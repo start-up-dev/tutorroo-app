@@ -9,19 +9,29 @@
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#FFF8F8"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": true
+      "associatedDomains": ["applinks:expo.dev"],
+      "supportsTablet": true,
+      "bundleIdentifier": "com.makereal.tutorroo"
     },
     "android": {
+      "package": "com.makereal.tutorroo",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "action": "VIEW",
+      "data": [
+        {
+          "scheme": "https",
+          "host": "*.myapp.io",
+          "pathPrefix": "/records"
+        }
+      ],
+      "category": ["BROWSABLE", "DEFAULT"]
     },
     "web": {
       "favicon": "./assets/favicon.png"

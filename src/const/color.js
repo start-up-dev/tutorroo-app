@@ -1,0 +1,17 @@
+export const Color = {
+  primaryDeep: "#FE5656",
+  primarylight: "#FFF1F1",
+  secondaryDeep: "#FFFFFF",
+  secondarylight: "#C3FFFC",
+  background: "#FFF8F8",
+  dark1: "#1A0505",
+  dark2: "#5F5757",
+  dark3: "#7E7474",
+  dark4: "#A8A8A8",
+  success: "#00C78E",
+  border: "#DFDADA",
+  info: "#64B5F3",
+  warning: "#F8B146",
+  danger1: "#EB5656",
+  danger2: "#FFE8E8",
+};
