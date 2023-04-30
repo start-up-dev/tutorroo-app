@@ -28,6 +28,7 @@ const Header = ({ title, subtitle, button }) => {
 const styles = StyleSheet.create({
   title: {
     color: Color.dark1,
+    fontFamily: "sofia-bold",
     fontSize: 28,
     fontWeight: 700,
   },

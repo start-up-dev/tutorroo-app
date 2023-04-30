@@ -52,6 +52,7 @@ const LogInScreen = () => {
 
   const error = useSelector((state) => state.auth.error);
   const status = useSelector((state) => state.auth.status);
+  const res = useSelector((state) => state.auth.res);
 
   // Initialize Firebase
   const app = initializeApp(firebaseConfig);
@@ -115,6 +116,12 @@ const LogInScreen = () => {
       console.log(error.response);
     }
   };
+
+  useEffect(() => {
+    if (res?.message === "Login Successful") {
+      navigation.navigate("Home");
+    }
+  }, [res]);
 
   return (
     <SafeAreaView style={{ backgroundColor: Color.background, flex: 1 }}>

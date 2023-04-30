@@ -11,6 +11,24 @@ import SearchScreen from "../screens/SearchScreen";
 import ProfileScreen from "../screens/ProfileScreen";
 import MessageScreen from "../screens/MessageScreen";
 import FavouriteScreen from "../screens/FavouriteScreen";
+import { Image } from "react-native";
+
+//icon
+
+const homeActive = require("../../assets/images/homeActive.png");
+const home = require("../../assets/images/home.png");
+
+const heart = require("../../assets/images/heart.png");
+const heartActive = require("../../assets/images/heartActive.png");
+
+const search = require("../../assets/images/search.png");
+const searchActive = require("../../assets/images/searchActive.png");
+
+const message = require("../../assets/images/message.png");
+const messageActive = require("../../assets/images/messageActive.png");
+
+const profile = require("../../assets/images/profile.png");
+const profileActive = require("../../assets/images/profileActive.png");
 
 const Tab = createBottomTabNavigator();
 
@@ -19,33 +37,31 @@ const TabNav = () => {
     <Tab.Navigator
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused, color, size }) => {
-          let iconName, iconColor;
+          let iconName;
 
           switch (route.name) {
             case "Home":
-              iconName = "fa-solid fa-house";
-              iconColor = focused ? Color.primaryDeep : Color.dark3;
+              iconName = focused ? homeActive : home;
               break;
             case "Search":
-              iconName = "fa-solid fa-magnifying-glass";
-              iconColor = focused ? Color.primaryDeep : Color.dark3;
+              iconName = focused ? searchActive : search;
               break;
             case "Profile":
-              iconName = "fa-regular fa-user";
-              iconColor = focused ? Color.primaryDeep : Color.dark3;
+              iconName = focused ? profileActive : profile;
               break;
             case "Message":
-              iconName = "fa-regular fa-message";
-              iconColor = focused ? Color.primaryDeep : Color.dark3;
+              iconName = focused ? messageActive : message;
               break;
             case "Favourite":
-              iconName = "fa-regular fa-heart";
-              iconColor = focused ? Color.primaryDeep : Color.dark3;
+              iconName = focused ? heartActive : heart;
               break;
           }
 
           return (
-            <FontAwesomeIcon icon={iconName} style={{ color: iconColor }} />
+            <Image
+              source={iconName}
+              style={{ width: 24, height: 24, resizeMode: "contain" }}
+            />
           );
         },
         tabBarActiveTintColor: "tomato",

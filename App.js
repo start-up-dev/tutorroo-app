@@ -7,10 +7,6 @@ import * as Font from "expo-font";
 import { Provider, useDispatch, useSelector } from "react-redux";
 import { store } from "./src/store";
 
-//Icon
-import { Icon } from "./src/const/Icon";
-import { regularIcon } from "./src/const/regularIcon";
-
 // Components
 import HomeScreen from "./src/screens/HomeScreen";
 import TabNav from "./src/navigation/TabNav";
@@ -22,15 +18,14 @@ export default function App() {
   const [appIsReady, setAppIsReady] = useState(false);
 
   useEffect(() => {
-    async function prepare() {
+    const prepare = async () => {
       try {
         // Pre-load fonts, make any API calls you need to do here
         await Font.loadAsync({
-          "sofia-light": require("./assets/fonts/sofiapro-light.otf"),
+          "sofia-medium": require("./assets/fonts/SofiaMedium.otf"),
+          "sofia-light": require("./assets/fonts/Sofia Pro Light Az.otf"),
+          "sofia-bold": require("./assets/fonts/Sofia Pro Bold Az.otf"),
         });
-
-        Icon();
-        regularIcon();
         console.log("4");
         // Artificially delay for two seconds to simulate a slow loading
         // experience. Please remove this if you copy and paste the code!
@@ -42,7 +37,7 @@ export default function App() {
         setAppIsReady(true);
         console.log("3");
       }
-    }
+    };
 
     prepare();
   }, []);

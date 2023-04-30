@@ -53,6 +53,7 @@ const styles = StyleSheet.create({
     color: Color.secondaryDeep,
     fontWeight: 500,
     fontSize: 16,
+    fontFamily: "sofia-medium",
   },
   miniTitle: {
     color: Color.secondaryDeep,

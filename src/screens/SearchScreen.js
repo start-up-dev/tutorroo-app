@@ -1,10 +1,19 @@
 import React, { useState } from "react";
-import { SafeAreaView, View, Text, StyleSheet, Dimensions } from "react-native";
+import {
+  SafeAreaView,
+  View,
+  Text,
+  StyleSheet,
+  Dimensions,
+  Image,
+} from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
 import { Color } from "../const/color";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import Space from "../components/common/Space";
 import Button from "../components/common/Button";
+
+const pq = require("../../assets/images/document-text.png");
 
 const height = Dimensions.get("window").height;
 
@@ -63,9 +72,9 @@ const SearchScreen = () => {
         <Button title={"Search For Turors"} />
 
         <View style={styles.postBtn}>
-          <FontAwesomeIcon
-            icon="fa-solid fa-circle-question"
-            style={{ color: Color.primaryDeep }}
+          <Image
+            source={pq}
+            style={{ width: 24, height: 24, resizeMode: "contain" }}
           />
           <Text style={styles.postText}>Post A Question</Text>
         </View>
@@ -103,12 +112,13 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: height - 250,
     right: 20,
+    alignItems: "center",
   },
   postText: {
     color: Color.primaryDeep,
     marginLeft: 10,
     fontSize: 16,
-    fontWeight: 500,
+    fontFamily: "sofia-light",
   },
 });
 

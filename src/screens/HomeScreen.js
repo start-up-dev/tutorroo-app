@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
     color: Color.dark3,
     textDecorationLine: "underline",
     textAlign: "center",
-    fontFamily: "sofia-light",
+    fontFamily: "sofia-medium",
   },
 });
 
