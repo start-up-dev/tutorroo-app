@@ -2,6 +2,7 @@ import { SafeAreaView, ScrollView, Text } from "react-native";
 import { Color } from "../const/color";
 import TutorCard from "../components/common/TutorCard";
 import Space from "../components/common/Space";
+import { useState } from "react";
 
 const FavouriteScreen = () => {
   return (

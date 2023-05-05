@@ -23,8 +23,9 @@ export default function App() {
         // Pre-load fonts, make any API calls you need to do here
         await Font.loadAsync({
           "sofia-medium": require("./assets/fonts/SofiaMedium.otf"),
-          "sofia-light": require("./assets/fonts/Sofia Pro Light Az.otf"),
-          "sofia-bold": require("./assets/fonts/Sofia Pro Bold Az.otf"),
+          "sofia-light": require("./assets/fonts/SofiaLight.otf"),
+          "sofia-regular": require("./assets/fonts/SofiaRegular.otf"),
+          "sofia-bold": require("./assets/fonts/SofiaBold.otf"),
         });
         console.log("4");
         // Artificially delay for two seconds to simulate a slow loading

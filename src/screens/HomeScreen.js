@@ -9,7 +9,10 @@ import {
   TouchableOpacity,
   ScrollView,
   FlatList,
+  Pressable,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+
 import { Color } from "../const/color";
 import Space from "../components/common/Space";
 import Subject from "../components/Home/Subject";
@@ -24,10 +27,13 @@ const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
 
 const HomeScreen = () => {
+  const navigation = useNavigation();
   return (
     <SafeAreaView style={{ backgroundColor: Color.background, flex: 1 }}>
       <ScrollView style={styles.container}>
-        <Image source={banner1} style={styles.banner1} />
+        <Pressable onPress={() => navigation.navigate("Search")}>
+          <Image source={banner1} style={styles.banner1} />
+        </Pressable>
         <Space height={20} />
         <View style={{ flexDirection: "row" }}>
           <Subject />

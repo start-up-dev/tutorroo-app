@@ -5,6 +5,13 @@ import { Color } from "../const/color";
 import IconButton from "../components/Profile/IconButton";
 import Space from "../components/common/Space";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import Icon from "../components/common/Icon";
+
+const editProfile = require("../../assets/images/user-edit.png");
+const message = require("../../assets/images/message-text.png");
+const changePass = require("../../assets/images/password-check.png");
+const notification = require("../../assets/images/notification-bing.png");
+const logout = require("../../assets/images/logout.png");
 
 const ProfileScreen = () => {
   return (
@@ -13,28 +20,13 @@ const ProfileScreen = () => {
       <View
         style={{ backgroundColor: Color.background, paddingHorizontal: 20 }}
       >
-        <IconButton
-          title={"Edit Profile"}
-          icon="fa-solid fa-user-pen"
-          color={Color.info}
-        />
-        <IconButton
-          title={"Message"}
-          icon="fa-solid fa-message"
-          color={Color.success}
-        />
-        <IconButton title={"Change Password"} icon="fa-solid fa-user-pen" />
-        <IconButton
-          title={"Notifcation"}
-          icon="fa-solid fa-bell"
-          color={Color.warning}
-        />
+        <IconButton title={"Edit Profile"} icon={editProfile} />
+        <IconButton title={"Message"} icon={message} />
+        <IconButton title={"Change Password"} icon={changePass} />
+        <IconButton title={"Notifcation"} icon={notification} />
         <TouchableOpacity style={styles.logoutView}>
           <Text style={styles.logout}>Log Out</Text>
-          <FontAwesomeIcon
-            icon="fa-solid fa-arrow-right-from-bracket"
-            style={{ color: Color.danger1 }}
-          />
+          <Icon icon={logout} xl />
         </TouchableOpacity>
         <Space height={400} />
       </View>
@@ -46,6 +38,9 @@ const styles = StyleSheet.create({
   logout: {
     color: Color.danger1,
     fontSize: 16,
+    marginLeft: 10,
+    fontFamily: "sofia-medium",
+    lineHeight: 26,
     marginRight: 10,
   },
   logoutView: {

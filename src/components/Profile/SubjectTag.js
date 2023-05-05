@@ -17,6 +17,7 @@ const SubjectTag = () => {
           color: Color.primaryDeep,
           fontSize: 14,
           textAlign: "center",
+          fontFamily: "sofia-regular",
         }}
       >
         Mathmatics

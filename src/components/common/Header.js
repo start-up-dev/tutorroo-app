@@ -64,7 +64,16 @@ const Header = ({ home, title, loggedIn }) => {
               style={{ width: 24, height: 24, resizeMode: "contain" }}
             />
           </TouchableOpacity>
-          <Text style={{ fontSize: 16, fontWeight: 500 }}>{title}</Text>
+          <Text
+            style={{
+              fontSize: 16,
+              fontWeight: 500,
+              fontFamily: "sofia-medium",
+              lineHeight: 26,
+            }}
+          >
+            {title}
+          </Text>
           <TouchableOpacity>
             <Image
               source={bell}

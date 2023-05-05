@@ -8,17 +8,24 @@ import {
   TouchableOpacity,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
+import { useNavigation } from "@react-navigation/native";
+
 import { useState } from "react";
 import { Color } from "../../const/color";
 import SubjectTag from "./SubjectTag";
+import Icon from "../common/Icon";
 
 const cover = require("../../../assets/physics.jpeg");
 const profile = require("../../../assets/profile.jpeg");
+const camera = require("../../../assets/images/camera.png");
+const left = require("../../../assets/images/arrow-left.png");
 
 const Header = () => {
   // Image Picker
   const [coverImage, setCoverImage] = useState(null);
   const [profileImage, setProfileImage] = useState(null);
+
+  const navigation = useNavigation();
 
   const pickCoverImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -59,17 +66,23 @@ const Header = () => {
           }}
         ></View>
         <View style={styles.navBack}>
-          <TouchableOpacity>
-            <FontAwesomeIcon icon="fa-solid fa-chevron-left" />
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <Icon icon={left} xl />
           </TouchableOpacity>
-          <Text style={{ fontSize: 16, fontWeight: 500 }}>Profile</Text>
+          <Text
+            style={{
+              fontSize: 16,
+              fontWeight: 500,
+              fontFamily: "sofia-medium",
+              lineHeight: 26,
+            }}
+          >
+            Profile
+          </Text>
           <View></View>
         </View>
         <TouchableOpacity style={styles.coverBtn} onPress={pickCoverImage}>
-          <FontAwesomeIcon
-            icon="fa-solid fa-camera"
-            style={{ color: Color.info }}
-          />
+          <Icon icon={camera} large />
         </TouchableOpacity>
 
         <View style={styles.profileImgView}>
@@ -78,10 +91,7 @@ const Header = () => {
             style={styles.profileImg}
           />
           <TouchableOpacity style={styles.profileBtn} onPress={pickCoverImage}>
-            <FontAwesomeIcon
-              icon="fa-solid fa-camera"
-              style={{ color: Color.info }}
-            />
+            <Icon icon={camera} large />
           </TouchableOpacity>
 
           <Text style={styles.profileName}>Mahbub Rahman</Text>
@@ -108,10 +118,10 @@ const styles = StyleSheet.create({
   coverBtn: {
     backgroundColor: Color.secondaryDeep,
     borderRadius: 100,
-    width: 40,
-    height: 40,
-    padding: 10,
+    width: 26,
+    height: 26,
     alignItems: "center",
+    justifyContent: "center",
     alignSelf: "flex-end",
     top: -70,
     left: -20,
@@ -126,11 +136,11 @@ const styles = StyleSheet.create({
   profileBtn: {
     backgroundColor: Color.secondaryDeep,
     borderRadius: 100,
-    width: 30,
-    height: 30,
-    padding: 7,
+    width: 26,
+    height: 26,
     position: "relative",
     alignItems: "center",
+    justifyContent: "center",
     bottom: 40,
     left: 40,
   },
@@ -140,15 +150,16 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   profileName: {
-    fontWeight: 700,
     fontSize: 18,
+    fontFamily: "sofia-bold",
+    lineHeight: 26,
   },
   tagView: {
     flexDirection: "row",
     justifyContent: "space-evenly",
     width: "80%",
     alignContent: "center",
-    marginTop: 10,
+    marginTop: 12,
   },
 });
 
