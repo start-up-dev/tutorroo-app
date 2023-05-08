@@ -15,6 +15,10 @@ import { getAuth, sendSignInLinkToEmail } from "firebase/auth";
 import { initializeApp } from "firebase/app";
 import { firebaseConfig } from "../config/firebase";
 
+const emailIcon = require("../../assets/images/email.png");
+const lockIcon = require("../../assets/images/lock.png");
+const profileIcon = require("../../assets/images/profile-circle.png");
+
 const RegisterScreen = () => {
   // Initialize Firebase
   const app = initializeApp(firebaseConfig);
@@ -111,28 +115,28 @@ const RegisterScreen = () => {
         <Space height={30} />
         <Input
           placeholder="Frist Name"
-          iconName="circle-user"
+          iconName={profileIcon}
           onChangeText={(text) => handleOnchange(text, "firstName")}
         />
         <Input
           placeholder="Last Name"
-          iconName="circle-user"
+          iconName={profileIcon}
           onChangeText={(text) => handleOnchange(text, "lastName")}
         />
         <Input
           placeholder="Email"
-          iconName="envelope"
+          iconName={emailIcon}
           onChangeText={(text) => handleOnchange(text, "email")}
         />
         <Input
           placeholder="Password"
-          iconName="lock"
+          iconName={lockIcon}
           onChangeText={(text) => handleOnchange(text, "password")}
           password
         />
         <Input
           placeholder="Confirm Password"
-          iconName="lock"
+          iconName={lockIcon}
           onChangeText={(text) => handleOnchange(text, "confirmPassword")}
           password
         />

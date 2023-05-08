@@ -14,13 +14,14 @@ import { useState } from "react";
 import { Color } from "../../const/color";
 import SubjectTag from "./SubjectTag";
 import Icon from "../common/Icon";
+import Space from "../common/Space";
 
 const cover = require("../../../assets/physics.jpeg");
 const profile = require("../../../assets/profile.jpeg");
 const camera = require("../../../assets/images/camera.png");
 const left = require("../../../assets/images/arrow-left.png");
 
-const Header = () => {
+const Header = ({ tutorProfile }) => {
   // Image Picker
   const [coverImage, setCoverImage] = useState(null);
   const [profileImage, setProfileImage] = useState(null);
@@ -52,7 +53,7 @@ const Header = () => {
   };
   return (
     <View style={{ backgroundColor: Color.background }}>
-      <View style={{ height: "50%" }}>
+      <View style={tutorProfile ? { height: 200 } : { height: "50%" }}>
         <Image
           source={coverImage ? { uri: coverImage } : cover}
           style={[StyleSheet.absoluteFill, { width: "100%", height: "100%" }]}
@@ -69,30 +70,42 @@ const Header = () => {
           <TouchableOpacity onPress={() => navigation.goBack()}>
             <Icon icon={left} xl />
           </TouchableOpacity>
-          <Text
-            style={{
-              fontSize: 16,
-              fontWeight: 500,
-              fontFamily: "sofia-medium",
-              lineHeight: 26,
-            }}
-          >
-            Profile
-          </Text>
+          {!tutorProfile && (
+            <Text
+              style={{
+                fontSize: 16,
+                fontWeight: 500,
+                fontFamily: "sofia-medium",
+                lineHeight: 26,
+              }}
+            >
+              Profile
+            </Text>
+          )}
+
           <View></View>
         </View>
-        <TouchableOpacity style={styles.coverBtn} onPress={pickCoverImage}>
-          <Icon icon={camera} large />
-        </TouchableOpacity>
-
-        <View style={styles.profileImgView}>
-          <Image
-            source={profileImage ? { uri: profileImage } : profile}
-            style={styles.profileImg}
-          />
-          <TouchableOpacity style={styles.profileBtn} onPress={pickCoverImage}>
+        {!tutorProfile && (
+          <TouchableOpacity style={styles.coverBtn} onPress={pickCoverImage}>
             <Icon icon={camera} large />
           </TouchableOpacity>
+        )}
+
+        <View style={[styles.profileImgView, tutorProfile && { bottom: 90 }]}>
+          <Image
+            source={profileImage ? { uri: profileImage } : profile}
+            style={[styles.profileImg]}
+          />
+
+          {!tutorProfile && (
+            <TouchableOpacity
+              style={styles.profileBtn}
+              onPress={pickCoverImage}
+            >
+              <Icon icon={camera} large />
+            </TouchableOpacity>
+          )}
+          {tutorProfile && <Space height={20} />}
 
           <Text style={styles.profileName}>Mahbub Rahman</Text>
           <View style={styles.tagView}>
@@ -102,6 +115,31 @@ const Header = () => {
           </View>
         </View>
       </View>
+      {tutorProfile && (
+        <View style={{ marginTop: 140, paddingHorizontal: 20 }}>
+          <Text style={styles.freeClass}>Enjoy your first class for free.</Text>
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-evenly",
+              borderTopWidth: 1,
+              borderBottomWidth: 1,
+              borderColor: "#E6E6E6",
+              padding: 10,
+            }}
+          >
+            <View>
+              <Text style={styles.priceText}>€15.00</Text>
+              <Text style={styles.priceDes}>Hourly Rate</Text>
+            </View>
+            <View style={{ borderWidth: 1, borderColor: "#E6E6E6" }}></View>
+            <View>
+              <Text style={styles.priceText}>2h</Text>
+              <Text style={styles.priceDes}>Response Time</Text>
+            </View>
+          </View>
+        </View>
+      )}
     </View>
   );
 };
@@ -127,8 +165,8 @@ const styles = StyleSheet.create({
     left: -20,
   },
   profileImg: {
-    width: 150,
-    height: 150,
+    width: 120,
+    height: 120,
     borderRadius: 8,
     borderWidth: 3,
     borderColor: Color.secondaryDeep,
@@ -146,7 +184,7 @@ const styles = StyleSheet.create({
   },
 
   profileImgView: {
-    bottom: 150,
+    bottom: 120,
     alignItems: "center",
   },
   profileName: {
@@ -160,6 +198,28 @@ const styles = StyleSheet.create({
     width: "80%",
     alignContent: "center",
     marginTop: 12,
+  },
+  freeClass: {
+    fontSize: 16,
+    fontFamily: "sofia-regular",
+    lineHeight: 16,
+    color: Color.warning,
+    marginVertical: 20,
+    textAlign: "center",
+  },
+  priceText: {
+    fontSize: 18,
+    fontFamily: "sofia-medium",
+    lineHeight: 26,
+    color: Color.dark1,
+    textAlign: "center",
+  },
+  priceDes: {
+    fontSize: 13,
+    fontFamily: "sofia-medium",
+    lineHeight: 26,
+    color: Color.dark4,
+    textAlign: "center",
   },
 });
 

@@ -26,8 +26,8 @@ export default function App() {
           "sofia-light": require("./assets/fonts/SofiaLight.otf"),
           "sofia-regular": require("./assets/fonts/SofiaRegular.otf"),
           "sofia-bold": require("./assets/fonts/SofiaBold.otf"),
+          "sofia-semi-bold": require("./assets/fonts/SofiaSemiBold.otf"),
         });
-        console.log("4");
         // Artificially delay for two seconds to simulate a slow loading
         // experience. Please remove this if you copy and paste the code!
         // await new Promise((resolve) => setTimeout(resolve, 2000));
@@ -36,7 +36,6 @@ export default function App() {
       } finally {
         // Tell the application to render
         setAppIsReady(true);
-        console.log("3");
       }
     };
 
@@ -45,8 +44,6 @@ export default function App() {
 
   const onLayoutRootView = useCallback(async () => {
     if (appIsReady) {
-      console.log("2");
-
       // This tells the splash screen to hide immediately! If we call this after
       // `setAppIsReady`, then we may see a blank screen while the app is
       // loading its initial state and rendering its first pixels. So instead,
@@ -57,7 +54,6 @@ export default function App() {
   }, [appIsReady]);
 
   if (!appIsReady) {
-    console.log("1");
     return null;
   }
   return (

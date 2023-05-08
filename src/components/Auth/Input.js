@@ -6,9 +6,11 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from "react-native";
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { Color } from "../../const/color";
+import Icon from "../common/Icon";
+
+const eyeIcon = require("../../../assets/images/eye.png");
+const hideEyeIcon = require("../../../assets/images/eye-slash.png");
 
 const Input = ({
   iconName,
@@ -31,12 +33,7 @@ const Input = ({
           },
         ]}
       >
-        {iconName && (
-          <FontAwesomeIcon
-            icon={`fa-solid fa-${iconName}`}
-            style={{ color: error ? Color.danger1 : Color.dark3 }}
-          />
-        )}
+        <Icon icon={iconName} xl />
         <TextInput
           autoCorrect={false}
           onFocus={() => {
@@ -57,15 +54,8 @@ const Input = ({
         />
         {password && (
           <TouchableOpacity onPress={() => setHidePassword(!hidePassword)}>
-            <FontAwesomeIcon
-              icon={`fa-regular fa-${hidePassword ? "eye" : "eye-slash"}`}
-            />
+            <Icon icon={hidePassword ? eyeIcon : hideEyeIcon} l />
           </TouchableOpacity>
-          //   <Icon
-          //     onPress={() => setHidePassword(!hidePassword)}
-          //     name={hidePassword ? "eye-off-outline" : "eye-outline"}
-          //     style={{ color: Color.primaryDeep, fontSize: 22 }}
-          //   />
         )}
       </View>
     </View>

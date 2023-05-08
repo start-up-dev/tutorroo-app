@@ -18,7 +18,7 @@ const AuthStack = () => {
         name="Log In"
         component={LogInScreen}
         options={{
-          headerShown: false,
+          header: () => <BackBtn />,
         }}
       />
       <Stack.Screen

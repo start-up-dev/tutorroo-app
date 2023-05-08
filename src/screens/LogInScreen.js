@@ -24,9 +24,12 @@ import { firebaseConfig } from "../config/firebase";
 // Client Secret - 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
 
 // ios - 696720031553-4t35le1rrlqnq9n5k2vnrc4umdoollq0.apps.googleusercontent.com
-//android - 696720031553-3etrgp4huno66euudh7srk0jf53eo4b7.apps.googleusercontent.com
+// android - 696720031553-3etrgp4huno66euudh7srk0jf53eo4b7.apps.googleusercontent.com
 
-WebBrowser.maybeCompleteAuthSession();
+// WebBrowser.maybeCompleteAuthSession();
+
+const emailIcon = require("../../assets/images/email.png");
+const lockIcon = require("../../assets/images/lock.png");
 
 const LogInScreen = () => {
   const [inputs, setInputs] = useState({ email: "", password: "" });
@@ -131,12 +134,12 @@ const LogInScreen = () => {
         <Space height={30} />
         <Input
           placeholder="Email"
-          iconName="envelope"
+          iconName={emailIcon}
           onChangeText={(text) => handleOnchange(text, "email")}
         />
         <Input
           placeholder="Password"
-          iconName="lock"
+          iconName={lockIcon}
           onChangeText={(text) => handleOnchange(text, "password")}
           password
         />
@@ -178,9 +181,9 @@ const LogInScreen = () => {
 const styles = StyleSheet.create({
   forgotPass: {
     color: Color.primaryDeep,
-    fontWeight: 600,
     fontSize: 16,
     textAlign: "right",
+    fontFamily: "sofia-semi-bold",
   },
   //   remember: {
   //     color: Color.dark4,

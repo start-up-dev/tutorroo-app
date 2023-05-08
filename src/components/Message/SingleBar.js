@@ -1,11 +1,18 @@
-import { Image, Text, View, StyleSheet } from "react-native";
+import { Image, Text, View, StyleSheet, TouchableOpacity } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+
 import { Color } from "../../const/color";
 
 const profile = require("../../../assets/profile.jpeg");
 
 const SingleBar = () => {
+  //Navigation
+  const navigation = useNavigation();
   return (
-    <View style={styles.container}>
+    <TouchableOpacity
+      style={styles.container}
+      onPress={() => navigation.navigate("Chat")}
+    >
       <View style={{ flexDirection: "row" }}>
         <Image source={profile} style={styles.profileImg} />
 
@@ -37,7 +44,7 @@ const SingleBar = () => {
           </Text>
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 

@@ -1,5 +1,5 @@
 import { View, StyleSheet, Image, Text, TouchableOpacity } from "react-native";
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { useNavigation } from "@react-navigation/native";
 
 import { Color } from "../../const/color";
 import SubjectTag from "../Profile/SubjectTag";
@@ -15,6 +15,10 @@ const heart = require("../../../assets/images/heart.png");
 
 const TutorCard = () => {
   const [favourite, setFavourite] = useState(false);
+
+  //Navigation
+  const navigation = useNavigation();
+
   return (
     <View
       style={{
@@ -23,49 +27,51 @@ const TutorCard = () => {
         borderRadius: 12,
       }}
     >
-      <View style={styles.container}>
-        <View style={{ flexDirection: "row", alignItems: "center" }}>
-          <Image source={profile} style={styles.profileImg} />
-          <View>
-            <View style={{ flexDirection: "row", alignItems: "center" }}>
-              <Text style={styles.nameText}>Isfat</Text>
-              <Icon icon={verified} />
+      <TouchableOpacity onPress={() => navigation.navigate("Tutor Detail")}>
+        <View style={styles.container}>
+          <View style={{ flexDirection: "row", alignItems: "center" }}>
+            <Image source={profile} style={styles.profileImg} />
+            <View>
+              <View style={{ flexDirection: "row", alignItems: "center" }}>
+                <Text style={styles.nameText}>Isfat</Text>
+                <Icon icon={verified} />
+              </View>
+              <Space height={10} />
+              <SubjectTag />
+              <Space height={10} />
+              <Text style={styles.qualificationText}>Phd in Mathmatics</Text>
             </View>
-            <Space height={10} />
-            <SubjectTag />
-            <Space height={10} />
-            <Text style={styles.qualificationText}>Phd in Mathmatics</Text>
           </View>
-        </View>
-        <View>
-          <View
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "space-evenly",
-            }}
-          >
-            <TouchableOpacity onPress={() => setFavourite(!favourite)}>
-              <Icon icon={favourite ? heartActive : heart} />
-            </TouchableOpacity>
+          <View>
             <View
               style={{
                 flexDirection: "row",
                 alignItems: "center",
+                justifyContent: "space-evenly",
               }}
             >
-              <Icon icon={star} />
-              <Text style={styles.ratingText}>4/5</Text>
+              <TouchableOpacity onPress={() => setFavourite(!favourite)}>
+                <Icon icon={favourite ? heartActive : heart} />
+              </TouchableOpacity>
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                }}
+              >
+                <Icon icon={star} />
+                <Text style={styles.ratingText}>4/5</Text>
+              </View>
             </View>
+            <Text style={styles.priceText}>€15.00/h</Text>
+            <Space height={30} />
           </View>
-          <Text style={styles.priceText}>€15.00/h</Text>
-          <Space height={30} />
         </View>
-      </View>
-      <Text style={styles.description}>
-        Lorem ipsum dolor sit amet consectetur. Pharetra viverra accumsan neque
-        neque faucibus sed. Utpat condimentum{" "}
-      </Text>
+        <Text style={styles.description}>
+          Lorem ipsum dolor sit amet consectetur. Pharetra viverra accumsan
+          neque neque faucibus sed. Utpat condimentum{" "}
+        </Text>
+      </TouchableOpacity>
     </View>
   );
 };

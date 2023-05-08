@@ -1,12 +1,12 @@
 import { Image } from "react-native";
 
-const Icon = ({ icon, large, xl }) => {
+const Icon = ({ icon, l, xl }) => {
   return (
     <Image
       source={icon}
       style={[
-        { width: 14, height: 14, resizeMode: "contain" },
-        large && { width: 18, height: 18 },
+        { width: 12, height: 12, resizeMode: "contain" },
+        l && { width: 20, height: 20 },
         xl && { width: 24, height: 24 },
       ]}
     />

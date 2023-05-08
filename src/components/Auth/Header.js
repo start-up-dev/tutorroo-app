@@ -29,13 +29,16 @@ const styles = StyleSheet.create({
   title: {
     color: Color.dark1,
     fontFamily: "sofia-bold",
-    fontSize: 28,
+    fontSize: 26,
     fontWeight: 700,
+    lineHeight: 36,
   },
   subtitle: {
     color: Color.dark2,
     fontSize: 16,
     marginVertical: 10,
+    fontFamily: "sofia-regular",
+    lineHeight: 26,
   },
   btn: {
     color: Color.primaryDeep,
