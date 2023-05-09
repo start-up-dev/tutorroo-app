@@ -13,7 +13,7 @@ const star = require("../../../assets/images/star.png");
 const heartActive = require("../../../assets/images/heartActive.png");
 const heart = require("../../../assets/images/heart.png");
 
-const TutorCard = () => {
+const TutorCard = ({ data }) => {
   const [favourite, setFavourite] = useState(false);
 
   //Navigation
@@ -33,7 +33,9 @@ const TutorCard = () => {
             <Image source={profile} style={styles.profileImg} />
             <View>
               <View style={{ flexDirection: "row", alignItems: "center" }}>
-                <Text style={styles.nameText}>Isfat</Text>
+                <Text style={styles.nameText}>
+                  {data?.tutor.firstName ? data?.tutor.firstName : "Mahbub"}
+                </Text>
                 <Icon icon={verified} />
               </View>
               <Space height={10} />

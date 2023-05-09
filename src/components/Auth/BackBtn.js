@@ -10,7 +10,7 @@ const BackBtn = () => {
   return (
     <SafeAreaView style={{ backgroundColor: Color.background }}>
       <TouchableOpacity
-        style={{ paddingHorizontal: 20, paddingVertical: 10 }}
+        style={{ paddingHorizontal: 16, paddingVertical: 10 }}
         onPress={() => navigation.goBack()}
       >
         <Icon icon={leftIcon} xl />

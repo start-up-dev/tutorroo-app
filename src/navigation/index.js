@@ -5,7 +5,11 @@ import AuthStack from "./AuthStack";
 import TutorDetailScreen from "../screens/TutorDetailScreen";
 import MessageDetailScreen from "../screens/ChatScreen";
 import ChatScreen from "../screens/ChatScreen";
+import TutorScreen from "../screens/TutorScreen";
+import NotificationScreen from "../screens/NotificationScreen";
 import Header from "../components/common/Header";
+import BackBtn from "../components/Auth/BackBtn";
+import EditProfileScreen from "../screens/EditProfileScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -42,6 +46,28 @@ const MainStack = () => {
         component={ChatScreen}
         options={{
           header: () => <Header title="Isfat Sharik" />,
+        }}
+      />
+      <Stack.Screen
+        name="Tutor"
+        component={TutorScreen}
+        options={{
+          header: () => <Header title="Tutor" />,
+        }}
+      />
+      <Stack.Screen
+        name="Notification"
+        component={NotificationScreen}
+        options={{
+          header: () => <Header title="Notification" />,
+        }}
+      />
+      <Stack.Screen
+        name="Edit Profile"
+        component={EditProfileScreen}
+        options={{
+          header: () => <BackBtn />,
+          gestureEnabled: false,
         }}
       />
     </Stack.Navigator>

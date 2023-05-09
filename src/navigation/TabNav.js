@@ -11,6 +11,7 @@ import ProfileScreen from "../screens/ProfileScreen";
 import MessageScreen from "../screens/MessageScreen";
 import FavouriteScreen from "../screens/FavouriteScreen";
 import { Image } from "react-native";
+import { useSelector } from "react-redux";
 
 //icon
 
@@ -32,6 +33,7 @@ const profileActive = require("../../assets/images/profileActive.png");
 const Tab = createBottomTabNavigator();
 
 const TabNav = () => {
+  const isLoggedIn = useSelector((state) => state.auth.loggedIn);
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -70,28 +72,32 @@ const TabNav = () => {
       <Tab.Screen
         name="Home"
         component={HomeScreen}
-        options={{ header: () => <Header home /> }}
+        options={{ header: () => <Header home loggedIn={isLoggedIn} /> }}
       />
       <Tab.Screen
         name="Search"
         component={SearchScreen}
         options={{ header: () => <Header title="Find A Tutor" /> }}
       />
-      <Tab.Screen
-        name="Message"
-        component={MessageScreen}
-        options={{ header: () => <Header title="Messages" /> }}
-      />
-      <Tab.Screen
-        name="Favourite"
-        component={FavouriteScreen}
-        options={{ header: () => <Header title="Favourite" /> }}
-      />
-      <Tab.Screen
-        name="Profile"
-        component={ProfileScreen}
-        options={{ headerShown: false }}
-      />
+      {isLoggedIn && (
+        <>
+          <Tab.Screen
+            name="Message"
+            component={MessageScreen}
+            options={{ header: () => <Header title="Messages" /> }}
+          />
+          <Tab.Screen
+            name="Favourite"
+            component={FavouriteScreen}
+            options={{ header: () => <Header title="Favourite" /> }}
+          />
+          <Tab.Screen
+            name="Profile"
+            component={ProfileScreen}
+            options={{ headerShown: false }}
+          />
+        </>
+      )}
     </Tab.Navigator>
   );
 };

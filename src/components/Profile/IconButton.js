@@ -10,7 +10,11 @@ const IconButton = ({ icon, color, title, deleted, navigate }) => {
   const navigation = useNavigation();
   return (
     <TouchableOpacity
-      onPress={() => navigation.navigate(navigate)}
+      onPress={
+        navigate
+          ? () => navigation.navigate(navigate)
+          : console.log("No Link Found")
+      }
       style={{ flexDirection: "row", alignItems: "center", marginTop: 20 }}
     >
       <Icon icon={icon} xl />

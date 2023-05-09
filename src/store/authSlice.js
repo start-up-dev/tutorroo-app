@@ -1,9 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { register, login } from "../api/auth";
+import { register, login, getMe } from "../api/auth";
 
 const initialState = {
   loggedIn: false,
   res: null,
+  user: null,
   error: null,
   status: "idle",
 };
@@ -39,6 +40,14 @@ export const authSlice = createSlice({
         if (action.payload?.access_token) {
           state.loggedIn = true;
         }
+        state.res = action.payload;
+      })
+      .addCase(getMe.pending, (state, action) => {
+        state.status = "loading";
+      })
+      .addCase(getMe.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.user = action.payload;
       });
   },
 });

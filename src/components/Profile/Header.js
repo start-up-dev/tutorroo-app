@@ -21,7 +21,7 @@ const profile = require("../../../assets/profile.jpeg");
 const camera = require("../../../assets/images/camera.png");
 const left = require("../../../assets/images/arrow-left.png");
 
-const Header = ({ tutorProfile }) => {
+const Header = ({ tutorProfile, data }) => {
   // Image Picker
   const [coverImage, setCoverImage] = useState(null);
   const [profileImage, setProfileImage] = useState(null);
@@ -107,15 +107,17 @@ const Header = ({ tutorProfile }) => {
           )}
           {tutorProfile && <Space height={20} />}
 
-          <Text style={styles.profileName}>Mahbub Rahman</Text>
+          <Text style={styles.profileName}>
+            {data?.firstName ? data?.firstName : "Mahbub"} {data?.lastName}
+          </Text>
+        </View>
+      </View>
+      {tutorProfile && (
+        <View style={{ marginTop: 100, paddingHorizontal: 20 }}>
           <View style={styles.tagView}>
             <SubjectTag />
             <SubjectTag />
           </View>
-        </View>
-      </View>
-      {tutorProfile && (
-        <View style={{ marginTop: 140, paddingHorizontal: 20 }}>
           <Text style={styles.freeClass}>Enjoy your first class for free.</Text>
           <View
             style={{
@@ -193,8 +195,7 @@ const styles = StyleSheet.create({
   },
   tagView: {
     flexDirection: "row",
-    justifyContent: "space-evenly",
-    width: "80%",
+    justifyContent: "center",
     alignContent: "center",
     marginTop: 12,
   },

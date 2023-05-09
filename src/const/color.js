@@ -1,5 +1,5 @@
 export const Color = {
-  primaryDeep: "#64B5F3",
+  primaryDeep: "#FE5656",
   primarylight: "#FFF1F1",
   secondaryDeep: "#FFFFFF",
   secondarylight: "#C3FFFC",
@@ -14,4 +14,6 @@ export const Color = {
   warning: "#F8B146",
   danger1: "#EB5656",
   danger2: "#FFE8E8",
+  BLACK: "#000",
+  WHITE: "#FFF",
 };

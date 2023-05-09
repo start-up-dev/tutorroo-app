@@ -27,7 +27,10 @@ const Header = ({ home, title, loggedIn }) => {
         <View style={styles.component}>
           <Image source={logo} />
           {loggedIn ? (
-            <TouchableOpacity style={{ flexDirection: "row" }}>
+            <TouchableOpacity
+              style={{ flexDirection: "row" }}
+              onPress={() => navigation.navigate("Profile")}
+            >
               <Image source={profile} style={styles.profileImg} />
             </TouchableOpacity>
           ) : (
@@ -74,7 +77,7 @@ const Header = ({ home, title, loggedIn }) => {
           >
             {title}
           </Text>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate("Notification")}>
             <Image
               source={bell}
               style={{ width: 24, height: 24, resizeMode: "contain" }}
@@ -94,7 +97,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    paddingHorizontal: 20,
+    paddingHorizontal: 16,
     paddingBottom: 10,
   },
   loginIcon: {
