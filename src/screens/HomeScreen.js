@@ -10,6 +10,7 @@ import {
   ScrollView,
   FlatList,
   Pressable,
+  StatusBar,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
@@ -30,6 +31,7 @@ const HomeScreen = () => {
   const navigation = useNavigation();
   return (
     <SafeAreaView style={{ backgroundColor: Color.background, flex: 1 }}>
+      <StatusBar backgroundColor={Color.background} barStyle="dark-content" />
       <ScrollView style={styles.container}>
         <Pressable onPress={() => navigation.navigate("Search")}>
           <Image source={banner1} style={styles.banner1} />

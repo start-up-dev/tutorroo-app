@@ -6,7 +6,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 //Component
 import HomeScreen from "../screens/HomeScreen";
 import Header from "../components/common/Header";
-import { Color } from "../const/color";
 import SearchScreen from "../screens/SearchScreen";
 import ProfileScreen from "../screens/ProfileScreen";
 import MessageScreen from "../screens/MessageScreen";

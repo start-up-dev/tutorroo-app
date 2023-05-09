@@ -111,7 +111,6 @@ const Header = ({ tutorProfile }) => {
           <View style={styles.tagView}>
             <SubjectTag />
             <SubjectTag />
-            <SubjectTag />
           </View>
         </View>
       </View>

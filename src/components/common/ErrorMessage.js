@@ -19,16 +19,17 @@ const ErrorMessage = ({ message }) => {
 const styles = StyleSheet.create({
   messageView: {
     flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 15,
   },
   messageText: {
     color: Color.danger1,
     fontSize: 16,
     marginLeft: 10,
-    marginBottom: 15,
-    marginTop: 2,
-    fontWeight: 500,
     alignSelf: "center",
     textAlign: "center",
+    fontFamily: "sofia-medium",
+    lineHeight: 26,
   },
 });
 

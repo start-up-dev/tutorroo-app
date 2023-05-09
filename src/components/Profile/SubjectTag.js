@@ -9,7 +9,7 @@ const SubjectTag = () => {
         backgroundColor: Color.primarylight,
         paddingHorizontal: 10,
         paddingVertical: 5,
-        width: 100,
+        width: 110,
       }}
     >
       <Text

@@ -6,6 +6,7 @@ import {
   StyleSheet,
   Dimensions,
   Image,
+  Platform,
 } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
 import { Color } from "../const/color";
@@ -106,11 +107,10 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     backgroundColor: Color.primarylight,
     padding: 10,
-    width: "45%",
     alignSelf: "flex-end",
     flexDirection: "row",
     position: "absolute",
-    top: height - 250,
+    top: Platform.OS === "ios" ? height - 250 : height - 180,
     right: 20,
     alignItems: "center",
   },
