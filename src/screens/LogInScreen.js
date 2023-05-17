@@ -10,7 +10,7 @@ import Button from "../components/common/Button";
 import ThirdPartyAuth from "../components/Auth/ThridPartyAuth";
 
 import { useSelector, useDispatch } from "react-redux";
-import { getMe, login } from "../api/auth";
+import { getMe, login, loginWithGoogleBearerToken } from "../api/auth";
 import ErrorMessage from "../components/common/ErrorMessage";
 
 import * as WebBrowser from "expo-web-browser";
@@ -80,7 +80,7 @@ const LogInScreen = () => {
 
   useEffect(() => {
     console.log(res);
-    if (res?.access_token) {
+    if (res?.access_token || res?.token) {
       navigation.navigate("Home");
       dispatch(getMe());
     }
@@ -88,23 +88,9 @@ const LogInScreen = () => {
 
   useEffect(() => {
     if (response?.type === "success") {
-      getUserInfo(response.authentication.accessToken);
+      dispatch(loginWithGoogleBearerToken(response.authentication.accessToken));
     }
   }, [response]);
-
-  const getUserInfo = async (token) => {
-    try {
-      const response = await fetch("https://www.googleapis.com/userinfo/v2/me", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-
-      const user = await response.json();
-
-      console.log(user, null, 4);
-    } catch (error) {
-      // Add your own error handler here
-    }
-  };
 
   return (
     <SafeAreaView style={{ backgroundColor: Color.background, flex: 1 }}>

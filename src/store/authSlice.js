@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { register, login, getMe } from "../api/auth";
+import { register, login, getMe, loginWithGoogleBearerToken } from "../api/auth";
 
 const initialState = {
   loggedIn: false,
@@ -22,6 +22,15 @@ export const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      .addCase(loginWithGoogleBearerToken.pending, (state, action) => {
+        state.status = "loading";
+      })
+      .addCase(loginWithGoogleBearerToken.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.loggedIn = true;
+        state.user = action.payload.user;
+        state.res = action.payload;
+      })
       .addCase(register.pending, (state, action) => {
         state.status = "loading";
       })

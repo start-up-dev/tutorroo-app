@@ -11,13 +11,9 @@
       "resizeMode": "contain",
       "backgroundColor": "#FFF8F8"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
-      "associatedDomains": [
-        "applinks:expo.dev"
-      ],
+      "associatedDomains": ["applinks:expo.dev"],
       "supportsTablet": true,
       "bundleIdentifier": "com.makereal.tutorroo"
     },
@@ -35,6 +31,7 @@
       "eas": {
         "projectId": "067538b8-c352-4bdf-9770-fe340619303c"
       }
-    }
+    },
+    "schema": "tutorroo"
   }
 }

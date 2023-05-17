@@ -4,7 +4,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 //Store Data to AsyncStorage
 
-const storeData = async (value) => {
+const saveJwtToken = async (value) => {
   try {
     await AsyncStorage.setItem("TOKEN", value);
   } catch (e) {
@@ -30,9 +30,24 @@ export const register = createAsyncThunk("auth/register", async (body) => {
 export const login = createAsyncThunk("auth/login", async (body) => {
   try {
     const res = await Axios.post(`/authenticate/login`, body);
-    storeData(res.data.access_token);
+    saveJwtToken(res.data.access_token);
     console.log("Try" + JSON.stringify(res.data));
     return res.data;
+  } catch (err) {
+    console.log("Catch" + JSON.stringify(err.response.data));
+    return err.response.data;
+  }
+});
+
+// Log In With Google
+
+export const loginWithGoogleBearerToken = createAsyncThunk("auth/login-with-google-bearer-token", async (token) => {
+  try {
+    const { data } = await Axios.post(`/authenticate/login-with-google-bearer-token`, {
+      bearerToken: token,
+    });
+    saveJwtToken(data.token);
+    return data;
   } catch (err) {
     console.log("Catch" + JSON.stringify(err.response.data));
     return err.response.data;
