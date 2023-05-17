@@ -4,6 +4,7 @@ import * as SplashScreen from "expo-splash-screen";
 import * as Font from "expo-font";
 import { Provider, useDispatch } from "react-redux";
 import { store } from "./src/store";
+import { io } from "socket.io-client";
 
 // Components
 import MainStack from "./src/navigation";
@@ -11,8 +12,26 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { logIn } from "./src/store/authSlice";
 import { getMe } from "./src/api/auth";
 import { getSubject } from "./src/api/tutor";
+import { socketBaseURL } from "./src/config/baseURL";
+import { newMessageReceived } from "./src/store/inboxSlice";
 
 SplashScreen.preventAutoHideAsync();
+
+AsyncStorage.getItem("TOKEN").then((token) => {
+  if (token) {
+    const socket = io(socketBaseURL, {
+      auth: {
+        socketAuthToken: token,
+      },
+    });
+
+    socket.on("ON_MESSAGE_RECEIVED", (message) => {
+      store.dispatch(newMessageReceived(message));
+
+      if (store.getState().inbox.selectedRouteId == message.routeId) socket.emit("MESSAGE_SEEN", message.routeId);
+    });
+  }
+});
 
 export default function App() {
   return (

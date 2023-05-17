@@ -3,7 +3,7 @@ import { Color } from "../const/color";
 import ChatText from "../components/Message/ChatText";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { markAsSeenAll } from "../store/inboxSlice";
+import { clearMessages, markAsSeenAll, setSelectedRouteId } from "../store/inboxSlice";
 import { getMessages, sendMessage } from "../api/inbox";
 
 import attachmentsIcon from "../../assets/images/attach-circle.png";
@@ -22,6 +22,11 @@ const ChatScreen = ({ route }) => {
     dispatch(markAsSeenAll(inbox._id));
 
     dispatch(getMessages({ routeId: inbox.routeId, skip: messages.length }));
+
+    return () => {
+      dispatch(clearMessages());
+      dispatch(setSelectedRouteId(null));
+    };
   }, []);
 
   const [text, setText] = useState("");

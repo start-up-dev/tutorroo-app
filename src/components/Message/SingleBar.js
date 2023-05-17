@@ -4,15 +4,24 @@ import { useNavigation } from "@react-navigation/native";
 import { Color } from "../../const/color";
 import getFullName from "../../utils/name";
 import moment from "moment/moment";
+import { useDispatch } from "react-redux";
+import { clearMessages, setSelectedRouteId } from "../../store/inboxSlice";
 
 const profile = require("../../../assets/profile.jpeg");
 
 const SingleBar = ({ inbox }) => {
-  //Navigation
+  const dispatch = useDispatch();
   const navigation = useNavigation();
 
   return (
-    <TouchableOpacity style={styles.container} onPress={() => navigation.navigate("Chat", { inbox })}>
+    <TouchableOpacity
+      style={styles.container}
+      onPress={() => {
+        dispatch(clearMessages());
+        dispatch(setSelectedRouteId(inbox.routeId));
+        navigation.navigate("Chat", { inbox });
+      }}
+    >
       <View style={{ flexDirection: "row" }}>
         <Image source={profile} style={styles.profileImg} />
 

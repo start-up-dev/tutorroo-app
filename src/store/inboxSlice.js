@@ -5,6 +5,7 @@ const initialState = {
   inboxes: [],
   messages: [],
   status: "idle",
+  selectedRouteId: null,
 };
 
 export const inboxSlice = createSlice({
@@ -19,6 +20,29 @@ export const inboxSlice = createSlice({
 
         return i;
       });
+    },
+
+    newMessageReceived: (state, action) => {
+      if (state.selectedRouteId == action.payload.routeId) {
+        state.messages = [action.payload, ...state.messages];
+      } else {
+        state.inboxes.map((i) => {
+          if (i.routeId == action.payload.routeId) {
+            i.numberOfUnSeenMessages = i.numberOfUnSeenMessages + 1;
+            i.lastMessage = action.payload;
+            i.lastMessageSendAt = Date.now();
+          }
+          return i;
+        });
+      }
+    },
+
+    clearMessages: (state, action) => {
+      state.messages = [];
+    },
+
+    setSelectedRouteId: (state, action) => {
+      state.selectedRouteId = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -40,4 +64,4 @@ export const inboxSlice = createSlice({
   },
 });
 
-export const { markAsSeenAll } = inboxSlice.actions;
+export const { markAsSeenAll, newMessageReceived, clearMessages, setSelectedRouteId } = inboxSlice.actions;
