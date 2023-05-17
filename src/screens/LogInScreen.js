@@ -13,10 +13,21 @@ import { useSelector, useDispatch } from "react-redux";
 import { getMe, login } from "../api/auth";
 import ErrorMessage from "../components/common/ErrorMessage";
 
+import * as WebBrowser from "expo-web-browser";
+import * as Google from "expo-auth-session/providers/google";
+
 const emailIcon = require("../../assets/images/email.png");
 const lockIcon = require("../../assets/images/lock.png");
 
+WebBrowser.maybeCompleteAuthSession();
+
 const LogInScreen = () => {
+  const [request, response, promptAsync] = Google.useAuthRequest({
+    androidClientId: "696720031553-3etrgp4huno66euudh7srk0jf53eo4b7.apps.googleusercontent.com",
+    iosClientId: "696720031553-4t35le1rrlqnq9n5k2vnrc4umdoollq0.apps.googleusercontent.com",
+    expoClientId: "696720031553-tfmsicb7up7q394bit19l0ijpldq55bh.apps.googleusercontent.com",
+  });
+
   const [inputs, setInputs] = useState({ email: "", password: "" });
   const [invalid, setInvalid] = useState();
   const [apiError, setApiError] = useState();
@@ -41,8 +52,7 @@ const LogInScreen = () => {
   }
 
   function validatePassword(password) {
-    const passwordRegex =
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()])[A-Za-z\d!@#$%^&*()]{8,}$/;
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()])[A-Za-z\d!@#$%^&*()]{8,}$/;
     return passwordRegex.test(password);
   }
 
@@ -65,9 +75,7 @@ const LogInScreen = () => {
       }
     }
 
-    console.log(
-      "Email:" + inputs.email + " Password:" + inputs.password + invalid
-    );
+    console.log("Email:" + inputs.email + " Password:" + inputs.password + invalid);
   };
 
   useEffect(() => {
@@ -78,23 +86,34 @@ const LogInScreen = () => {
     }
   }, [res]);
 
+  useEffect(() => {
+    if (response?.type === "success") {
+      getUserInfo(response.authentication.accessToken);
+    }
+  }, [response]);
+
+  const getUserInfo = async (token) => {
+    try {
+      const response = await fetch("https://www.googleapis.com/userinfo/v2/me", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      const user = await response.json();
+
+      console.log(user, null, 4);
+    } catch (error) {
+      // Add your own error handler here
+    }
+  };
+
   return (
     <SafeAreaView style={{ backgroundColor: Color.background, flex: 1 }}>
       <ScrollView style={{ paddingHorizontal: 20 }}>
         <Space height={50} />
         <Header title={"Log In"} subtitle={"Don't have an account?"} button />
         <Space height={30} />
-        <Input
-          placeholder="Email"
-          iconName={emailIcon}
-          onChangeText={(text) => handleOnchange(text, "email")}
-        />
-        <Input
-          placeholder="Password"
-          iconName={lockIcon}
-          onChangeText={(text) => handleOnchange(text, "password")}
-          password
-        />
+        <Input placeholder="Email" iconName={emailIcon} onChangeText={(text) => handleOnchange(text, "email")} />
+        <Input placeholder="Password" iconName={lockIcon} onChangeText={(text) => handleOnchange(text, "password")} password />
 
         <ErrorMessage message={invalid} />
 
@@ -107,16 +126,15 @@ const LogInScreen = () => {
         <Button title={"Log In"} onPress={onLogIn} status={status} />
 
         <ThirdPartyAuth
+          googleAuth={() => {
+            promptAsync();
+          }}
           text="Don't have an account?"
           linkText="Register"
           link="Register"
         />
 
-        <Button
-          title={"Register as a Tutor"}
-          tutor
-          onPress={() => navigation.navigate("Tutor Reg")}
-        />
+        <Button title={"Register as a Tutor"} tutor onPress={() => navigation.navigate("Tutor Reg")} />
       </ScrollView>
     </SafeAreaView>
   );
