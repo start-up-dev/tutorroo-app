@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getInboxes, getMessages } from "../api/inbox";
+import { getInboxes, getMessages, sendMessage } from "../api/inbox";
 
 const initialState = {
   inboxes: [],
@@ -23,6 +23,9 @@ export const inboxSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      .addCase(sendMessage.fulfilled, (state, action) => {
+        state.messages = [action.payload, ...state.messages];
+      })
       .addCase(getInboxes.pending, (state, action) => {
         state.status = "loading";
       })
@@ -30,12 +33,9 @@ export const inboxSlice = createSlice({
         state.status = "succeeded";
         state.inboxes = action.payload;
       })
-      .addCase(getMessages.pending, (state, action) => {
-        state.status = "loading";
-      })
+      .addCase(getMessages.pending, (state, action) => {})
       .addCase(getMessages.fulfilled, (state, action) => {
-        state.status = "succeeded";
-        state.messages = [...state.messages, ...action.payload];
+        state.messages = action.payload;
       });
   },
 });

@@ -1,25 +1,12 @@
 import React, { useState } from "react";
-import {
-  View,
-  Text,
-  TextInput,
-  StyleSheet,
-  TouchableOpacity,
-} from "react-native";
+import { View, Text, TextInput, StyleSheet, TouchableOpacity } from "react-native";
 import { Color } from "../../const/color";
 import Icon from "../common/Icon";
 
 const eyeIcon = require("../../../assets/images/eye.png");
 const hideEyeIcon = require("../../../assets/images/eye-slash.png");
 
-const Input = ({
-  iconName,
-  error,
-  password,
-  onFocus = () => {},
-  value,
-  ...props
-}) => {
+const Input = ({ iconName, error, password, onFocus = () => {}, value, ...props }) => {
   const [hidePassword, setHidePassword] = useState(password);
   const [isFocused, setIsFocused] = useState(false);
   return (

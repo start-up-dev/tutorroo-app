@@ -18,7 +18,7 @@ const SingleBar = ({ inbox }) => {
 
         <View>
           <Text style={{ fontWeight: 600 }}>{getFullName(inbox?.participant?.firstName, inbox?.participant?.lastName)}</Text>
-          <Text style={{ color: Color.dark3, marginTop: 10 }}>Hi!</Text>
+          <Text style={{ color: Color.dark3, marginTop: 10 }}>{inbox?.lastMessage?.text || "Attachment"}</Text>
         </View>
       </View>
       <View>

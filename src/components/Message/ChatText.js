@@ -2,6 +2,7 @@ import { Text, View, StyleSheet } from "react-native";
 import Icon from "../common/Icon";
 import { Color } from "../../const/color";
 import { useSelector } from "react-redux";
+import moment from "moment";
 
 const sentIcon = require("../../../assets/images/tick-square-active.png");
 
@@ -15,7 +16,7 @@ const ChatText = ({ msg }) => {
 
         <View style={styles.timeStampView}>
           <Icon icon={sentIcon} />
-          <Text style={styles.timeStamp}>9:12aaa am</Text>
+          <Text style={styles.timeStamp}>{moment(msg?.createdAt).fromNow()}</Text>
         </View>
       </View>
     );
@@ -24,7 +25,7 @@ const ChatText = ({ msg }) => {
       <View style={styles.container}>
         <View style={styles.timeStampView}>
           <Icon icon={sentIcon} />
-          <Text style={styles.timeStamp}>9:12 am</Text>
+          <Text style={styles.timeStamp}>{moment(msg?.createdAt).fromNow()}</Text>
         </View>
         <Text style={styles.messageText}>{msg?.text}</Text>
       </View>

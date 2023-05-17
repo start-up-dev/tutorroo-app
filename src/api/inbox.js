@@ -4,7 +4,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 // Get Inboxes
 
 export const getInboxes = createAsyncThunk(
-  "tutor/getInboxes",
+  "inbox/getInboxes",
   async (
     args = {
       skip: 0,
@@ -26,13 +26,11 @@ export const getInboxes = createAsyncThunk(
   }
 );
 
-export const getMessages = createAsyncThunk("tutor/getMessages", async (args = { routeId, skip: 0, limit: 20 }) => {
+export const getMessages = createAsyncThunk("inbox/getMessages", async (args = { routeId, skip: 0, limit: 20 }) => {
   try {
     const { data } = await Axios.get(`/inbox/messages`, {
       params: {
         routeId: args.routeId,
-        skip: args.skip,
-        limit: args.limit,
       },
     });
 
@@ -53,3 +51,13 @@ export const sendMessageRequest = async (participant) => {
     throw err;
   }
 };
+
+export const sendMessage = createAsyncThunk("inbox/sendMessage", async (message) => {
+  try {
+    const { data } = await Axios.post(`/inbox/messages/send`, message);
+
+    return data.message;
+  } catch (err) {
+    throw err;
+  }
+});
