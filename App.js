@@ -10,6 +10,7 @@ import MainStack from "./src/navigation";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { logIn } from "./src/store/authSlice";
 import { getMe } from "./src/api/auth";
+import { getSubject } from "./src/api/tutor";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -41,6 +42,7 @@ const Main = () => {
         if (value) {
           dispatch(logIn());
           dispatch(getMe());
+          dispatch(getSubject());
         }
       } catch (e) {
         console.warn(e);

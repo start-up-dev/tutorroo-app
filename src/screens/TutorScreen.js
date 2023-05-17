@@ -56,7 +56,7 @@ const TutorScreen = () => {
       </View>
       <ScrollView style={{ paddingHorizontal: 16 }}>
         <Loader visible={status == "loading" ? true : false} />
-        {res?.data.length > 0
+        {res?.data?.length > 0
           ? status !== "loading" &&
             res.data.map((item) => <TutorCard data={item} />)
           : status !== "loading" && (

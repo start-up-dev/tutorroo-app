@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   SafeAreaView,
   View,
@@ -17,6 +17,8 @@ import { useNavigation } from "@react-navigation/native";
 import { Color } from "../const/color";
 import Space from "../components/common/Space";
 import Subject from "../components/Home/Subject";
+import { useDispatch, useSelector } from "react-redux";
+import { getSubject } from "../api/tutor";
 
 const banner1 = require("../../assets/banner1.jpg");
 const banner2 = require("../../assets/banner2.png");
@@ -29,6 +31,15 @@ const height = Dimensions.get("window").height;
 
 const HomeScreen = () => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
+
+  const subject = useSelector((state) => state.tutor.subject);
+
+  useEffect(() => {
+    if (subject === null) {
+      dispatch(getSubject());
+    }
+  });
   return (
     <SafeAreaView style={{ backgroundColor: Color.background, flex: 1 }}>
       <StatusBar backgroundColor={Color.background} barStyle="dark-content" />
@@ -37,20 +48,15 @@ const HomeScreen = () => {
           <Image source={banner1} style={styles.banner1} />
         </Pressable>
         <Space height={20} />
-        <View style={{ flexDirection: "row" }}>
-          <Subject />
-          <Subject />
-          <Subject />
-        </View>
-        <View style={{ flexDirection: "row" }}>
-          <Subject />
-          <Subject />
-          <Subject />
-        </View>
-        <View style={{ flexDirection: "row" }}>
-          <Subject />
-          <Subject />
-          <Subject />
+        <View
+          style={{
+            flexDirection: "row",
+            flexWrap: "wrap",
+            justifyContent: "space-evenly",
+          }}
+        >
+          {subject?.length > 0 &&
+            subject?.map((item) => <Subject key={item._id} data={item} />)}
         </View>
         <Space height={10} />
         <TouchableOpacity>

@@ -83,7 +83,6 @@ export default StyleSheet.create({
     borderRadius: 8,
     width: "100%",
     overflow: "hidden",
-    zIndex: 100,
   },
   modalContentContainer: {
     flexGrow: 1,

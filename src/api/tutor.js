@@ -18,3 +18,16 @@ export const searchTutor = createAsyncThunk(
     }
   }
 );
+
+// Get Subject
+
+export const getSubject = createAsyncThunk("tutor/getSubject", async () => {
+  try {
+    const res = await Axios.get(`/subject`);
+    console.log("Try Subject" + JSON.stringify(res.data));
+    return res.data.data;
+  } catch (err) {
+    console.log("Catch Subject" + JSON.stringify(err.response.data));
+    return err.response.data;
+  }
+});

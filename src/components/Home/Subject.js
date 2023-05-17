@@ -4,12 +4,12 @@ import { Color } from "../../const/color";
 
 const image = require("../../../assets/physics.jpeg");
 
-const Subject = () => {
+const Subject = ({ data }) => {
   return (
     <>
       <View style={styles.container}>
         <Image
-          source={image}
+          source={data?.image ? { uri: data?.image } : image}
           style={[
             StyleSheet.absoluteFill,
             { width: "100%", height: "100%", borderRadius: 12 },
@@ -24,7 +24,7 @@ const Subject = () => {
             borderRadius: 40,
           }}
         ></View>
-        <Text style={styles.text}>Physics</Text>
+        <Text style={styles.text}>{data?.name}</Text>
       </View>
     </>
   );
@@ -32,8 +32,8 @@ const Subject = () => {
 
 const styles = StyleSheet.create({
   container: {
-    width: "30%",
-    height: 110,
+    width: 100,
+    height: 100,
     borderRadius: 40,
     margin: 6,
   },
