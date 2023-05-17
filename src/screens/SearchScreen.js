@@ -1,13 +1,5 @@
 import React, { useCallback, useState } from "react";
-import {
-  SafeAreaView,
-  View,
-  Text,
-  StyleSheet,
-  Dimensions,
-  Image,
-  Platform,
-} from "react-native";
+import { SafeAreaView, View, Text, StyleSheet, Dimensions, Image, Platform } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
 import DropDownPicker from "react-native-dropdown-picker";
@@ -115,67 +107,68 @@ const SearchScreen = () => {
       <View style={{ paddingHorizontal: 20 }}>
         <Space height={20} />
 
-        <DropDownPicker
-          open={subOpen}
-          value={subValue}
-          items={subjects}
-          onOpen={onSubOpen}
-          setOpen={setSubOpen}
-          setValue={setSubValue}
-          dropDownContainerStyle={styles.dropdown}
-          style={styles.dropdownPicker}
-          placeholder="Choose a subject"
-          zIndex={3000}
-          zIndexInverse={1000}
-        />
+        <View style={{ zIndex: 4 }}>
+          <DropDownPicker
+            open={subOpen}
+            value={subValue}
+            items={subjects}
+            onOpen={onSubOpen}
+            setOpen={setSubOpen}
+            setValue={setSubValue}
+            dropDownContainerStyle={styles.dropdown}
+            style={styles.dropdownPicker}
+            placeholder="Choose a subject"
+          />
+        </View>
         <Space height={15} />
 
-        <DropDownPicker
-          open={levelOpen}
-          value={levelValue}
-          items={levels}
-          onOpen={onLevelOpen}
-          setOpen={setLevelOpen}
-          setValue={setLevelValue}
-          dropDownContainerStyle={styles.dropdown}
-          style={styles.dropdownPicker}
-          placeholder="Choose a level"
-          zIndex={2000}
-          zIndexInverse={2000}
-        />
+        <View style={{ zIndex: 3 }}>
+          <DropDownPicker
+            open={levelOpen}
+            value={levelValue}
+            items={levels}
+            onOpen={onLevelOpen}
+            setOpen={setLevelOpen}
+            setValue={setLevelValue}
+            dropDownContainerStyle={styles.dropdown}
+            style={styles.dropdownPicker}
+            placeholder="Choose a level"
+          />
+        </View>
+
         <Space height={15} />
 
-        <DropDownPicker
-          open={typeOpen}
-          value={typeValue}
-          onOpen={onTypeOpen}
-          items={types}
-          setOpen={setTypeOpen}
-          setValue={setTypeValue}
-          dropDownContainerStyle={styles.dropdown}
-          style={styles.dropdownPicker}
-          placeholder="Choose a Tuition Type"
-          zIndex={1000}
-          zIndexInverse={3000}
-        />
+        <View style={{ zIndex: 2 }}>
+          <DropDownPicker
+            open={typeOpen}
+            value={typeValue}
+            onOpen={onTypeOpen}
+            items={types}
+            setOpen={setTypeOpen}
+            setValue={setTypeValue}
+            dropDownContainerStyle={styles.dropdown}
+            style={styles.dropdownPicker}
+            placeholder="Choose a Tuition Type"
+          />
+        </View>
 
         {typeValue === "One to one" && (
           <>
             <Space height={15} />
 
-            <DropDownPicker
-              open={eirOpen}
-              value={eirValue}
-              items={eircodes}
-              onOpen={onEirOpen}
-              setOpen={setEirOpen}
-              setValue={setEirValue}
-              dropDownContainerStyle={styles.dropdown}
-              style={styles.dropdownPicker}
-              placeholder="Choose your EIRCODE"
-              zIndex={500}
-              zIndexInverse={3500}
-            />
+            <View style={{ zIndex: 1 }}>
+              <DropDownPicker
+                open={eirOpen}
+                value={eirValue}
+                items={eircodes}
+                onOpen={onEirOpen}
+                setOpen={setEirOpen}
+                setValue={setEirValue}
+                dropDownContainerStyle={styles.dropdown}
+                style={styles.dropdownPicker}
+                placeholder="Choose your EIRCODE"
+              />
+            </View>
           </>
         )}
 
@@ -183,17 +176,10 @@ const SearchScreen = () => {
 
         <ErrorMessage message={invalid} />
 
-        <Button
-          title={"Search For Turors"}
-          status={status}
-          onPress={onSearch}
-        />
+        <Button title={"Search For Turors"} status={status} onPress={onSearch} />
 
         <View style={styles.postBtn}>
-          <Image
-            source={pq}
-            style={{ width: 24, height: 24, resizeMode: "contain" }}
-          />
+          <Image source={pq} style={{ width: 24, height: 24, resizeMode: "contain" }} />
           <Text style={styles.postText}>Post A Question</Text>
         </View>
       </View>
