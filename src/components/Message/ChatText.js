@@ -1,24 +1,48 @@
 import { Text, View, StyleSheet } from "react-native";
 import Icon from "../common/Icon";
 import { Color } from "../../const/color";
+import { useSelector } from "react-redux";
 
 const sentIcon = require("../../../assets/images/tick-square-active.png");
-const ChatText = () => {
-  return (
-    <View style={styles.container}>
-      <View style={styles.timeStampView}>
-        <Icon icon={sentIcon} />
-        <Text style={styles.timeStamp}>9:12 am</Text>
+
+const ChatText = ({ msg }) => {
+  const user = useSelector((state) => state?.auth?.user?.data);
+
+  if (user?._id == msg.sender._id) {
+    return (
+      <View style={styles.myMessageContainer}>
+        <Text style={styles.messageText}>{msg?.text}</Text>
+
+        <View style={styles.timeStampView}>
+          <Icon icon={sentIcon} />
+          <Text style={styles.timeStamp}>9:12aaa am</Text>
+        </View>
       </View>
-      <Text style={styles.messageText}>
-        Lorem ipsum dolor sit amet ectetur. Elementum proin tum nunc ipiscing
-        scelerisque volutpat et eget. bortis unc urna eget donec. Interdum um
-        rutrum interdum.
-      </Text>
-    </View>
-  );
+    );
+  } else {
+    return (
+      <View style={styles.container}>
+        <View style={styles.timeStampView}>
+          <Icon icon={sentIcon} />
+          <Text style={styles.timeStamp}>9:12 am</Text>
+        </View>
+        <Text style={styles.messageText}>{msg?.text}</Text>
+      </View>
+    );
+  }
 };
+
 const styles = StyleSheet.create({
+  myMessageContainer: {
+    backgroundColor: Color.WHITE,
+    borderRadius: 10,
+    borderBottomEndRadius: 0,
+    padding: 10,
+    marginVertical: 10,
+    display: "flex",
+    alignItems: "flex-end",
+  },
+
   container: {
     backgroundColor: Color.primarylight,
     borderRadius: 10,

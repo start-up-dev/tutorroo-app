@@ -17,7 +17,6 @@ const saveJwtToken = async (value) => {
 export const register = createAsyncThunk("auth/register", async (body) => {
   try {
     const res = await Axios.post(`authenticate/register`, body);
-    console.log("Try" + JSON.stringify(res.data));
     return res.data;
   } catch (err) {
     console.log("Catch" + JSON.stringify(err.response.data));
@@ -31,7 +30,6 @@ export const login = createAsyncThunk("auth/login", async (body) => {
   try {
     const res = await Axios.post(`/authenticate/login`, body);
     saveJwtToken(res.data.access_token);
-    console.log("Try" + JSON.stringify(res.data));
     return res.data;
   } catch (err) {
     console.log("Catch" + JSON.stringify(err.response.data));
@@ -59,7 +57,6 @@ export const loginWithGoogleBearerToken = createAsyncThunk("auth/login-with-goog
 export const getMe = createAsyncThunk("auth/getMe", async () => {
   try {
     const res = await Axios.get(`/authenticate/me`);
-    console.log("Try" + JSON.stringify(res.data));
     return res.data;
   } catch (err) {
     console.log("Catch" + JSON.stringify(err.response.data));
