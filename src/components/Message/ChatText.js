@@ -1,4 +1,4 @@
-import { Text, View, StyleSheet } from "react-native";
+import { Text, View, StyleSheet, Image } from "react-native";
 import Icon from "../common/Icon";
 import { Color } from "../../const/color";
 import { useSelector } from "react-redux";
@@ -8,6 +8,16 @@ const sentIcon = require("../../../assets/images/tick-square-active.png");
 
 const ChatText = ({ msg }) => {
   const user = useSelector((state) => state?.auth?.user?.data);
+
+  if (msg?.metadata?.type == "image") {
+    return (
+      <View style={{ width: "100%", marginVertical: 10, alignItems: user?._id == msg.sender._id ? "flex-end" : "flex-start" }}>
+        {msg.attachments?.map((uri, idx) => (
+          <Image source={{ uri: uri }} key={idx} style={{ height: 200, width: 200, backgroundColor: "rgba(0,0,0,0.02)", borderRadius: 10 }} resizeMode="contain" />
+        ))}
+      </View>
+    );
+  }
 
   if (user?._id == msg.sender._id) {
     return (

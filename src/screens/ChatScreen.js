@@ -1,13 +1,14 @@
-import { SafeAreaView, ScrollView, Text, StyleSheet, View, TextInput, Image, TouchableOpacity } from "react-native";
+import { SafeAreaView, ScrollView, Text, StyleSheet, View, TextInput, Image, TouchableOpacity, ActivityIndicator, ToastAndroid, Platform } from "react-native";
 import { Color } from "../const/color";
 import ChatText from "../components/Message/ChatText";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { clearMessages, markAsSeenAll, setSelectedRouteId } from "../store/inboxSlice";
 import { getMessages, sendMessage } from "../api/inbox";
-
+import * as ImagePicker from "expo-image-picker";
 import attachmentsIcon from "../../assets/images/attach-circle.png";
 import sendIcon from "../../assets/images/send.png";
+import { uploadFile } from "../api/files";
 
 const ChatScreen = ({ route }) => {
   const dispatch = useDispatch();
@@ -31,6 +32,8 @@ const ChatScreen = ({ route }) => {
 
   const [text, setText] = useState("");
 
+  const [uploadingAttachment, setUploadingAttachment] = useState(false);
+
   const conversationStarted = messages.length >= 2;
 
   const _sendMessage = () => {
@@ -42,6 +45,38 @@ const ChatScreen = ({ route }) => {
     );
 
     setText("");
+  };
+
+  const pickCoverImage = async () => {
+    try {
+      let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        aspect: [1, 1],
+        quality: 1,
+      });
+
+      if (!result.canceled) {
+        setUploadingAttachment(true);
+        const url = await uploadFile(result.assets[0].uri);
+        dispatch(
+          sendMessage({
+            routeId: inbox?.routeId,
+            attachments: [url],
+            metadata: {
+              type: "image",
+            },
+          })
+        );
+
+        setUploadingAttachment(false);
+      }
+    } catch (error) {
+      setUploadingAttachment(false);
+
+      if ((Platform.OS = "android")) {
+        ToastAndroid.show("Something went wrong.", ToastAndroid.LONG);
+      }
+    }
   };
 
   const scrollView = useRef();
@@ -75,9 +110,13 @@ const ChatScreen = ({ route }) => {
           <View style={{ borderWidth: 1, borderColor: "#DFDADA", borderRadius: 20, flex: 1, flexDirection: "row", padding: 4, justifyContent: "center", alignItems: "center" }}>
             <TextInput value={text} onChangeText={(v) => setText(v)} style={{ paddingVertical: 4, paddingHorizontal: 12, flex: 1 }} placeholder="Write message" />
 
-            <TouchableOpacity onPress={() => {}}>
-              <Image source={attachmentsIcon} style={{ width: 24, height: 24, marginRight: 8 }} />
-            </TouchableOpacity>
+            {uploadingAttachment ? (
+              <ActivityIndicator size="small" color={Color.primaryDeep} style={{ marginRight: 8 }} />
+            ) : (
+              <TouchableOpacity onPress={pickCoverImage}>
+                <Image source={attachmentsIcon} style={{ width: 24, height: 24, marginRight: 8 }} />
+              </TouchableOpacity>
+            )}
           </View>
 
           <TouchableOpacity
