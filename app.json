@@ -33,6 +33,14 @@
       }
     },
     "schema": "tutorroo",
-    "plugins": ["expo-apple-authentication"]
+    "plugins": [
+      "expo-apple-authentication",
+      [
+        "expo-document-picker",
+        {
+          "iCloudContainerEnvironment": "Production"
+        }
+      ]
+    ]
   }
 }
