@@ -10,6 +10,7 @@ import NotificationScreen from "../screens/NotificationScreen";
 import Header from "../components/common/Header";
 import BackBtn from "../components/Auth/BackBtn";
 import EditProfileScreen from "../screens/EditProfileScreen";
+import PostQuestionScreen from "../screens/PostQuestionScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -68,6 +69,13 @@ const MainStack = () => {
         options={{
           header: () => <BackBtn />,
           gestureEnabled: false,
+        }}
+      />
+      <Stack.Screen
+        name="Post Question"
+        component={PostQuestionScreen}
+        options={{
+          header: () => <Header title="Post A Question" />,
         }}
       />
     </Stack.Navigator>

@@ -26,6 +26,7 @@ const ThirdPartyAuth = ({
   linkText,
   tutor,
   googleAuth = () => {},
+  appleAuth = () => {},
 }) => {
   const navigation = useNavigation();
 
@@ -43,9 +44,9 @@ const ThirdPartyAuth = ({
               <Image source={facebook} style={{ width: 20, height: 20 }} />
             </View>
 
-            <View style={styles.continueBox}>
+            <TouchableOpacity style={styles.continueBox} onPress={appleAuth}>
               <Image source={apple} style={{ width: 20, height: 20 }} />
-            </View>
+            </TouchableOpacity>
           </View>
         </>
       )}

@@ -20,7 +20,7 @@ export const tutorSlice = createSlice({
       .addCase(searchTutor.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.error = action.payload?.issue;
-        state.res = action.payload;
+        state.res = action.payload?.message;
       })
       .addCase(getSubject.pending, (state, action) => {
         state.status = "loading";

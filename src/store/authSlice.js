@@ -1,5 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { register, login, getMe, loginWithGoogleBearerToken } from "../api/auth";
+import {
+  register,
+  login,
+  getMe,
+  loginWithGoogleBearerToken,
+  loginWithApple,
+} from "../api/auth";
 
 const initialState = {
   loggedIn: false,
@@ -26,6 +32,15 @@ export const authSlice = createSlice({
         state.status = "loading";
       })
       .addCase(loginWithGoogleBearerToken.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.loggedIn = true;
+        state.user = action.payload.user;
+        state.res = action.payload;
+      })
+      .addCase(loginWithApple.pending, (state, action) => {
+        state.status = "loading";
+      })
+      .addCase(loginWithApple.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.loggedIn = true;
         state.user = action.payload.user;

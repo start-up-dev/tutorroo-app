@@ -21,7 +21,7 @@ const Subject = ({ data }) => {
             opacity: 0.3,
             width: "100%",
             height: "100%",
-            borderRadius: 40,
+            borderRadius: 12,
           }}
         ></View>
         <Text style={styles.text}>{data?.name}</Text>

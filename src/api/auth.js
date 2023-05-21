@@ -39,18 +39,42 @@ export const login = createAsyncThunk("auth/login", async (body) => {
 
 // Log In With Google
 
-export const loginWithGoogleBearerToken = createAsyncThunk("auth/login-with-google-bearer-token", async (token) => {
-  try {
-    const { data } = await Axios.post(`/authenticate/login-with-google-bearer-token`, {
-      bearerToken: token,
-    });
-    saveJwtToken(data.token);
-    return data;
-  } catch (err) {
-    console.log("Catch" + JSON.stringify(err.response.data));
-    return err.response.data;
+export const loginWithGoogleBearerToken = createAsyncThunk(
+  "auth/login-with-google-bearer-token",
+  async (token) => {
+    try {
+      const { data } = await Axios.post(
+        `/authenticate/login-with-google-bearer-token`,
+        {
+          bearerToken: token,
+        }
+      );
+      saveJwtToken(data.token);
+      return data;
+    } catch (err) {
+      console.log("Catch" + JSON.stringify(err.response.data));
+      return err.response.data;
+    }
   }
-});
+);
+
+// Log In With Apple
+
+export const loginWithApple = createAsyncThunk(
+  "auth/login-with-apple",
+  async (body) => {
+    try {
+      const { data } = await Axios.post(
+        `/authenticate/login-with-apple-identity-token`,
+        body
+      );
+      saveJwtToken(data.token);
+      return data;
+    } catch (err) {
+      return err.response.data;
+    }
+  }
+);
 
 // Get Me
 

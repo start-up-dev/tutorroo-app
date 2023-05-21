@@ -1,5 +1,14 @@
-import React, { useCallback, useState } from "react";
-import { SafeAreaView, View, Text, StyleSheet, Dimensions, Image, Platform } from "react-native";
+import React, { useCallback, useEffect, useState } from "react";
+import {
+  SafeAreaView,
+  View,
+  Text,
+  StyleSheet,
+  Dimensions,
+  Image,
+  Platform,
+  TouchableOpacity,
+} from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
 import DropDownPicker from "react-native-dropdown-picker";
@@ -37,6 +46,7 @@ const SearchScreen = () => {
   const navigation = useNavigation();
 
   const status = useSelector((state) => state.tutor.state);
+  const res = useSelector((state) => state.tutor.res);
 
   const dispatch = useDispatch();
 
@@ -94,13 +104,16 @@ const SearchScreen = () => {
     if (subValue) {
       setInvalid("");
       dispatch(searchTutor(body));
-      navigation.navigate("Tutor");
     } else {
       setInvalid("Please Choose a Subject");
     }
-
-    console.log(body);
   };
+
+  useEffect(() => {
+    if (res === "something") {
+      navigation.navigate("Tutor");
+    }
+  }, [res]);
 
   return (
     <SafeAreaView style={styles.contains}>
@@ -176,12 +189,22 @@ const SearchScreen = () => {
 
         <ErrorMessage message={invalid} />
 
-        <Button title={"Search For Turors"} status={status} onPress={onSearch} />
+        <Button
+          title={"Search For Turors"}
+          status={status}
+          onPress={onSearch}
+        />
 
-        <View style={styles.postBtn}>
-          <Image source={pq} style={{ width: 24, height: 24, resizeMode: "contain" }} />
+        <TouchableOpacity
+          style={styles.postBtn}
+          onPress={() => navigation.navigate("Post Question")}
+        >
+          <Image
+            source={pq}
+            style={{ width: 24, height: 24, resizeMode: "contain" }}
+          />
           <Text style={styles.postText}>Post A Question</Text>
-        </View>
+        </TouchableOpacity>
       </View>
     </SafeAreaView>
   );

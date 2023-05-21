@@ -32,6 +32,7 @@
         "projectId": "067538b8-c352-4bdf-9770-fe340619303c"
       }
     },
-    "schema": "tutorroo"
+    "schema": "tutorroo",
+    "plugins": ["expo-apple-authentication"]
   }
 }

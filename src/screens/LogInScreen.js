@@ -10,11 +10,17 @@ import Button from "../components/common/Button";
 import ThirdPartyAuth from "../components/Auth/ThridPartyAuth";
 
 import { useSelector, useDispatch } from "react-redux";
-import { getMe, login, loginWithGoogleBearerToken } from "../api/auth";
+import {
+  getMe,
+  login,
+  loginWithApple,
+  loginWithGoogleBearerToken,
+} from "../api/auth";
 import ErrorMessage from "../components/common/ErrorMessage";
 
 import * as WebBrowser from "expo-web-browser";
 import * as Google from "expo-auth-session/providers/google";
+import * as AppleAuthentication from "expo-apple-authentication";
 
 const emailIcon = require("../../assets/images/email.png");
 const lockIcon = require("../../assets/images/lock.png");
@@ -23,14 +29,18 @@ WebBrowser.maybeCompleteAuthSession();
 
 const LogInScreen = () => {
   const [request, response, promptAsync] = Google.useAuthRequest({
-    androidClientId: "696720031553-3etrgp4huno66euudh7srk0jf53eo4b7.apps.googleusercontent.com",
-    iosClientId: "696720031553-4t35le1rrlqnq9n5k2vnrc4umdoollq0.apps.googleusercontent.com",
-    expoClientId: "696720031553-tfmsicb7up7q394bit19l0ijpldq55bh.apps.googleusercontent.com",
+    androidClientId:
+      "696720031553-3etrgp4huno66euudh7srk0jf53eo4b7.apps.googleusercontent.com",
+    iosClientId:
+      "696720031553-4t35le1rrlqnq9n5k2vnrc4umdoollq0.apps.googleusercontent.com",
+    expoClientId:
+      "696720031553-tfmsicb7up7q394bit19l0ijpldq55bh.apps.googleusercontent.com",
   });
 
   const [inputs, setInputs] = useState({ email: "", password: "" });
   const [invalid, setInvalid] = useState();
   const [apiError, setApiError] = useState();
+  const [appleToken, setAppleToken] = useState("");
 
   //Navigation
   const navigation = useNavigation();
@@ -52,7 +62,8 @@ const LogInScreen = () => {
   }
 
   function validatePassword(password) {
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()])[A-Za-z\d!@#$%^&*()]{8,}$/;
+    const passwordRegex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()])[A-Za-z\d!@#$%^&*()]{8,}$/;
     return passwordRegex.test(password);
   }
 
@@ -75,11 +86,38 @@ const LogInScreen = () => {
       }
     }
 
-    console.log("Email:" + inputs.email + " Password:" + inputs.password + invalid);
+    console.log(
+      "Email:" + inputs.email + " Password:" + inputs.password + invalid
+    );
+  };
+
+  const appleLogin = async () => {
+    try {
+      const credential = await AppleAuthentication.signInAsync({
+        requestedScopes: [
+          AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
+          AppleAuthentication.AppleAuthenticationScope.EMAIL,
+        ],
+      });
+      // signed in
+      setAppleToken(credential.identityToken);
+    } catch (e) {
+      if (e.code === "ERR_REQUEST_CANCELED") {
+        // handle that the user canceled the sign-in flow
+      } else {
+        // handle other errors
+      }
+    }
   };
 
   useEffect(() => {
-    console.log(res);
+    if (!!appleToken) {
+      const body = { identityToken: appleToken };
+      dispatch(loginWithApple(body));
+    }
+  }, [appleToken]);
+
+  useEffect(() => {
     if (res?.access_token || res?.token) {
       navigation.navigate("Home");
       dispatch(getMe());
@@ -98,8 +136,17 @@ const LogInScreen = () => {
         <Space height={50} />
         <Header title={"Log In"} subtitle={"Don't have an account?"} button />
         <Space height={30} />
-        <Input placeholder="Email" iconName={emailIcon} onChangeText={(text) => handleOnchange(text, "email")} />
-        <Input placeholder="Password" iconName={lockIcon} onChangeText={(text) => handleOnchange(text, "password")} password />
+        <Input
+          placeholder="Email"
+          iconName={emailIcon}
+          onChangeText={(text) => handleOnchange(text, "email")}
+        />
+        <Input
+          placeholder="Password"
+          iconName={lockIcon}
+          onChangeText={(text) => handleOnchange(text, "password")}
+          password
+        />
 
         <ErrorMessage message={invalid} />
 
@@ -118,9 +165,14 @@ const LogInScreen = () => {
           text="Don't have an account?"
           linkText="Register"
           link="Register"
+          appleAuth={() => appleLogin()}
         />
 
-        <Button title={"Register as a Tutor"} tutor onPress={() => navigation.navigate("Tutor Reg")} />
+        <Button
+          title={"Register as a Tutor"}
+          tutor
+          onPress={() => navigation.navigate("Tutor Reg")}
+        />
       </ScrollView>
     </SafeAreaView>
   );

@@ -108,7 +108,7 @@ const Header = ({ tutorProfile, data }) => {
           {tutorProfile && <Space height={20} />}
 
           <Text style={styles.profileName}>
-            {data?.firstName ? data?.firstName : "Mahbub"} {data?.lastName}
+            {data?.firstName ? data?.firstName : "Add Name"} {data?.lastName}
           </Text>
         </View>
       </View>
