@@ -3,8 +3,8 @@ import { Color } from "../const/color";
 import ChatText from "../components/Message/ChatText";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { clearMessages, markAsSeenAll, setSelectedRouteId } from "../store/inboxSlice";
-import { getMessages, sendMessage } from "../api/inbox";
+import { clearMessages, markAsSeenAll, messageRequestStatusChanged, setSelectedRouteId } from "../store/inboxSlice";
+import { changeMessageRequestStatus, getMessages, sendMessage } from "../api/inbox";
 import * as ImagePicker from "expo-image-picker";
 import attachmentsIcon from "../../assets/images/attach-circle.png";
 import sendIcon from "../../assets/images/send.png";
@@ -13,7 +13,7 @@ import { uploadFile } from "../api/files";
 const ChatScreen = ({ route }) => {
   const dispatch = useDispatch();
 
-  const { inbox } = route.params;
+  const [inbox, setInbox] = useState(route.params.inbox);
 
   const messages = useSelector((state) => state.inbox.messages.filter((msg) => msg.routeId == inbox.routeId));
 
@@ -34,8 +34,6 @@ const ChatScreen = ({ route }) => {
 
   const [uploadingAttachment, setUploadingAttachment] = useState(false);
 
-  const conversationStarted = messages.length >= 2;
-
   const _sendMessage = () => {
     dispatch(
       sendMessage({
@@ -47,7 +45,7 @@ const ChatScreen = ({ route }) => {
     setText("");
   };
 
-  const pickCoverImage = async () => {
+  const pickDocs = async () => {
     try {
       let result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -80,6 +78,20 @@ const ChatScreen = ({ route }) => {
   };
 
   const scrollView = useRef();
+
+  const handleChangeMessageRequestState = async (status = "rejected") => {
+    setInbox((prev) => ({ ...prev, status }));
+
+    dispatch(
+      messageRequestStatusChanged({
+        routeId: inbox.routeId,
+        status,
+      })
+    );
+
+    changeMessageRequestStatus(inbox.routeId, status);
+  };
+
   return (
     <SafeAreaView
       style={{
@@ -98,14 +110,56 @@ const ChatScreen = ({ route }) => {
           <ChatText msg={msg} key={idx} />
         ))}
 
-        {!conversationStarted && (
-          <Text style={styles.noticeText}>
-            {user?._id == inbox?.lastMessage?.sender && messages.length == 1 ? "Your request has not been accepted yet. We will keep you informed about updates." : "Reply or ignore this message."}
-          </Text>
+        {inbox?.status == "pending" && inbox?.creator != user?._id && (
+          <View style={{ flex: 1, flexDirection: "row", marginVertical: 8 }}>
+            <TouchableOpacity
+              onPress={() => handleChangeMessageRequestState("rejected")}
+              style={{
+                padding: 12,
+                backgroundColor: "#FFE8E8",
+                flex: 1,
+                marginRight: 8,
+                borderRadius: 10,
+              }}
+            >
+              <Text
+                style={{
+                  color: "#EB5656",
+                  textAlign: "center",
+                }}
+              >
+                Reject
+              </Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              onPress={() => handleChangeMessageRequestState("approved")}
+              style={{
+                padding: 12,
+                backgroundColor: "#00C78E",
+                flex: 1,
+                marginLeft: 8,
+                borderRadius: 10,
+              }}
+            >
+              <Text
+                style={{
+                  color: "#FFFFFF",
+                  textAlign: "center",
+                }}
+              >
+                Accept
+              </Text>
+            </TouchableOpacity>
+          </View>
         )}
+
+        {inbox?.status == "pending" && inbox?.creator == user?._id && <Text style={styles.noticeText}>Your request has not been accepted yet. We will keep you informed about updates.</Text>}
+
+        {inbox?.status == "rejected" && <Text style={styles.noticeText}>Message request was rejected.</Text>}
       </ScrollView>
 
-      {(user?._id != inbox?.lastMessage?.sender || messages.length > 1) && (
+      {inbox?.status == "approved" && (
         <View style={{ display: "flex", flexDirection: "row", paddingVertical: 8, paddingHorizontal: 12, justifyContent: "center", alignItems: "center" }}>
           <View style={{ borderWidth: 1, borderColor: "#DFDADA", borderRadius: 20, flex: 1, flexDirection: "row", padding: 4, justifyContent: "center", alignItems: "center" }}>
             <TextInput value={text} onChangeText={(v) => setText(v)} style={{ paddingVertical: 4, paddingHorizontal: 12, flex: 1 }} placeholder="Write message" />
@@ -113,7 +167,7 @@ const ChatScreen = ({ route }) => {
             {uploadingAttachment ? (
               <ActivityIndicator size="small" color={Color.primaryDeep} style={{ marginRight: 8 }} />
             ) : (
-              <TouchableOpacity onPress={pickCoverImage}>
+              <TouchableOpacity onPress={pickDocs}>
                 <Image source={attachmentsIcon} style={{ width: 24, height: 24, marginRight: 8 }} />
               </TouchableOpacity>
             )}

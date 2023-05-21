@@ -51,6 +51,18 @@ export const sendMessageRequest = async (participant) => {
     throw err;
   }
 };
+export const changeMessageRequestStatus = async (routeId, status) => {
+  try {
+    const { data } = await Axios.post(`/inbox/change-message-request-status`, {
+      routeId,
+      status,
+    });
+
+    return data.inbox;
+  } catch (err) {
+    throw err;
+  }
+};
 
 export const sendMessage = createAsyncThunk("inbox/sendMessage", async (message) => {
   try {

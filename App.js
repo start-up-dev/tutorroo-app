@@ -13,7 +13,7 @@ import { logIn } from "./src/store/authSlice";
 import { getMe } from "./src/api/auth";
 import { getSubject } from "./src/api/tutor";
 import { socketBaseURL } from "./src/config/baseURL";
-import { newMessageReceived } from "./src/store/inboxSlice";
+import { messageRequestStatusChanged, newMessageReceived } from "./src/store/inboxSlice";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -29,6 +29,15 @@ AsyncStorage.getItem("TOKEN").then((token) => {
       store.dispatch(newMessageReceived(message));
 
       if (store.getState().inbox.selectedRouteId == message.routeId) socket.emit("MESSAGE_SEEN", message.routeId);
+    });
+
+    socket.on("MESSAGE_REQUEST_STATUS_CHANGED", (routeId, status) => {
+      store.dispatch(
+        messageRequestStatusChanged({
+          routeId,
+          status,
+        })
+      );
     });
   }
 });

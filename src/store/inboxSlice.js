@@ -37,6 +37,16 @@ export const inboxSlice = createSlice({
       }
     },
 
+    messageRequestStatusChanged: (state, action) => {
+      state.inboxes.map((i) => {
+        if (i.routeId == action.payload.routeId) {
+          i.status = action.payload.status;
+        }
+
+        return i;
+      });
+    },
+
     clearMessages: (state, action) => {
       state.messages = [];
     },
@@ -64,4 +74,4 @@ export const inboxSlice = createSlice({
   },
 });
 
-export const { markAsSeenAll, newMessageReceived, clearMessages, setSelectedRouteId } = inboxSlice.actions;
+export const { markAsSeenAll, newMessageReceived, clearMessages, setSelectedRouteId, messageRequestStatusChanged } = inboxSlice.actions;
