@@ -40,10 +40,13 @@ export const getMessages = createAsyncThunk("inbox/getMessages", async (args = {
   }
 });
 
-export const sendMessageRequest = async (participant) => {
+export const sendMessageRequest = async (participant, subject, level, question, attachments) => {
   try {
     const { data } = await Axios.post(`/inbox/send-message-request`, {
       participant,
+      subject,
+      level,
+      attachments,
     });
 
     return data.inbox;
