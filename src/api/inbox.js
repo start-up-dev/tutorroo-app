@@ -46,6 +46,7 @@ export const sendMessageRequest = async (participant, subject, level, question, 
       participant,
       subject,
       level,
+      question,
       attachments,
     });
 
