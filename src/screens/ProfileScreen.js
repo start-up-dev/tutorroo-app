@@ -42,7 +42,7 @@ const ProfileScreen = () => {
   };
   return (
     <>
-      <Header data={userInfo?.data} />
+      <Header data={userInfo} />
       <View
         style={{ backgroundColor: Color.background, paddingHorizontal: 20 }}
       >

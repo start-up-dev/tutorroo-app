@@ -87,3 +87,19 @@ export const getMe = createAsyncThunk("auth/getMe", async () => {
     return err.response.data;
   }
 });
+
+// Update Profile
+
+export const updateProfile = createAsyncThunk(
+  "auth/updateProfile",
+  async (body) => {
+    try {
+      const res = await Axios.patch(`/authenticate/update_profile`, body);
+      console.log("Try Update Profile" + JSON.stringify(res.data));
+      return res.data;
+    } catch (err) {
+      console.log("Catch Update Profile" + JSON.stringify(err.response.data));
+      return err.response.data;
+    }
+  }
+);

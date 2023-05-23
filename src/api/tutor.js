@@ -28,3 +28,29 @@ export const getSubject = createAsyncThunk("tutor/getSubject", async () => {
     return err.response.data;
   }
 });
+
+// Get Wishlist
+
+export const getWishlist = createAsyncThunk("tutor/getWishlist", async () => {
+  try {
+    const { data } = await Axios.get(`/wishlist`);
+    console.log("Try Get Wishlist: " + JSON.stringify(data));
+    return data;
+  } catch (err) {
+    console.log("Try Get Wishlist: " + JSON.stringify(err.response.data));
+    return err.response.data;
+  }
+});
+
+// Add To Wishlist
+
+export const addWishlist = createAsyncThunk("tutor/addWishlist", async (id) => {
+  try {
+    const { data } = await Axios.patch(`/wishlist/add/${id}`);
+    console.log("Try Add Wishlist: " + JSON.stringify(data));
+    return data;
+  } catch (err) {
+    console.log("Catch Add Wishlist: " + JSON.stringify(err.response.data));
+    return err.response.data;
+  }
+});

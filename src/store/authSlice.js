@@ -5,6 +5,7 @@ import {
   getMe,
   loginWithGoogleBearerToken,
   loginWithApple,
+  updateProfile,
 } from "../api/auth";
 
 const initialState = {
@@ -24,6 +25,9 @@ export const authSlice = createSlice({
     },
     logOut: (state, action) => {
       state.loggedIn = false;
+    },
+    clearRes: (state, action) => {
+      state.res = null;
     },
   },
   extraReducers: (builder) => {
@@ -71,9 +75,17 @@ export const authSlice = createSlice({
       })
       .addCase(getMe.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.user = action.payload;
+        state.user = action.payload?.data;
+      })
+      .addCase(updateProfile.pending, (state, action) => {
+        state.status = "loading";
+      })
+      .addCase(updateProfile.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.res = action.payload?.message;
+        state.user = action.payload?.data;
       });
   },
 });
 
-export const { logIn, logOut } = authSlice.actions;
+export const { logIn, logOut, clearRes } = authSlice.actions;

@@ -1,4 +1,11 @@
-import { SafeAreaView, ScrollView, Text, TouchableOpacity, View, StyleSheet } from "react-native";
+import {
+  SafeAreaView,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+  StyleSheet,
+} from "react-native";
 
 import TutorCard from "../components/common/TutorCard";
 import Loader from "../components/common/Loader";
@@ -14,20 +21,34 @@ const sad = require("../../assets/images/emoji-sad.png");
 const TutorScreen = () => {
   const [tab, setTab] = useState(1);
 
-  const res = useSelector((state) => state.tutor.res);
+  const tutor = useSelector((state) => state.tutor.tutor);
   const status = useSelector((state) => state.tutor.status);
 
   return (
     <SafeAreaView style={{ backgroundColor: Color.background, flex: 1 }}>
       <View style={styles.tabView}>
         <View></View>
-        <TouchableOpacity onPress={() => setTab(1)} style={{ alignItems: "center" }}>
-          <Text style={[styles.tabText, tab === 1 && { color: Color.primaryDeep }]}>All</Text>
+        <TouchableOpacity
+          onPress={() => setTab(1)}
+          style={{ alignItems: "center" }}
+        >
+          <Text
+            style={[styles.tabText, tab === 1 && { color: Color.primaryDeep }]}
+          >
+            All
+          </Text>
           {tab === 1 && <Icon icon={dot} xs />}
           {tab === 2 && <Icon xs />}
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => setTab(2)} style={{ alignItems: "center" }}>
-          <Text style={[styles.tabText, tab === 2 && { color: Color.primaryDeep }]}>Pro Tutor</Text>
+        <TouchableOpacity
+          onPress={() => setTab(2)}
+          style={{ alignItems: "center" }}
+        >
+          <Text
+            style={[styles.tabText, tab === 2 && { color: Color.primaryDeep }]}
+          >
+            Pro Tutor
+          </Text>
           {tab === 2 && <Icon icon={dot} xs />}
           {tab === 1 && <Icon xs />}
         </TouchableOpacity>
@@ -35,8 +56,9 @@ const TutorScreen = () => {
       </View>
       <ScrollView style={{ paddingHorizontal: 16 }}>
         <Loader visible={status == "loading" ? true : false} />
-        {res?.data?.length > 0
-          ? status !== "loading" && res.data.map((item, idx) => <TutorCard data={item} key={idx} />)
+        {tutor?.data?.length > 0
+          ? status !== "loading" &&
+            tutor.data.map((item, idx) => <TutorCard data={item} key={idx} />)
           : status !== "loading" && (
               <View style={styles.notFound}>
                 <Icon icon={sad} xxl />
