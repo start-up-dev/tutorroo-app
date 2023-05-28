@@ -24,9 +24,8 @@ const styles = StyleSheet.create({
   },
   messageText: {
     color: Color.danger1,
-    fontSize: 16,
-    marginLeft: 10,
-    alignSelf: "center",
+    fontSize: 14,
+    marginHorizontal: 10,
     textAlign: "center",
     fontFamily: "sofia-medium",
     lineHeight: 26,

@@ -6,6 +6,8 @@ import {
   loginWithGoogleBearerToken,
   loginWithApple,
   updateProfile,
+  verifyAccount,
+  resendOTP,
 } from "../api/auth";
 
 const initialState = {
@@ -28,6 +30,9 @@ export const authSlice = createSlice({
     },
     clearRes: (state, action) => {
       state.res = null;
+    },
+    clearError: (state, action) => {
+      state.error = null;
     },
   },
   extraReducers: (builder) => {
@@ -70,6 +75,28 @@ export const authSlice = createSlice({
         }
         state.res = action.payload;
       })
+      .addCase(verifyAccount.fulfilled, (state, action) => {
+        state.status = "succeeded";
+
+        if (action.payload?.issue) {
+          state.error = action.payload?.issue;
+        }
+
+        if (action.payload?.message) {
+          state.res = action.payload?.message;
+        }
+      })
+      .addCase(verifyAccount.pending, (state, action) => {
+        state.status = "loading";
+      })
+      .addCase(resendOTP.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.error = action.payload?.issue;
+        state.res = action.payload;
+      })
+      .addCase(resendOTP.pending, (state, action) => {
+        state.status = "loading";
+      })
       .addCase(getMe.pending, (state, action) => {
         state.status = "loading";
       })
@@ -88,4 +115,4 @@ export const authSlice = createSlice({
   },
 });
 
-export const { logIn, logOut, clearRes } = authSlice.actions;
+export const { logIn, logOut, clearRes, clearError } = authSlice.actions;

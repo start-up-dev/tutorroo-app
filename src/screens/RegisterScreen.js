@@ -10,19 +10,13 @@ import { useNavigation } from "@react-navigation/native";
 import { useSelector, useDispatch } from "react-redux";
 import { register } from "../api/auth";
 import ErrorMessage from "../components/common/ErrorMessage";
-
-import { getAuth, sendSignInLinkToEmail } from "firebase/auth";
-import { initializeApp } from "firebase/app";
-import { firebaseConfig } from "../config/firebase";
+import { clearRes } from "../store/authSlice";
 
 const emailIcon = require("../../assets/images/email.png");
 const lockIcon = require("../../assets/images/lock.png");
 const profileIcon = require("../../assets/images/profile-circle.png");
 
 const RegisterScreen = () => {
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-
   const [inputs, setInputs] = useState({
     firstName: "",
     lastName: "",
@@ -59,12 +53,12 @@ const RegisterScreen = () => {
   }
 
   const onRegister = async () => {
-    const sendEmail = await sendSignInLinkToEmail(
-      getAuth(app),
-      "mahbub@makereal.io",
-      { handleCodeInApp: true }
-    );
-    console.log("Send Email:" + sendEmail);
+    // const sendEmail = await sendSignInLinkToEmail(
+    //   getAuth(app),
+    //   "mahbub@makereal.io",
+    //   { handleCodeInApp: true }
+    // );
+    // console.log("Send Email:" + sendEmail);
 
     if (
       validateEmail(inputs.email) &&
@@ -97,12 +91,14 @@ const RegisterScreen = () => {
   };
 
   useEffect(() => {
-    if (
-      res?.message === "Registration successful, Please verify your account"
-    ) {
-      console.log("hello");
+    if (res?.userId) {
+      navigation.navigate("Enter OTP", {
+        data: { email: inputs.email, password: inputs.password },
+      });
     }
-  });
+  }, [res]);
+
+  console.log(res);
 
   return (
     <SafeAreaView style={{ backgroundColor: Color.background, flex: 1 }}>
@@ -143,7 +139,7 @@ const RegisterScreen = () => {
 
         <ErrorMessage message={invalid} />
 
-        {error?.message && apiError && <ErrorMessage message={error.message} />}
+        {error && apiError && <ErrorMessage message={error?.email} />}
 
         <Button title="Register" status={status} onPress={onRegister} />
         <ThirdPartyAuth

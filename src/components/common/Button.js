@@ -1,8 +1,13 @@
 import React from "react";
-import { TouchableOpacity, Text, ActivityIndicator, StyleSheet } from "react-native";
+import {
+  TouchableOpacity,
+  Text,
+  ActivityIndicator,
+  StyleSheet,
+} from "react-native";
 import { Color } from "../../const/color";
 
-const Button = ({ status, tutor, title, onPress = () => {} }) => {
+const Button = ({ status, tutor, title, onPress }) => {
   return (
     <TouchableOpacity
       onPress={onPress}

@@ -6,6 +6,7 @@ import {
   KeyboardAvoidingView,
   Image,
   TouchableOpacity,
+  Platform,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
@@ -40,13 +41,11 @@ const ThirdPartyAuth = ({
               <Image source={google} style={{ width: 20, height: 20 }} />
             </TouchableOpacity>
 
-            <View style={styles.continueBox}>
-              <Image source={facebook} style={{ width: 20, height: 20 }} />
-            </View>
-
-            <TouchableOpacity style={styles.continueBox} onPress={appleAuth}>
-              <Image source={apple} style={{ width: 20, height: 20 }} />
-            </TouchableOpacity>
+            {Platform.OS === "ios" && (
+              <TouchableOpacity style={styles.continueBox} onPress={appleAuth}>
+                <Image source={apple} style={{ width: 20, height: 20 }} />
+              </TouchableOpacity>
+            )}
           </View>
         </>
       )}
@@ -75,7 +74,7 @@ const styles = StyleSheet.create({
   },
   continueView: {
     flexDirection: "row",
-    justifyContent: "space-around",
+    justifyContent: "center",
     marginVertical: 20,
   },
   continueBox: {
@@ -86,6 +85,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 8,
+    marginHorizontal: 10,
   },
 
   bottomText: {

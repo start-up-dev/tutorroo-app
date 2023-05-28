@@ -7,7 +7,7 @@ import Space from "../components/common/Space";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import Icon from "../components/common/Icon";
 import { useDispatch, useSelector } from "react-redux";
-import { logOut } from "../store/authSlice";
+import { clearError, clearRes, logOut } from "../store/authSlice";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 
@@ -35,6 +35,8 @@ const ProfileScreen = () => {
         onPress: async () => {
           await AsyncStorage.removeItem("TOKEN");
           dispatch(logOut());
+          dispatch(clearRes());
+          dispatch(clearError());
           navigation.navigate("Auth");
         },
       },

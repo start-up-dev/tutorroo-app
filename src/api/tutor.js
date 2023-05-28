@@ -23,8 +23,10 @@ export const searchTutor = createAsyncThunk(
 export const getSubject = createAsyncThunk("tutor/getSubject", async () => {
   try {
     const res = await Axios.get(`/subject`);
+    console.log("Try Seubject: " + JSON.stringify(res.data));
     return res.data.data;
   } catch (err) {
+    console.log("Catch Seubject: " + JSON.stringify(err.response.data));
     return err.response.data;
   }
 });
@@ -54,3 +56,21 @@ export const addWishlist = createAsyncThunk("tutor/addWishlist", async (id) => {
     return err.response.data;
   }
 });
+
+// Remove From Wishlist
+
+export const removeWishlist = createAsyncThunk(
+  "tutor/removeWishlist",
+  async (id) => {
+    try {
+      const { data } = await Axios.patch(`/wishlist/remove/${id}`);
+      console.log("Try Remove Wishlist: " + JSON.stringify(data));
+      return data;
+    } catch (err) {
+      console.log(
+        "Catch Remove Wishlist: " + JSON.stringify(err.response.data)
+      );
+      return err.response.data;
+    }
+  }
+);

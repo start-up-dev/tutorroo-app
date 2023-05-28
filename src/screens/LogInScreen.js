@@ -15,12 +15,14 @@ import {
   login,
   loginWithApple,
   loginWithGoogleBearerToken,
+  resendOTP,
 } from "../api/auth";
 import ErrorMessage from "../components/common/ErrorMessage";
 
 import * as WebBrowser from "expo-web-browser";
 import * as Google from "expo-auth-session/providers/google";
 import * as AppleAuthentication from "expo-apple-authentication";
+import { clearError } from "../store/authSlice";
 
 const emailIcon = require("../../assets/images/email.png");
 const lockIcon = require("../../assets/images/lock.png");
@@ -125,6 +127,16 @@ const LogInScreen = () => {
   }, [res]);
 
   useEffect(() => {
+    if (error?.message == "Please verify your email") {
+      dispatch(clearError());
+      navigation.navigate("Enter OTP", {
+        data: { email: inputs.email, password: inputs.password },
+      });
+      dispatch(resendOTP({ email: inputs.email }));
+    }
+  }, [error]);
+
+  useEffect(() => {
     if (response?.type === "success") {
       dispatch(loginWithGoogleBearerToken(response.authentication.accessToken));
     }
@@ -150,7 +162,9 @@ const LogInScreen = () => {
 
         <ErrorMessage message={invalid} />
 
-        {error?.message && apiError && <ErrorMessage message={error.message} />}
+        {error?.message && apiError && (
+          <ErrorMessage message={error?.message} />
+        )}
 
         <Space height={10} />
 

@@ -12,19 +12,20 @@ const saveJwtToken = async (value) => {
   }
 };
 
-// Register In
+// Node Register
 
 export const register = createAsyncThunk("auth/register", async (body) => {
   try {
     const res = await Axios.post(`authenticate/register`, body);
+    console.log("Try Register" + JSON.stringify(res.data));
     return res.data;
   } catch (err) {
-    console.log("Catch" + JSON.stringify(err.response.data));
+    console.log("Catch Register" + JSON.stringify(err.response.data));
     return err.response.data;
   }
 });
 
-// Log In
+// Node Log In
 
 export const login = createAsyncThunk("auth/login", async (body) => {
   try {
@@ -33,6 +34,35 @@ export const login = createAsyncThunk("auth/login", async (body) => {
     return res.data;
   } catch (err) {
     console.log("Catch" + JSON.stringify(err.response.data));
+    return err.response.data;
+  }
+});
+
+// Node Verify Account
+
+export const verifyAccount = createAsyncThunk(
+  "auth/verifyAccount",
+  async (body) => {
+    try {
+      const res = await Axios.patch(`/authenticate/verify_account`, body);
+      console.log("Try Verify Account" + JSON.stringify(res.data));
+      return res.data;
+    } catch (err) {
+      console.log("Catch Verify Account" + JSON.stringify(err.response.data));
+      return err.response.data;
+    }
+  }
+);
+
+// Node Resend OTP
+
+export const resendOTP = createAsyncThunk("auth/resendOTP", async (body) => {
+  try {
+    const res = await Axios.post(`/authenticate/resend_code`, body);
+    console.log("Try Resend Code" + JSON.stringify(res.data));
+    return res.data;
+  } catch (err) {
+    console.log("Catch Resend Code" + JSON.stringify(err.response.data));
     return err.response.data;
   }
 });

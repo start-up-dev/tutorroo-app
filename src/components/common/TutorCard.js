@@ -5,9 +5,11 @@ import { Color } from "../../const/color";
 import SubjectTag from "../Profile/SubjectTag";
 import Space from "./Space";
 import Icon from "./Icon";
-import { useState } from "react";
-import { useDispatch } from "react-redux";
-import { addWishlist } from "../../api/tutor";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { addWishlist, removeWishlist } from "../../api/tutor";
+import { getMe } from "../../api/auth";
+import { wishlistRemoved } from "../../store/tutorSlice";
 
 const profile = require("../../../assets/profile.jpeg");
 const verified = require("../../../assets/images/verified.png");
@@ -23,15 +25,24 @@ const TutorCard = ({ data }) => {
 
   const dispatch = useDispatch();
 
+  const userInfo = useSelector((state) => state.auth.user);
+
   const onWishlist = (id) => {
     if (favourite) {
       setFavourite(false);
+      dispatch(removeWishlist(id));
+      dispatch(wishlistRemoved(id));
     } else {
       setFavourite(true);
       dispatch(addWishlist(id));
-      console.log("Tutor ID: " + id);
     }
   };
+
+  useEffect(() => {
+    if (userInfo?.wishlist?.includes(data?._id)) {
+      setFavourite(true);
+    }
+  }, [userInfo]);
 
   return (
     <View
