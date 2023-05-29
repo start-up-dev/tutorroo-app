@@ -5,8 +5,9 @@ import DropDownPicker from "react-native-dropdown-picker";
 import { useCallback, useState } from "react";
 import Button from "../components/common/Button";
 import Icon from "../components/common/Icon";
+import * as DocumentPicker from "expo-document-picker";
 import * as ImagePicker from "expo-image-picker";
-import { uploadFile } from "../api/files";
+import { uploadFile, uploadFileV2 } from "../api/files";
 import { sendMessageRequest } from "../api/inbox";
 import { useDispatch } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
@@ -47,16 +48,12 @@ const PostQuestionScreen = () => {
 
   const pickDocs = async () => {
     try {
-      let result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        aspect: [1, 1],
-        quality: 1,
-      });
+      let res = await DocumentPicker.getDocumentAsync();
 
-      if (!result.canceled) {
-        const url = await uploadFile(result.assets[0].uri);
+      if (res.type == "success") {
+        const data = await uploadFileV2(res);
 
-        setDocs((prev) => [...prev, url]);
+        setDocs((prev) => [...prev, data.attachment]);
       }
     } catch (error) {
       if ((Platform.OS = "android")) {
@@ -69,9 +66,23 @@ const PostQuestionScreen = () => {
 
   const handlePostAQuestion = async () => {
     try {
+      if (question == "") {
+        if ((Platform.OS = "android")) {
+          ToastAndroid.show("Question is required.", ToastAndroid.LONG);
+        }
+
+        return;
+      }
+
       setStatus("loading");
 
-      const inbox = await sendMessageRequest("643bfc50926f6f9dd8848e40", subValue, levelValue, question, docs);
+      const inbox = await sendMessageRequest(
+        "643bfc50926f6f9dd8848e40",
+        subValue,
+        levelValue,
+        question,
+        docs.map((d) => d._id)
+      );
 
       dispatch(clearMessages());
       dispatch(setSelectedRouteId(inbox.routeId));
@@ -80,6 +91,10 @@ const PostQuestionScreen = () => {
       setDocs([]);
     } catch (error) {
       setStatus(null);
+
+      if ((Platform.OS = "android")) {
+        ToastAndroid.show(error?.response?.data?.issue?.message || "Something went wrong.", ToastAndroid.LONG);
+      }
     }
   };
 
@@ -126,7 +141,7 @@ const PostQuestionScreen = () => {
             key={idx}
             style={{ display: "flex", marginBottom: 8, flexDirection: "row", borderColor: Color.border, borderWidth: 1, borderRadius: 12, backgroundColor: Color.background, padding: 8 }}
           >
-            <Text style={{ flex: 1 }}>{doc}</Text>
+            <Text style={{ flex: 1 }}>{doc?.name}</Text>
 
             <TouchableOpacity onPress={() => setDocs((prev) => prev.filter((d) => d != doc))}>
               <Icon icon={closeIcon} l />

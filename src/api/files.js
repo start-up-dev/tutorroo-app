@@ -25,3 +25,20 @@ export const uploadFile = async (localUri) => {
     throw err;
   }
 };
+
+export const uploadFileV2 = async (file) => {
+  try {
+    let formData = new FormData();
+    formData.append("file", { ...file, type: file.mimeType });
+
+    const { data } = await Axios.post(`/files/upload`, formData, {
+      headers: {
+        "content-type": "multipart/form-data",
+      },
+    });
+
+    return data;
+  } catch (err) {
+    throw err;
+  }
+};
