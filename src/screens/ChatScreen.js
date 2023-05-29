@@ -8,7 +8,8 @@ import { changeMessageRequestStatus, getMessages, sendMessage } from "../api/inb
 import * as ImagePicker from "expo-image-picker";
 import attachmentsIcon from "../../assets/images/attach-circle.png";
 import sendIcon from "../../assets/images/send.png";
-import { uploadFile } from "../api/files";
+import { uploadFile, uploadFileV2 } from "../api/files";
+import * as DocumentPicker from "expo-document-picker";
 
 const ChatScreen = ({ route }) => {
   const dispatch = useDispatch();
@@ -17,7 +18,7 @@ const ChatScreen = ({ route }) => {
 
   const messages = useSelector((state) => state.inbox.messages.filter((msg) => msg.routeId == inbox.routeId));
 
-  const user = useSelector((state) => state.auth.user?.data);
+  const user = useSelector((state) => state.auth.user);
 
   useEffect(() => {
     dispatch(markAsSeenAll(inbox._id));
@@ -47,30 +48,23 @@ const ChatScreen = ({ route }) => {
 
   const pickDocs = async () => {
     try {
-      let result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        aspect: [1, 1],
-        quality: 1,
-      });
+      let res = await DocumentPicker.getDocumentAsync();
 
-      if (!result.canceled) {
+      if (res.type == "success") {
         setUploadingAttachment(true);
-        const url = await uploadFile(result.assets[0].uri);
+
+        const data = await uploadFileV2(res);
+
         dispatch(
           sendMessage({
             routeId: inbox?.routeId,
-            attachments: [url],
-            metadata: {
-              type: "image",
-            },
+            attachments: [data.attachment?._id],
           })
         );
 
         setUploadingAttachment(false);
       }
     } catch (error) {
-      setUploadingAttachment(false);
-
       if ((Platform.OS = "android")) {
         ToastAndroid.show("Something went wrong.", ToastAndroid.LONG);
       }

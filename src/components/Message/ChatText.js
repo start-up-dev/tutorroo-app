@@ -1,8 +1,9 @@
-import { Text, View, StyleSheet, Image } from "react-native";
+import { Text, View, StyleSheet, Image, TouchableOpacity, FlatList } from "react-native";
 import Icon from "../common/Icon";
 import { Color } from "../../const/color";
 import { useSelector } from "react-redux";
 import moment from "moment";
+import { openBrowserAsync } from "expo-web-browser";
 
 const sentIcon = require("../../../assets/images/tick-square-active.png");
 
@@ -37,7 +38,48 @@ const ChatText = ({ msg }) => {
           <Icon icon={sentIcon} />
           <Text style={styles.timeStamp}>{moment(msg?.createdAt).fromNow()}</Text>
         </View>
+
         <Text style={styles.messageText}>{msg?.text}</Text>
+
+        <FlatList
+          style={{ marginTop: 12 }}
+          data={msg?.attachments}
+          renderItem={({ item: attachment }) => {
+            if (attachment?.type == "unknown") {
+              return (
+                <TouchableOpacity
+                  onPress={() => openBrowserAsync(attachment?.url)}
+                  style={{ flex: 1, height: 120, justifyContent: "center", alignItems: "center", backgroundColor: `#${Math.floor(Math.random() * 16777215).toString(16)}` }}
+                >
+                  <Text style={{ fontSize: 12 }}>Unknown file</Text>
+                </TouchableOpacity>
+              );
+            } else if (attachment?.type == "image") {
+              return <Image source={{ uri: attachment?.url }} style={{ flex: 1, height: 120 }} />;
+            } else if (attachment?.type == "pdf") {
+              return (
+                <TouchableOpacity
+                  onPress={() => openBrowserAsync(attachment?.url)}
+                  style={{ flex: 1, height: 120, justifyContent: "center", alignItems: "center", backgroundColor: `#${Math.floor(Math.random() * 16777215).toString(16)}` }}
+                >
+                  <Text style={{ fontSize: 24 }}>PDF</Text>
+                </TouchableOpacity>
+              );
+            } else {
+              return (
+                <TouchableOpacity
+                  onPress={() => openBrowserAsync(attachment?.url)}
+                  style={{ flex: 1, height: 120, justifyContent: "center", alignItems: "center", backgroundColor: `#${Math.floor(Math.random() * 16777215).toString(16)}` }}
+                >
+                  <Text style={{ fontSize: 24 }}>Doc.</Text>
+                </TouchableOpacity>
+              );
+            }
+          }}
+          //Setting the number of column
+          numColumns={3}
+          keyExtractor={(item, index) => index}
+        />
       </View>
     );
   }
