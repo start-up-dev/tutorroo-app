@@ -23,10 +23,18 @@ const SingleBar = ({ inbox }) => {
       }}
     >
       <View style={{ flexDirection: "row" }}>
-        <Image source={profile} style={styles.profileImg} />
+        {inbox?.question ? (
+          <View style={styles.profileImg}>
+            <Text style={{ fontSize: 30, fontWeight: "900" }}>?</Text>
+          </View>
+        ) : (
+          <Image source={profile} style={styles.profileImg} />
+        )}
 
         <View>
-          <Text style={{ fontWeight: 600 }}>{getFullName(inbox?.participant?.firstName, inbox?.participant?.lastName)}</Text>
+          <Text style={{ fontWeight: 600 }} numberOfLines={1}>
+            {inbox?.question || getFullName(inbox?.participant?.firstName, inbox?.participant?.lastName)}
+          </Text>
           <Text style={{ color: Color.dark3, marginTop: 10 }}>{inbox?.lastMessage?.text || "Attachment"}</Text>
         </View>
       </View>
@@ -71,6 +79,9 @@ const styles = StyleSheet.create({
     height: 50,
     borderRadius: 100,
     marginRight: 10,
+    backgroundColor: "#ddd",
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
 
