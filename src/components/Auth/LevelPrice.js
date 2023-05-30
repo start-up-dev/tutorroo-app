@@ -1,11 +1,17 @@
-import { View, StyleSheet, Text, TextInput } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+} from "react-native";
 import Icon from "../common/Icon";
 import { Color } from "../../const/color";
 
 const tickIcon = require("../../../assets/images/tick-square.png");
 const tickIconActive = require("../../../assets/images/tick-square-active.png");
 
-const LevelPrice = ({ title }) => {
+const LevelPrice = ({ title, onPress, setPrice, iconName }) => {
   return (
     <View
       style={{
@@ -14,9 +20,11 @@ const LevelPrice = ({ title }) => {
         marginTop: 10,
       }}
     >
-      <Icon icon={tickIconActive} l />
+      <TouchableOpacity onPress={onPress}>
+        <Icon icon={iconName} l />
+      </TouchableOpacity>
       <Text style={styles.levelText}>{title}</Text>
-      <TextInput style={styles.levelInput} />
+      <TextInput style={styles.levelInput} onChangeText={setPrice} />
       <Text style={styles.levelText}>euro/h</Text>
     </View>
   );

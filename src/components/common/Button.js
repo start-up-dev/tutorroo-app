@@ -42,7 +42,7 @@ const Button = ({ status, tutor, title, onPress }) => {
 const styles = StyleSheet.create({
   container: {
     height: 55,
-    marginVertical: 30,
+    marginVertical: 20,
     width: "100%",
     backgroundColor: Color.primaryDeep,
     justifyContent: "center",

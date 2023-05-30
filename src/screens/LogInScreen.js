@@ -53,6 +53,7 @@ const LogInScreen = () => {
   const error = useSelector((state) => state.auth.error);
   const status = useSelector((state) => state.auth.status);
   const res = useSelector((state) => state.auth.res);
+  const userInfo = useSelector((state) => state.auth.user);
 
   const handleOnchange = (text, input) => {
     setInputs((prevState) => ({ ...prevState, [input]: text }));
@@ -121,7 +122,9 @@ const LogInScreen = () => {
 
   useEffect(() => {
     if (res?.access_token || res?.token) {
-      navigation.navigate("Home");
+      navigation.navigate(
+        res?.type == "tutor" && !res?.eirCode ? "Tutor Add Details" : "Tab Nav"
+      );
       dispatch(getMe());
     }
   }, [res]);

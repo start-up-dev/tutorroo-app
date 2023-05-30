@@ -61,7 +61,9 @@ export const authSlice = createSlice({
       .addCase(register.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.error = action.payload?.issue;
-        state.res = action.payload;
+        if (action.payload?.userId) {
+          state.res = action.payload;
+        }
       })
       .addCase(login.pending, (state, action) => {
         state.status = "loading";

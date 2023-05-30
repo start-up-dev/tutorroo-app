@@ -53,13 +53,6 @@ const RegisterScreen = () => {
   }
 
   const onRegister = async () => {
-    // const sendEmail = await sendSignInLinkToEmail(
-    //   getAuth(app),
-    //   "mahbub@makereal.io",
-    //   { handleCodeInApp: true }
-    // );
-    // console.log("Send Email:" + sendEmail);
-
     if (
       validateEmail(inputs.email) &&
       validatePassword(inputs.password) &&
@@ -97,8 +90,6 @@ const RegisterScreen = () => {
       });
     }
   }, [res]);
-
-  console.log(res);
 
   return (
     <SafeAreaView style={{ backgroundColor: Color.background, flex: 1 }}>

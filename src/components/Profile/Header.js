@@ -7,7 +7,6 @@ import {
   Touchable,
   TouchableOpacity,
 } from "react-native";
-import * as ImagePicker from "expo-image-picker";
 import { useNavigation } from "@react-navigation/native";
 
 import { useState } from "react";
@@ -18,44 +17,16 @@ import Space from "../common/Space";
 
 const cover = require("../../../assets/physics.jpeg");
 const profile = require("../../../assets/profile.jpeg");
-const camera = require("../../../assets/images/camera.png");
 const left = require("../../../assets/images/arrow-left.png");
 
 const Header = ({ tutorProfile, data }) => {
-  // Image Picker
-  const [coverImage, setCoverImage] = useState(null);
-  const [profileImage, setProfileImage] = useState(null);
-
   const navigation = useNavigation();
 
-  const pickCoverImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      aspect: [1, 1],
-      quality: 1,
-    });
-
-    if (!result.canceled) {
-      setCoverImage(result.assets[0].uri);
-    }
-  };
-
-  const pickProfileImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      aspect: [1, 1],
-      quality: 1,
-    });
-
-    if (!result.canceled) {
-      setProfileImage(result.assets[0].uri);
-    }
-  };
   return (
     <View style={{ backgroundColor: Color.background }}>
-      <View style={tutorProfile ? { height: 200 } : { height: "50%" }}>
+      <View style={{ height: 200, marginBottom: 100 }}>
         <Image
-          source={coverImage ? { uri: coverImage } : cover}
+          source={data?.coverImage ? { uri: data?.coverImage } : cover}
           style={[StyleSheet.absoluteFill, { width: "100%", height: "100%" }]}
         />
         <View
@@ -85,35 +56,19 @@ const Header = ({ tutorProfile, data }) => {
 
           <View></View>
         </View>
-        {!tutorProfile && (
-          <TouchableOpacity style={styles.coverBtn} onPress={pickCoverImage}>
-            <Icon icon={camera} large />
-          </TouchableOpacity>
-        )}
-
-        <View style={[styles.profileImgView, tutorProfile && { bottom: 90 }]}>
+        <View style={[styles.profileImgView]}>
           <Image
-            source={profileImage ? { uri: profileImage } : profile}
+            source={data?.picture ? { uri: data?.picture } : profile}
             style={[styles.profileImg]}
           />
-
-          {!tutorProfile && (
-            <TouchableOpacity
-              style={styles.profileBtn}
-              onPress={pickCoverImage}
-            >
-              <Icon icon={camera} large />
-            </TouchableOpacity>
-          )}
-          {tutorProfile && <Space height={20} />}
-
+          <Space height={20} />
           <Text style={styles.profileName}>
             {data?.firstName ? data?.firstName : "Add Name"} {data?.lastName}
           </Text>
         </View>
       </View>
       {tutorProfile && (
-        <View style={{ marginTop: 100, paddingHorizontal: 20 }}>
+        <View>
           <View style={styles.tagView}>
             <SubjectTag />
             <SubjectTag />
@@ -185,8 +140,8 @@ const styles = StyleSheet.create({
   },
 
   profileImgView: {
-    bottom: 120,
     alignItems: "center",
+    bottom: 90,
   },
   profileName: {
     fontSize: 18,

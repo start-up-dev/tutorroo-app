@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
   messageView: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 15,
+    marginVertical: 10,
   },
   messageText: {
     color: Color.danger1,

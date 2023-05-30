@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import * as SplashScreen from "expo-splash-screen";
 import * as Font from "expo-font";
-import { Provider, useDispatch } from "react-redux";
+import { Provider, useDispatch, useSelector } from "react-redux";
 import { store } from "./src/store";
 import { io } from "socket.io-client";
 
@@ -17,8 +17,15 @@ import {
   messageRequestStatusChanged,
   newMessageReceived,
 } from "./src/store/inboxSlice";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import TutorAddDetailsScreen from "./src/screens/TutorAddDetailsScreen";
+import BackBtn from "./src/components/Auth/BackBtn";
+import Header from "./src/components/common/Header";
+import TutorRegisterStack from "./src/navigation/TutorRegisterStack";
 
 SplashScreen.preventAutoHideAsync();
+
+const Stack = createNativeStackNavigator();
 
 AsyncStorage.getItem("TOKEN").then((token) => {
   if (token) {
@@ -58,7 +65,7 @@ export default function App() {
 
 const Main = () => {
   const [appIsReady, setAppIsReady] = useState(false);
-
+  const userInfo = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -99,6 +106,12 @@ const Main = () => {
   }
   return (
     <NavigationContainer onLayout={onLayoutRootView()}>
+      {/* {userInfo?.type == "tutor" && !userInfo?.subjectInfo ? (
+        <TutorRegisterStack />
+      ) : (
+        <MainStack />
+      )} */}
+
       <MainStack />
     </NavigationContainer>
   );

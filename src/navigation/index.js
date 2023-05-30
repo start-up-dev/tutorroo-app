@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import TabNav from "./TabNav";
 import AuthStack from "./AuthStack";
@@ -11,15 +11,26 @@ import Header from "../components/common/Header";
 import BackBtn from "../components/Auth/BackBtn";
 import EditProfileScreen from "../screens/EditProfileScreen";
 import PostQuestionScreen from "../screens/PostQuestionScreen";
+import { useSelector } from "react-redux";
+import TutorAddDetailsScreen from "../screens/TutorAddDetailsScreen";
+import ProfileScreen from "../screens/ProfileScreen";
 
 const Stack = createNativeStackNavigator();
 
 const MainStack = () => {
+  const [initialRoute, setInitialRoute] = useState();
+  const userInfo = useSelector((state) => state.auth.user);
+
+  const onInitialRoute = () => {
+    if (userInfo?.type == "tutor" && !userInfo?.subjectInfo) {
+      return "Tutor Add Details";
+    }
+  };
+
+  console.log(onInitialRoute());
+
   return (
-    <Stack.Navigator
-      initialRouteName="Tab Nav"
-      screenOptions={{ animation: "slide_from_left" }}
-    >
+    <Stack.Navigator>
       <Stack.Screen
         name="Tab Nav"
         component={TabNav}
@@ -77,6 +88,19 @@ const MainStack = () => {
         options={{
           header: () => <Header title="Post A Question" />,
         }}
+      />
+      <Stack.Screen
+        name="Tutor Add Details"
+        component={TutorAddDetailsScreen}
+        options={{
+          header: () => <Header home loggedIn={true} />,
+          gestureEnabled: false,
+        }}
+      />
+      <Stack.Screen
+        name="Profile"
+        component={ProfileScreen}
+        options={{ headerShown: false }}
       />
     </Stack.Navigator>
   );

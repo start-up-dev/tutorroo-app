@@ -46,20 +46,32 @@ const ProfileScreen = () => {
     <>
       <Header data={userInfo} />
       <View
-        style={{ backgroundColor: Color.background, paddingHorizontal: 20 }}
+        style={{
+          backgroundColor: Color.background,
+          paddingHorizontal: 20,
+          paddingTop: 30,
+        }}
       >
         <IconButton
           title={"Edit Profile"}
           icon={editProfile}
           navigate={"Edit Profile"}
         />
-        <IconButton title={"Message"} icon={message} navigate={"Message"} />
+        {userInfo?.type == "tutor" && !userInfo?.subjectInfo ? (
+          <></>
+        ) : (
+          <>
+            <IconButton title={"Message"} icon={message} navigate={"Message"} />
+            <IconButton
+              title={"Notifcation"}
+              icon={notification}
+              navigate={"Notification"}
+            />
+          </>
+        )}
+
         <IconButton title={"Change Password"} icon={changePass} />
-        <IconButton
-          title={"Notifcation"}
-          icon={notification}
-          navigate={"Notification"}
-        />
+
         <View style={{ flexDirection: "row" }}>
           <TouchableOpacity style={styles.logoutView} onPress={logOutHandler}>
             <Text style={styles.logout}>Log Out</Text>
