@@ -16,7 +16,19 @@ const ChatText = ({ msg }) => {
   if (user?._id == msg.sender._id) {
     return (
       <View style={styles.myMessageContainer}>
-        {Boolean(msg?.text) && <Text style={styles.messageText}>{msg?.text}</Text>}
+        {Boolean(msg?.text) && (
+          <Text
+            style={{
+              color: Color.dark1,
+              fontSize: 14,
+              fontFamily: "sofia-regular",
+              lineHeight: 20,
+              textAlign: "right",
+            }}
+          >
+            {msg?.text}
+          </Text>
+        )}
 
         <FlatList
           style={{ marginTop: 8 }}
