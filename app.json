@@ -11,9 +11,13 @@
       "resizeMode": "contain",
       "backgroundColor": "#FFF8F8"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
-      "associatedDomains": ["applinks:expo.dev"],
+      "associatedDomains": [
+        "applinks:expo.dev"
+      ],
       "supportsTablet": true,
       "bundleIdentifier": "com.makereal.tutorroo"
     },
@@ -27,11 +31,6 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "extra": {
-      "eas": {
-        "projectId": "067538b8-c352-4bdf-9770-fe340619303c"
-      }
-    },
     "schema": "tutorroo",
     "plugins": [
       "expo-apple-authentication",
@@ -41,6 +40,12 @@
           "iCloudContainerEnvironment": "Production"
         }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "e9d041f3-d680-48c6-b4fa-0f41e2e4af0f"
+      }
+    },
+    "owner": "coder.shanta"
   }
 }

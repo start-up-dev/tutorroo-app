@@ -39,7 +39,7 @@ const SingleBar = ({ inbox }) => {
         </View>
       </View>
       <View>
-        <Text style={{ color: Color.primaryDeep, fontSize: 10 }}>{moment(inbox?.lastMessageSendAt).fromNow()}</Text>
+        <Text style={{ color: Boolean(inbox?.numberOfUnSeenMessages) ? Color.primaryDeep : Color.BLACK, fontSize: 10 }}>{moment(inbox?.lastMessageSendAt).format("lll")}</Text>
 
         {Boolean(inbox?.numberOfUnSeenMessages) && (
           <View

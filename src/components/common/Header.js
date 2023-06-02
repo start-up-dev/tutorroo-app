@@ -1,12 +1,5 @@
 import React from "react";
-import {
-  Image,
-  Text,
-  SafeAreaView,
-  StyleSheet,
-  View,
-  TouchableOpacity,
-} from "react-native";
+import { Image, Text, SafeAreaView, StyleSheet, View, TouchableOpacity } from "react-native";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { Color } from "../../const/color";
 import { useNavigation } from "@react-navigation/native";
@@ -19,7 +12,7 @@ const bell = require("../../../assets/images/bell.png");
 
 const login = require("../../../assets/images/login.png");
 
-const Header = ({ home, title, loggedIn }) => {
+const Header = ({ home, title, loggedIn, inbox }) => {
   const navigation = useNavigation();
   return (
     <SafeAreaView style={styles.container}>
@@ -27,10 +20,7 @@ const Header = ({ home, title, loggedIn }) => {
         <View style={styles.component}>
           <Image source={logo} />
           {loggedIn ? (
-            <TouchableOpacity
-              style={{ flexDirection: "row" }}
-              onPress={() => navigation.navigate("Profile")}
-            >
+            <TouchableOpacity style={{ flexDirection: "row" }} onPress={() => navigation.navigate("Profile")}>
               <Image source={profile} style={styles.profileImg} />
             </TouchableOpacity>
           ) : (
@@ -45,14 +35,8 @@ const Header = ({ home, title, loggedIn }) => {
               >
                 Log In
               </Text>
-              <TouchableOpacity
-                style={styles.loginIcon}
-                onPress={() => navigation.navigate("Auth")}
-              >
-                <Image
-                  source={login}
-                  style={{ width: 14, height: 14, resizeMode: "contain" }}
-                />
+              <TouchableOpacity style={styles.loginIcon} onPress={() => navigation.navigate("Auth")}>
+                <Image source={login} style={{ width: 14, height: 14, resizeMode: "contain" }} />
               </TouchableOpacity>
             </View>
           )}
@@ -62,10 +46,7 @@ const Header = ({ home, title, loggedIn }) => {
       {!home && (
         <View style={styles.component}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Image
-              source={arrowLeft}
-              style={{ width: 24, height: 24, resizeMode: "contain" }}
-            />
+            <Image source={arrowLeft} style={{ width: 24, height: 24, resizeMode: "contain" }} />
           </TouchableOpacity>
           <Text
             style={{
@@ -78,10 +59,7 @@ const Header = ({ home, title, loggedIn }) => {
             {title}
           </Text>
           <TouchableOpacity onPress={() => navigation.navigate("Notification")}>
-            <Image
-              source={bell}
-              style={{ width: 24, height: 24, resizeMode: "contain" }}
-            />
+            <Image source={bell} style={{ width: 24, height: 24, resizeMode: "contain" }} />
           </TouchableOpacity>
         </View>
       )}

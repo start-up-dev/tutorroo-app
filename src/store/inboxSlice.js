@@ -59,6 +59,15 @@ export const inboxSlice = createSlice({
     builder
       .addCase(sendMessage.fulfilled, (state, action) => {
         state.messages = [action.payload, ...state.messages];
+
+        state.inboxes.map((i) => {
+          if (i.routeId == action.payload.routeId) {
+            i.numberOfUnSeenMessages = 0;
+            i.lastMessage = action.payload;
+            i.lastMessageSendAt = Date.now();
+          }
+          return i;
+        });
       })
       .addCase(getInboxes.pending, (state, action) => {
         state.status = "loading";

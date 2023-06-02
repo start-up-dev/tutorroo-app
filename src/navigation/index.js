@@ -57,7 +57,7 @@ const MainStack = () => {
         name="Chat"
         component={ChatScreen}
         options={{
-          header: () => <Header title="Isfat Sharik" />,
+          header: () => <Header title="Inbox" />,
         }}
       />
       <Stack.Screen
@@ -97,11 +97,7 @@ const MainStack = () => {
           gestureEnabled: false,
         }}
       />
-      <Stack.Screen
-        name="Profile"
-        component={ProfileScreen}
-        options={{ headerShown: false }}
-      />
+      <Stack.Screen name="Profile" component={ProfileScreen} options={{ headerShown: false }} />
     </Stack.Navigator>
   );
 };

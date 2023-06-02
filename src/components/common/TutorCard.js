@@ -52,19 +52,13 @@ const TutorCard = ({ data }) => {
         borderRadius: 12,
       }}
     >
-      <TouchableOpacity
-        onPress={() =>
-          navigation.navigate("Tutor Detail", { tutor: data?.tutor })
-        }
-      >
+      <TouchableOpacity onPress={() => navigation.navigate("Tutor Detail", { tutor: data?.tutor })}>
         <View style={styles.container}>
           <View style={{ flexDirection: "row", alignItems: "center" }}>
             <Image source={profile} style={styles.profileImg} />
             <View>
               <View style={{ flexDirection: "row", alignItems: "center" }}>
-                <Text style={styles.nameText}>
-                  {data?.tutor.firstName ? data?.tutor.firstName : "Mahbub"}
-                </Text>
+                <Text style={styles.nameText}>{data?.tutor.firstName ? data?.tutor.firstName : "Mahbub"}</Text>
                 <Icon icon={verified} />
               </View>
               <Space height={10} />
@@ -98,10 +92,7 @@ const TutorCard = ({ data }) => {
             <Space height={30} />
           </View>
         </View>
-        <Text style={styles.description}>
-          Lorem ipsum dolor sit amet consectetur. Pharetra viverra accumsan
-          neque neque faucibus sed. Utpat condimentum{" "}
-        </Text>
+        <Text style={styles.description}>Lorem ipsum dolor sit amet consectetur. Pharetra viverra accumsan neque neque faucibus sed. Utpat condimentum </Text>
       </TouchableOpacity>
     </View>
   );

@@ -4,30 +4,58 @@ import { Color } from "../../const/color";
 import { useSelector } from "react-redux";
 import moment from "moment";
 import { openBrowserAsync } from "expo-web-browser";
+import pdfImage from "../../../assets/images/pdf.png";
+import docsImage from "../../../assets/images/docs.png";
+import unknownFileImage from "../../../assets/images/unknown_file.png";
 
 const sentIcon = require("../../../assets/images/tick-square-active.png");
 
 const ChatText = ({ msg }) => {
-  const user = useSelector((state) => state?.auth?.user?.data);
-
-  if (msg?.metadata?.type == "image") {
-    return (
-      <View style={{ width: "100%", marginVertical: 10, alignItems: user?._id == msg.sender._id ? "flex-end" : "flex-start" }}>
-        {msg.attachments?.map((uri, idx) => (
-          <Image source={{ uri: uri }} key={idx} style={{ height: 200, width: 200, backgroundColor: "rgba(0,0,0,0.02)", borderRadius: 10 }} resizeMode="contain" />
-        ))}
-      </View>
-    );
-  }
+  const user = useSelector((state) => state?.auth?.user);
 
   if (user?._id == msg.sender._id) {
     return (
       <View style={styles.myMessageContainer}>
-        <Text style={styles.messageText}>{msg?.text}</Text>
+        {Boolean(msg?.text) && <Text style={styles.messageText}>{msg?.text}</Text>}
+
+        <FlatList
+          style={{ marginTop: 8 }}
+          data={msg?.attachments}
+          renderItem={({ item: attachment }) => {
+            if (attachment?.type == "unknown") {
+              return (
+                <TouchableOpacity onPress={() => openBrowserAsync(attachment?.url)} style={{ marginBottom: 12, alignItems: "flex-end" }}>
+                  <Image source={unknownFileImage} style={{ width: 100, height: 100 }} />
+                </TouchableOpacity>
+              );
+            } else if (attachment?.type == "image") {
+              return (
+                <TouchableOpacity onPress={() => openBrowserAsync(attachment?.url)} style={{ marginBottom: 12, alignItems: "flex-end" }}>
+                  <Image source={{ uri: attachment?.url }} style={{ width: 300, height: 300, borderRadius: 10 }} />
+                </TouchableOpacity>
+              );
+            } else if (attachment?.type == "pdf") {
+              return (
+                <TouchableOpacity onPress={() => openBrowserAsync(attachment?.url)} style={{ marginBottom: 12, alignItems: "flex-end" }}>
+                  <Image source={pdfImage} style={{ width: 100, height: 100 }} />
+                </TouchableOpacity>
+              );
+            } else {
+              return (
+                <TouchableOpacity onPress={() => openBrowserAsync(attachment?.url)} style={{ marginBottom: 12, alignItems: "flex-end" }}>
+                  <Image source={docsImage} style={{ width: 100, height: 100 }} />
+                </TouchableOpacity>
+              );
+            }
+          }}
+          //Setting the number of column
+          keyExtractor={(item, index) => index}
+        />
 
         <View style={styles.timeStampView}>
           <Icon icon={sentIcon} />
-          <Text style={styles.timeStamp}>{moment(msg?.createdAt).fromNow()}</Text>
+
+          <Text style={styles.timeStamp}>{moment(msg?.createdAt).format("lll")}</Text>
         </View>
       </View>
     );
@@ -36,48 +64,37 @@ const ChatText = ({ msg }) => {
       <View style={styles.container}>
         <View style={styles.timeStampView}>
           <Icon icon={sentIcon} />
-          <Text style={styles.timeStamp}>{moment(msg?.createdAt).fromNow()}</Text>
+          <Text style={styles.timeStamp}>{moment(msg?.createdAt).format("lll")}</Text>
         </View>
 
-        <Text style={styles.messageText}>{msg?.text}</Text>
+        {msg?.text && <Text style={styles.messageText}>{msg?.text}</Text>}
 
         <FlatList
-          style={{ marginTop: 12 }}
           data={msg?.attachments}
           renderItem={({ item: attachment }) => {
             if (attachment?.type == "unknown") {
               return (
-                <TouchableOpacity
-                  onPress={() => openBrowserAsync(attachment?.url)}
-                  style={{ flex: 1, height: 120, justifyContent: "center", alignItems: "center", backgroundColor: `#${Math.floor(Math.random() * 16777215).toString(16)}` }}
-                >
-                  <Text style={{ fontSize: 12 }}>Unknown file</Text>
+                <TouchableOpacity onPress={() => openBrowserAsync(attachment?.url)} style={{ marginTop: 12 }}>
+                  <Image source={unknownFileImage} style={{ width: 100, height: 100 }} />
                 </TouchableOpacity>
               );
             } else if (attachment?.type == "image") {
-              return <Image source={{ uri: attachment?.url }} style={{ flex: 1, height: 120 }} />;
+              return <Image source={{ uri: attachment?.url }} style={{ width: 300, height: 300, borderRadius: 10, marginTop: 12 }} />;
             } else if (attachment?.type == "pdf") {
               return (
-                <TouchableOpacity
-                  onPress={() => openBrowserAsync(attachment?.url)}
-                  style={{ flex: 1, height: 120, justifyContent: "center", alignItems: "center", backgroundColor: `#${Math.floor(Math.random() * 16777215).toString(16)}` }}
-                >
-                  <Text style={{ fontSize: 24 }}>PDF</Text>
+                <TouchableOpacity onPress={() => openBrowserAsync(attachment?.url)} style={{ marginTop: 12 }}>
+                  <Image source={pdfImage} style={{ width: 100, height: 100 }} />
                 </TouchableOpacity>
               );
             } else {
               return (
-                <TouchableOpacity
-                  onPress={() => openBrowserAsync(attachment?.url)}
-                  style={{ flex: 1, height: 120, justifyContent: "center", alignItems: "center", backgroundColor: `#${Math.floor(Math.random() * 16777215).toString(16)}` }}
-                >
-                  <Text style={{ fontSize: 24 }}>Doc.</Text>
+                <TouchableOpacity onPress={() => openBrowserAsync(attachment?.url)} style={{ marginTop: 12 }}>
+                  <Image source={docsImage} style={{ width: 100, height: 100 }} />
                 </TouchableOpacity>
               );
             }
           }}
           //Setting the number of column
-          numColumns={3}
           keyExtractor={(item, index) => index}
         />
       </View>
