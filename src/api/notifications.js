@@ -12,3 +12,15 @@ export const getNotifications = createAsyncThunk("notification/getNotifications"
     return [];
   }
 });
+
+export const saveExpoPushToken = async (token) => {
+  try {
+    await Axios.post(`/notifications/save-expo-push-token`, {
+      token,
+    });
+
+    return true;
+  } catch (err) {
+    throw err;
+  }
+};

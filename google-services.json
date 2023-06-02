@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "405793659283",
+    "project_id": "tuttorroo",
+    "storage_bucket": "tuttorroo.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:405793659283:android:4f0a6e7af36977ae723066",
+        "android_client_info": {
+          "package_name": "com.makereal.tutorroo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "405793659283-0p3f221t6bp2jhjv0mabio75h182ck0o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDz8G9h0TEkX8TSxUJTL6jrPfzofDLKsxA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "405793659283-0p3f221t6bp2jhjv0mabio75h182ck0o.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
