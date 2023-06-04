@@ -14,11 +14,9 @@ import * as DocumentPicker from "expo-document-picker";
 const ChatScreen = ({ route }) => {
   const dispatch = useDispatch();
 
-  const [inbox, setInbox] = useState(route.params.inbox);
-
-  const messages = useSelector((state) => state.inbox.messages.filter((msg) => msg.routeId == inbox.routeId));
-
   const user = useSelector((state) => state.auth.user);
+  const inbox = useSelector((state) => state.inbox.inboxes).find((i) => i.routeId == route.params.inbox.routeId);
+  const messages = useSelector((state) => state.inbox.messages.filter((msg) => msg.routeId == inbox.routeId));
 
   useEffect(() => {
     dispatch(markAsSeenAll(inbox._id));
@@ -74,8 +72,6 @@ const ChatScreen = ({ route }) => {
   const scrollView = useRef();
 
   const handleChangeMessageRequestState = async (status = "rejected") => {
-    setInbox((prev) => ({ ...prev, status }));
-
     dispatch(
       messageRequestStatusChanged({
         routeId: inbox.routeId,
@@ -151,6 +147,8 @@ const ChatScreen = ({ route }) => {
         {inbox?.status == "pending" && inbox?.creator == user?._id && <Text style={styles.noticeText}>Your request has not been accepted yet. We will keep you informed about updates.</Text>}
 
         {inbox?.status == "rejected" && <Text style={styles.noticeText}>Message request was rejected.</Text>}
+
+        {inbox?.status == "answered" && <Text style={styles.successText}>This question is marked as completed.</Text>}
       </ScrollView>
 
       {inbox?.status == "approved" && (
@@ -189,6 +187,14 @@ const styles = StyleSheet.create({
   noticeText: {
     textAlign: "center",
     color: Color.danger1,
+    fontSize: 14,
+    fontFamily: "sofia-medium",
+    lineHeight: 24,
+    marginVertical: 20,
+  },
+  successText: {
+    textAlign: "center",
+    color: Color.info,
     fontSize: 14,
     fontFamily: "sofia-medium",
     lineHeight: 24,
