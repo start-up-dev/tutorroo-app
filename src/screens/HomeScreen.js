@@ -1,5 +1,18 @@
 import React, { useEffect } from "react";
-import { SafeAreaView, View, StyleSheet, Text, Platform, Image, Dimensions, TouchableOpacity, ScrollView, FlatList, Pressable, StatusBar } from "react-native";
+import {
+  SafeAreaView,
+  View,
+  StyleSheet,
+  Text,
+  Platform,
+  Image,
+  Dimensions,
+  TouchableOpacity,
+  ScrollView,
+  FlatList,
+  Pressable,
+  StatusBar,
+} from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
 import { Color } from "../const/color";
@@ -34,7 +47,8 @@ async function registerForPushNotificationsAsync() {
   }
 
   if (Device.isDevice) {
-    const { status: existingStatus } = await Notifications.getPermissionsAsync();
+    const { status: existingStatus } =
+      await Notifications.getPermissionsAsync();
     let finalStatus = existingStatus;
     if (existingStatus !== "granted") {
       const { status } = await Notifications.requestPermissionsAsync();
@@ -59,6 +73,8 @@ const HomeScreen = () => {
 
   const subject = useSelector((state) => state.tutor.subject);
 
+  const firstNine = subject?.slice(0, 9);
+
   useEffect(() => {
     if (subject === null) {
       dispatch(getSubject());
@@ -82,10 +98,13 @@ const HomeScreen = () => {
             justifyContent: "space-evenly",
           }}
         >
-          {subject?.length > 0 && subject?.map((item) => <Subject key={item._id} data={item} />)}
+          {firstNine?.length > 0 &&
+            firstNine?.map((item) => <Subject key={item._id} data={item} />)}
         </View>
         <Space height={10} />
-        <TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => navigation.navigate("View All Subject")}
+        >
           <Text style={styles.viewAll}>View All</Text>
         </TouchableOpacity>
         <Space height={20} />

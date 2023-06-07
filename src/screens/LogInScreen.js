@@ -1,5 +1,12 @@
 import { useEffect, useState } from "react";
-import { SafeAreaView, ScrollView, View, Text, StyleSheet } from "react-native";
+import {
+  SafeAreaView,
+  ScrollView,
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+} from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
 import Header from "../components/Auth/Header";
@@ -88,10 +95,6 @@ const LogInScreen = () => {
         setInvalid("Please provide a valid password");
       }
     }
-
-    console.log(
-      "Email:" + inputs.email + " Password:" + inputs.password + invalid
-    );
   };
 
   const appleLogin = async () => {
@@ -171,8 +174,11 @@ const LogInScreen = () => {
 
         <Space height={10} />
 
-        <Text style={styles.forgotPass}>Forgot Password?</Text>
-
+        <TouchableOpacity
+          onPress={() => navigation.navigate("Forgot Password")}
+        >
+          <Text style={styles.forgotPass}>Forgot Password?</Text>
+        </TouchableOpacity>
         <Button title={"Log In"} onPress={onLogIn} status={status} />
 
         <ThirdPartyAuth

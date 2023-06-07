@@ -14,6 +14,9 @@ import PostQuestionScreen from "../screens/PostQuestionScreen";
 import { useSelector } from "react-redux";
 import TutorAddDetailsScreen from "../screens/TutorAddDetailsScreen";
 import ProfileScreen from "../screens/ProfileScreen";
+import ViewAllSubjectScreen from "../screens/ViewAllSubjectScreen";
+import ChangePassScreen from "../screens/ChangePassScreen";
+import ResetPassScreen from "../screens/ResetPassScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -97,7 +100,33 @@ const MainStack = () => {
           gestureEnabled: false,
         }}
       />
-      <Stack.Screen name="Profile" component={ProfileScreen} options={{ headerShown: false }} />
+      <Stack.Screen
+        name="View All Subject"
+        component={ViewAllSubjectScreen}
+        options={{
+          header: () => <Header title="All Subject" />,
+        }}
+      />
+
+      <Stack.Screen
+        name="Profile"
+        component={ProfileScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Change Password"
+        component={ChangePassScreen}
+        options={{
+          header: () => <BackBtn />,
+        }}
+      />
+      <Stack.Screen
+        name="Reset Password"
+        component={ResetPassScreen}
+        options={{
+          header: () => <BackBtn />,
+        }}
+      />
     </Stack.Navigator>
   );
 };

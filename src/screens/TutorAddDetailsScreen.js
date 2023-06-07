@@ -16,6 +16,8 @@ import { Color } from "../const/color";
 import Icon from "../components/common/Icon";
 import DropDownPicker from "react-native-dropdown-picker";
 import ErrorMessage from "../components/common/ErrorMessage";
+import { useDispatch } from "react-redux";
+import { addTutorDetails } from "../api/tutor";
 
 const locationIcon = require("../../assets/images/location.png");
 const callIcon = require("../../assets/images/call-calling.png");
@@ -30,6 +32,7 @@ const closeIcon = require("../../assets/images/close-circle.png");
 const TutorAddDetailsScreen = () => {
   const [tab, setTab] = useState(1);
   const [inputError, setInputError] = useState("");
+  const [level, setLevel] = useState([]);
   const [inputs, setInputs] = useState({
     addressLine1: "",
     telephone: "",
@@ -39,13 +42,30 @@ const TutorAddDetailsScreen = () => {
     details: "",
     subjectInfo: {
       subject: "",
-      level: [],
     },
     tuitionType: "",
   });
 
+  const dispatch = useDispatch();
+
   const handleOnchange = (text, input) => {
     setInputs((prevState) => ({ ...prevState, [input]: text }));
+  };
+
+  const updateLevel = (index, newLevel) => {
+    setLevel((prevLevel) => {
+      const updatedLevel = [...prevLevel];
+      updatedLevel[index] = { ...updatedLevel[index], name: newLevel };
+      return updatedLevel;
+    });
+  };
+
+  const updatePrice = (index, newLevel) => {
+    setLevel((prevLevel) => {
+      const updatedLevel = [...prevLevel];
+      updatedLevel[index] = { ...updatedLevel[index], price: newLevel };
+      return updatedLevel;
+    });
   };
 
   const updateInputs = (keyPath, newValue) => {
@@ -102,7 +122,7 @@ const TutorAddDetailsScreen = () => {
   };
 
   const onDone = () => {
-    if (inputs.subjectInfo.level.length == 0) {
+    if (level.length == 0) {
       setInputError("You must select a level");
     }
     if (!inputs.subjectInfo.subject) {
@@ -115,12 +135,15 @@ const TutorAddDetailsScreen = () => {
     if (
       !!inputs.tuitionType &&
       !!inputs.subjectInfo.subject &&
-      inputs.subjectInfo.level.length != 0
+      level.length != 0
     ) {
-      console.log(inputs);
+      setInputError("");
+      let body = inputs;
+      body.subjectInfo.level = level;
+      console.log(JSON.stringify(body));
+      dispatch(addTutorDetails(body));
     }
   };
-  console.log(inputs);
 
   return (
     <SafeAreaView style={{ backgroundColor: Color.background, flex: 1 }}>
@@ -315,41 +338,67 @@ const TutorAddDetailsScreen = () => {
               <LevelPrice
                 title={"Primary School"}
                 onPress={() =>
-                  inputs.subjectInfo.level[0] == "Primary School"
-                    ? updateInputs("subjectInfo.level.0", "")
-                    : updateInputs("subjectInfo.level.0", "Primary School")
+                  level[0]?.name == "Primary School"
+                    ? updateLevel(0, "")
+                    : updateLevel(0, "Primary School")
                 }
                 iconName={
-                  inputs.subjectInfo.level[0] == "Primary School"
-                    ? tickIconActive
-                    : tickIcon
+                  level[0]?.name == "Primary School" ? tickIconActive : tickIcon
                 }
+                setPrice={updatePrice}
+                index={0}
               />
               <LevelPrice
                 title={"Junior Cycle"}
                 onPress={() =>
-                  handleOnchange(!inputs?.juniorCycle, "juniorCycle")
+                  level[1]?.name == "Junior Cycle"
+                    ? updateLevel(1, "")
+                    : updateLevel(1, "Junior Cycle")
                 }
-                iconName={inputs?.juniorCycle ? tickIconActive : tickIcon}
+                iconName={
+                  level[1]?.name == "Junior Cycle" ? tickIconActive : tickIcon
+                }
+                setPrice={updatePrice}
+                index={1}
               />
               <LevelPrice
                 title={"Senior Cycle"}
                 onPress={() =>
-                  handleOnchange(!inputs?.seniorCycle, "seniorCycle")
+                  level[2]?.name == "Senior Cycle"
+                    ? updateLevel(2, "")
+                    : updateLevel(2, "Senior Cycle")
                 }
-                iconName={inputs?.seniorCycle ? tickIconActive : tickIcon}
+                iconName={
+                  level[2]?.name == "Senior Cycle" ? tickIconActive : tickIcon
+                }
+                setPrice={updatePrice}
+                index={2}
               />
               <LevelPrice
                 title={"University"}
                 onPress={() =>
-                  handleOnchange(!inputs?.university, "university")
+                  level[3]?.name == "University"
+                    ? updateLevel(3, "")
+                    : updateLevel(3, "University")
                 }
-                iconName={inputs?.university ? tickIconActive : tickIcon}
+                iconName={
+                  level[3]?.name == "University" ? tickIconActive : tickIcon
+                }
+                setPrice={updatePrice}
+                index={3}
               />
               <LevelPrice
                 title={"Adult/Casual"}
-                onPress={() => handleOnchange(!inputs?.adult, "adult")}
-                iconName={inputs?.adult ? tickIconActive : tickIcon}
+                onPress={() =>
+                  level[4]?.name == "Adult/Casual"
+                    ? updateLevel(4, "")
+                    : updateLevel(4, "Adult/Casual")
+                }
+                iconName={
+                  level[4]?.name == "Adult/Casual" ? tickIconActive : tickIcon
+                }
+                setPrice={updatePrice}
+                index={4}
               />
             </View>
 

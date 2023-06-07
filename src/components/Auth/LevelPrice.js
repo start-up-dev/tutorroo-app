@@ -11,7 +11,7 @@ import { Color } from "../../const/color";
 const tickIcon = require("../../../assets/images/tick-square.png");
 const tickIconActive = require("../../../assets/images/tick-square-active.png");
 
-const LevelPrice = ({ title, onPress, setPrice, iconName }) => {
+const LevelPrice = ({ title, onPress, setPrice, iconName, index }) => {
   return (
     <View
       style={{
@@ -24,7 +24,11 @@ const LevelPrice = ({ title, onPress, setPrice, iconName }) => {
         <Icon icon={iconName} l />
       </TouchableOpacity>
       <Text style={styles.levelText}>{title}</Text>
-      <TextInput style={styles.levelInput} onChangeText={setPrice} />
+      <TextInput
+        style={styles.levelInput}
+        onChangeText={(text) => setPrice(index, text)}
+        placeholder="20.00"
+      />
       <Text style={styles.levelText}>euro/h</Text>
     </View>
   );

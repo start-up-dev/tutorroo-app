@@ -34,7 +34,6 @@ const EditProfileScreen = () => {
     password: "",
     confirmPassword: "",
   });
-  const [coverImage, setCoverImage] = useState(null);
   const [profileImage, setProfileImage] = useState(null);
 
   //Navigation
@@ -50,17 +49,17 @@ const EditProfileScreen = () => {
   const res = useSelector((state) => state.auth.res);
   const userInfo = useSelector((state) => state.auth.user);
 
-  const pickCoverImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      aspect: [1, 1],
-      quality: 1,
-    });
+  // const pickCoverImage = async () => {
+  //   let result = await ImagePicker.launchImageLibraryAsync({
+  //     mediaTypes: ImagePicker.MediaTypeOptions.Images,
+  //     aspect: [1, 1],
+  //     quality: 1,
+  //   });
 
-    if (!result.canceled) {
-      setCoverImage(result.assets[0].uri);
-    }
-  };
+  //   if (!result.canceled) {
+  //     setCoverImage(result.assets[0].uri);
+  //   }
+  // };
 
   const pickProfileImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -74,11 +73,24 @@ const EditProfileScreen = () => {
     }
   };
 
+  // Create a new FormData object
+  const formData = new FormData();
+  // Add the file to the form data
+  formData.append("avatar", {
+    uri: profileImage ? profileImage : null,
+    name: "image.jpg",
+    type: "image/jpeg",
+  });
+  inputs.firstName ? formData.append("firstName", inputs.firstName) : null;
+  inputs.lastName ? formData.append("lastName", inputs.lastName) : null;
+
   const onUpdate = () => {
-    const body = {
-      firstName: inputs.firstName ? inputs.firstName : userInfo?.firstName,
-      lastName: inputs.lastName ? inputs.lastName : userInfo?.lastName,
-    };
+    const body = profileImage
+      ? formData
+      : {
+          firstName: inputs.firstName ? inputs.firstName : userInfo?.firstName,
+          lastName: inputs.lastName ? inputs.lastName : userInfo?.lastName,
+        };
 
     dispatch(updateProfile(body));
   };
@@ -100,12 +112,12 @@ const EditProfileScreen = () => {
 
         <View
           style={{
-            height: 100,
+            height: 120,
           }}
         >
           <View>
             <Image
-              source={coverImage ? { uri: coverImage } : cover}
+              source={cover}
               style={[
                 {
                   width: "100%",
@@ -115,10 +127,6 @@ const EditProfileScreen = () => {
                 },
               ]}
             />
-
-            <TouchableOpacity style={styles.coverBtn} onPress={pickCoverImage}>
-              <Icon icon={camera} l />
-            </TouchableOpacity>
           </View>
 
           <View style={[styles.profileImgView]}>
@@ -128,7 +136,7 @@ const EditProfileScreen = () => {
             />
             <TouchableOpacity
               style={styles.profileBtn}
-              onPress={pickCoverImage}
+              onPress={pickProfileImage}
             >
               <Icon icon={camera} l />
             </TouchableOpacity>

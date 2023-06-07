@@ -8,6 +8,9 @@ import {
   updateProfile,
   verifyAccount,
   resendOTP,
+  changePassword,
+  forgotPassword,
+  resetPassword,
 } from "../api/auth";
 
 const initialState = {
@@ -113,6 +116,30 @@ export const authSlice = createSlice({
         state.status = "succeeded";
         state.res = action.payload?.message;
         state.user = action.payload?.data;
+      })
+      .addCase(changePassword.pending, (state, action) => {
+        state.status = "loading";
+      })
+      .addCase(changePassword.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.res = action.payload?.message;
+        state.error = action.payload?.issue;
+      })
+      .addCase(forgotPassword.pending, (state, action) => {
+        state.status = "loading";
+      })
+      .addCase(forgotPassword.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.res = action.payload;
+        state.error = action.payload?.issue;
+      })
+      .addCase(resetPassword.pending, (state, action) => {
+        state.status = "loading";
+      })
+      .addCase(resetPassword.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.res = action.payload?.message;
+        state.error = action.payload?.issue;
       });
   },
 });

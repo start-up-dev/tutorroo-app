@@ -133,3 +133,51 @@ export const updateProfile = createAsyncThunk(
     }
   }
 );
+
+// Change Password
+
+export const changePassword = createAsyncThunk(
+  "auth/changePassword",
+  async (body) => {
+    try {
+      const { data } = await Axios.post(`/authenticate/change_password`, body);
+      console.log("Try Change Password" + JSON.stringify(data));
+      return data;
+    } catch (err) {
+      console.log("Catch Change Password" + JSON.stringify(err.response.data));
+      return err.response.data;
+    }
+  }
+);
+
+// Forgot Password
+
+export const forgotPassword = createAsyncThunk(
+  "auth/forgotPassword",
+  async (body) => {
+    try {
+      const { data } = await Axios.post(`/authenticate/forget_password`, body);
+      console.log("Try Forgot Password" + JSON.stringify(data));
+      return data;
+    } catch (err) {
+      console.log("Catch Forgot Password" + JSON.stringify(err.response.data));
+      return err.response.data;
+    }
+  }
+);
+
+// Reset Password
+
+export const resetPassword = createAsyncThunk(
+  "auth/resetPassword",
+  async (body) => {
+    try {
+      const { data } = await Axios.post(`/authenticate/reset_password`, body);
+      console.log("Try Reset Password" + JSON.stringify(data));
+      return data;
+    } catch (err) {
+      console.log("Catch Reset Password" + JSON.stringify(err.response.data));
+      return err.response.data;
+    }
+  }
+);

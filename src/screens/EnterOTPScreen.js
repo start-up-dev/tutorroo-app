@@ -27,6 +27,14 @@ const EnterOTPScreen = ({ route }) => {
   const status = useSelector((state) => state.auth.status);
 
   const onPressHandler = () => {
+    if (data?.navigate == "Reset Password") {
+      const body = {
+        sessionId: data?.sessionId,
+        code: otpInput,
+      };
+      navigation.navigate("Reset Password", { data: body });
+    }
+
     if (res?.session) {
       const body = {
         sessionId: res?.session?.sessionId,
@@ -42,6 +50,7 @@ const EnterOTPScreen = ({ route }) => {
         email: data.email,
         password: data.password,
       };
+      navigation.navigate("Log In");
       dispatch(login(body));
     }
 

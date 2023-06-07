@@ -26,7 +26,7 @@ const Header = ({ tutorProfile, data }) => {
     <View style={{ backgroundColor: Color.background }}>
       <View style={{ height: 200, marginBottom: 100 }}>
         <Image
-          source={data?.coverImage ? { uri: data?.coverImage } : cover}
+          source={cover}
           style={[StyleSheet.absoluteFill, { width: "100%", height: "100%" }]}
         />
         <View
@@ -58,7 +58,7 @@ const Header = ({ tutorProfile, data }) => {
         </View>
         <View style={[styles.profileImgView]}>
           <Image
-            source={data?.picture ? { uri: data?.picture } : profile}
+            source={data?.avatar ? { uri: data?.avatar } : profile}
             style={[styles.profileImg]}
           />
           <Space height={20} />

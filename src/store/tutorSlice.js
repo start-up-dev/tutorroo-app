@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import {
+  addTutorDetails,
   addWishlist,
   getSubject,
   getWishlist,
@@ -69,6 +70,14 @@ export const tutorSlice = createSlice({
         //state.status = "loading";
       })
       .addCase(removeWishlist.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.error = action.payload?.issue;
+        state.res = action.payload;
+      })
+      .addCase(addTutorDetails.pending, (state, action) => {
+        state.status = "loading";
+      })
+      .addCase(addTutorDetails.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.error = action.payload?.issue;
         state.res = action.payload;

@@ -5,6 +5,7 @@ import RegisterScreen from "../screens/RegisterScreen";
 import BackBtn from "../components/Auth/BackBtn";
 import TutorRegScreen from "../screens/TutorRegScreen";
 import EnterOTPScreen from "../screens/EnterOTPScreen";
+import ForgotPassScreen from "../screens/ForgotPassScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -41,6 +42,14 @@ const AuthStack = () => {
       <Stack.Screen
         name="Enter OTP"
         component={EnterOTPScreen}
+        options={{
+          header: () => <BackBtn />,
+          gestureEnabled: false,
+        }}
+      />
+      <Stack.Screen
+        name="Forgot Password"
+        component={ForgotPassScreen}
         options={{
           header: () => <BackBtn />,
           gestureEnabled: false,

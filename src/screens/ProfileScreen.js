@@ -58,7 +58,11 @@ const ProfileScreen = () => {
           navigate={"Edit Profile"}
         />
         {userInfo?.type == "tutor" && !userInfo?.subjectInfo ? (
-          <></>
+          <IconButton
+            title={"Complete Profile"}
+            icon={editProfile}
+            navigate={"Tutor Add Details"}
+          />
         ) : (
           <>
             <IconButton title={"Message"} icon={message} navigate={"Message"} />
@@ -70,7 +74,11 @@ const ProfileScreen = () => {
           </>
         )}
 
-        <IconButton title={"Change Password"} icon={changePass} />
+        <IconButton
+          title={"Change Password"}
+          navigate={"Change Password"}
+          icon={changePass}
+        />
 
         <View style={{ flexDirection: "row" }}>
           <TouchableOpacity style={styles.logoutView} onPress={logOutHandler}>
