@@ -11,7 +11,7 @@ import { uploadFile, uploadFileV2 } from "../api/files";
 import { sendMessageRequest } from "../api/inbox";
 import { useDispatch } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
-import { clearMessages, setSelectedRouteId } from "../store/inboxSlice";
+import { addInboxes, clearMessages, setSelectedRouteId } from "../store/inboxSlice";
 
 const attachIcon = require("../../assets/images/attach-circle-red.png");
 const closeIcon = require("../../assets/images/close-circle-red.png");
@@ -84,7 +84,12 @@ const PostQuestionScreen = () => {
         docs.map((d) => d._id)
       );
 
+      console.log("#####################################");
+      console.log(JSON.stringify(inbox, null, 4));
+      console.log("#####################################");
+
       dispatch(clearMessages());
+      dispatch(addInboxes([inbox]));
       dispatch(setSelectedRouteId(inbox.routeId));
       navigation.navigate("Chat", { inbox });
       setStatus(null);

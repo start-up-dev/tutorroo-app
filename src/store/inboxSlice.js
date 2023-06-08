@@ -12,6 +12,9 @@ export const inboxSlice = createSlice({
   name: "inbox",
   initialState,
   reducers: {
+    addInboxes: (state, action) => {
+      state.inboxes = action.payload;
+    },
     markAsSeenAll: (state, action) => {
       state.inboxes.map((i) => {
         if (i._id == action.payload) {
@@ -83,4 +86,4 @@ export const inboxSlice = createSlice({
   },
 });
 
-export const { markAsSeenAll, newMessageReceived, clearMessages, setSelectedRouteId, messageRequestStatusChanged } = inboxSlice.actions;
+export const { markAsSeenAll, addInboxes, newMessageReceived, clearMessages, setSelectedRouteId, messageRequestStatusChanged } = inboxSlice.actions;

@@ -19,15 +19,17 @@ const ChatScreen = ({ route }) => {
   const messages = useSelector((state) => state.inbox.messages.filter((msg) => msg.routeId == inbox.routeId));
 
   useEffect(() => {
-    dispatch(markAsSeenAll(inbox._id));
+    if (inbox) {
+      dispatch(markAsSeenAll(inbox._id));
 
-    dispatch(getMessages({ routeId: inbox.routeId, skip: messages.length }));
+      dispatch(getMessages({ routeId: inbox.routeId, skip: messages.length }));
+    }
 
     return () => {
       dispatch(clearMessages());
       dispatch(setSelectedRouteId(null));
     };
-  }, []);
+  }, [inbox]);
 
   const [text, setText] = useState("");
 
