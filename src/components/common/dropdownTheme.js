@@ -28,7 +28,7 @@ export default StyleSheet.create({
   },
   label: {
     flex: 1,
-    color: Color.dark3,
+    color: Color.dark1,
     fontSize: 16,
     fontFamily: "sofia-light",
     lineHeight: 18,

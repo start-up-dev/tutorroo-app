@@ -12,6 +12,7 @@ const initialState = {
   res: null,
   error: null,
   subject: null,
+  subjectObj: null,
   tutor: null,
   wishlist: null,
   status: "idle",
@@ -32,6 +33,13 @@ export const tutorSlice = createSlice({
 
       console.log("New Wishlist: " + JSON.stringify(state.wishlist));
     },
+    clearError: (state, action) => {
+      state.error = null;
+    },
+    clearRes: (state, action) => {
+      state.res = null;
+    },
+    subjects: (state) => {},
   },
   extraReducers: (builder) => {
     builder
@@ -49,6 +57,20 @@ export const tutorSlice = createSlice({
         state.status = "succeeded";
         state.error = action.payload?.issue;
         state.subject = action.payload;
+
+        const allSubject = action.payload;
+
+        if (allSubject?.length > 0) {
+          const subjectArray = allSubject?.map((obj) => obj.name);
+
+          const subjectsObj = subjectArray?.map((value) => {
+            return { label: value, value };
+          });
+
+          state.subjectObj = subjectsObj;
+
+          console.log("Subjects: " + JSON.stringify(subjectsObj));
+        }
       })
       .addCase(getWishlist.pending, (state, action) => {
         state.status = "loading";
@@ -80,9 +102,10 @@ export const tutorSlice = createSlice({
       .addCase(addTutorDetails.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.error = action.payload?.issue;
-        state.res = action.payload;
+        state.res = action.payload?.message;
       });
   },
 });
 
-export const { wishlistRemoved } = tutorSlice.actions;
+export const { wishlistRemoved, clearError, clearRes, subjects } =
+  tutorSlice.actions;

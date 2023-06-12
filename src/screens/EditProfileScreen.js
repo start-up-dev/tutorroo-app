@@ -17,9 +17,11 @@ import Button from "../components/common/Button";
 import { Color } from "../const/color";
 import { updateProfile } from "../api/auth";
 import { useNavigation } from "@react-navigation/native";
+
 import { clearRes } from "../store/authSlice";
 import * as ImagePicker from "expo-image-picker";
 import Icon from "../components/common/Icon";
+import { uploadFile, uploadFileV2 } from "../api/files";
 
 const profileIcon = require("../../assets/images/profile-circle.png");
 const camera = require("../../assets/images/camera.png");
@@ -69,28 +71,17 @@ const EditProfileScreen = () => {
     });
 
     if (!result.canceled) {
-      setProfileImage(result.assets[0].uri);
+      const url = await uploadFile(result.assets[0].uri);
+      setProfileImage(url);
     }
   };
 
-  // Create a new FormData object
-  const formData = new FormData();
-  // Add the file to the form data
-  formData.append("avatar", {
-    uri: profileImage ? profileImage : null,
-    name: "image.jpg",
-    type: "image/jpeg",
-  });
-  inputs.firstName ? formData.append("firstName", inputs.firstName) : null;
-  inputs.lastName ? formData.append("lastName", inputs.lastName) : null;
-
   const onUpdate = () => {
-    const body = profileImage
-      ? formData
-      : {
-          firstName: inputs.firstName ? inputs.firstName : userInfo?.firstName,
-          lastName: inputs.lastName ? inputs.lastName : userInfo?.lastName,
-        };
+    const body = {
+      firstName: inputs.firstName ? inputs.firstName : userInfo?.firstName,
+      lastName: inputs.lastName ? inputs.lastName : userInfo?.lastName,
+      avatar: profileImage,
+    };
 
     dispatch(updateProfile(body));
   };
@@ -101,6 +92,8 @@ const EditProfileScreen = () => {
       navigation.goBack();
     }
   });
+
+  console.log("Profile Image: " + profileImage);
 
   return (
     <SafeAreaView style={{ backgroundColor: Color.background, flex: 1 }}>

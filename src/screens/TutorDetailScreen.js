@@ -8,6 +8,8 @@ import Icon from "../components/common/Icon";
 import Button from "../components/common/Button";
 import { sendMessageRequest } from "../api/inbox";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { addInboxes } from "../store/inboxSlice";
 
 const teacher = require("../../assets/images/teacher.png");
 
@@ -18,12 +20,14 @@ const TutorDetailScreen = ({ route }) => {
 
   //Navigation
   const navigation = useNavigation();
+  const dispatch = useDispatch();
 
   const _sendMessageRequest = async () => {
     try {
       setLoading(true);
       const inbox = await sendMessageRequest(tutor._id);
       setLoading(false);
+      dispatch(addInboxes([inbox]));
       navigation.navigate("Chat", { inbox });
     } catch (error) {
       setLoading(false);
@@ -31,9 +35,10 @@ const TutorDetailScreen = ({ route }) => {
       alert(error?.response?.data?.issue?.message || error?.message);
     }
   };
+  console.log(tutor);
   return (
     <>
-      <Header tutorProfile />
+      <Header tutorProfile data={tutor} />
 
       <SafeAreaView
         style={{
@@ -50,15 +55,20 @@ const TutorDetailScreen = ({ route }) => {
           <Text style={styles.textTitle}>Description</Text>
           <Space height={10} />
           <Text style={styles.textDescription}>
-            Lorem ipsum dolor sit amet consectetur. Pharetra viverra accumsan neque neque faucibus sed. Utpat condimentum quam eget vitae amet sapien. Mattis natoque morbi quam in morbi sodales. In
-            arcu erat tincidunt urna fermentum elit. At vulputate nulla torto erat facilisi adipiscing eget auctor vulputate.
+            Lorem ipsum dolor sit amet consectetur. Pharetra viverra accumsan
+            neque neque faucibus sed. Utpat condimentum quam eget vitae amet
+            sapien. Mattis natoque morbi quam in morbi sodales. In arcu erat
+            tincidunt urna fermentum elit. At vulputate nulla torto erat
+            facilisi adipiscing eget auctor vulputate.
           </Text>
           <Space height={24} />
           <Text style={styles.textTitle}>Qualification</Text>
           <Space height={10} />
           <View style={{ flexDirection: "row", alignItems: "center" }}>
             <Icon icon={teacher} l />
-            <Text style={[styles.textDescription, { marginLeft: 10 }]}>Phd in Mathmatics</Text>
+            <Text style={[styles.textDescription, { marginLeft: 10 }]}>
+              Phd in Mathmatics
+            </Text>
           </View>
         </ScrollView>
         <View
@@ -66,7 +76,11 @@ const TutorDetailScreen = ({ route }) => {
             paddingHorizontal: 20,
           }}
         >
-          <Button title="Message Request" onPress={_sendMessageRequest} status={isLoading ? "loading" : null} />
+          <Button
+            title="Message Request"
+            onPress={_sendMessageRequest}
+            status={isLoading ? "loading" : null}
+          />
         </View>
       </SafeAreaView>
     </>

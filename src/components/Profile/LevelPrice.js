@@ -11,13 +11,13 @@ import { Color } from "../../const/color";
 const tickIcon = require("../../../assets/images/tick-square.png");
 const tickIconActive = require("../../../assets/images/tick-square-active.png");
 
-const LevelPrice = ({ title, onPress, setPrice, iconName, index }) => {
+const LevelPrice = ({ title, onPress, setPrice, iconName, x, y }) => {
   return (
     <View
       style={{
         flexDirection: "row",
         alignItems: "center",
-        marginTop: 10,
+        marginTop: 5,
       }}
     >
       <TouchableOpacity onPress={onPress}>
@@ -26,8 +26,10 @@ const LevelPrice = ({ title, onPress, setPrice, iconName, index }) => {
       <Text style={styles.levelText}>{title}</Text>
       <TextInput
         style={styles.levelInput}
-        onChangeText={(text) => setPrice(index, text)}
+        onChangeText={(text) => setPrice(x, y, text)}
         placeholder="20.00"
+        defaultValue="20.00"
+        keyboardType="decimal-pad"
       />
       <Text style={styles.levelText}>euro/h</Text>
     </View>
@@ -47,15 +49,15 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     paddingVertical: 7,
     paddingHorizontal: 18,
-    marginLeft: 25,
+    marginLeft: 10,
     width: 80,
   },
   levelText: {
-    fontSize: 16,
+    fontSize: 15,
     color: Color.dark2,
     fontFamily: "sofia-light",
     lineHeight: 16,
-    marginLeft: 15,
+    marginLeft: 10,
     width: "40%",
   },
 });

@@ -5,19 +5,24 @@ import {
   TouchableOpacity,
   View,
   StyleSheet,
+  KeyboardAvoidingView,
+  StatusBar,
 } from "react-native";
 import Space from "../components/common/Space";
 import Header from "../components/Auth/Header";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Input from "../components/Auth/Input";
 import Button from "../components/common/Button";
-import LevelPrice from "../components/Auth/LevelPrice";
 import { Color } from "../const/color";
 import Icon from "../components/common/Icon";
 import DropDownPicker from "react-native-dropdown-picker";
 import ErrorMessage from "../components/common/ErrorMessage";
-import { useDispatch } from "react-redux";
-import { addTutorDetails } from "../api/tutor";
+import { useDispatch, useSelector } from "react-redux";
+import { addTutorDetails, getSubject } from "../api/tutor";
+import { clearError, clearRes, subjects } from "../store/tutorSlice";
+import { useNavigation } from "@react-navigation/native";
+import LevelPrice from "../components/Profile/LevelPrice";
+import AddSubject from "../components/Profile/AddSubject";
 
 const locationIcon = require("../../assets/images/location.png");
 const callIcon = require("../../assets/images/call-calling.png");
@@ -29,75 +34,143 @@ const tickIcon = require("../../assets/images/tick-square.png");
 const tickIconActive = require("../../assets/images/tick-square-active.png");
 const closeIcon = require("../../assets/images/close-circle.png");
 
+const myTheme = require("../components/common/dropdownTheme");
+
+DropDownPicker.addTheme("Tutorro", myTheme);
+DropDownPicker.setTheme("Tutorro");
+
 const TutorAddDetailsScreen = () => {
   const [tab, setTab] = useState(1);
   const [inputError, setInputError] = useState("");
-  const [level, setLevel] = useState([]);
   const [inputs, setInputs] = useState({
     addressLine1: "",
     telephone: "",
-    country: "Bangladesh",
+    country: "Ireland",
     eirCode: "",
     qualification: "",
     details: "",
-    subjectInfo: {
-      subject: "",
-    },
     tuitionType: "",
   });
 
+  const defaultSubjectInfo = {
+    subject: "Math",
+    level: [
+      {
+        name: "Primary School",
+        price: 25.0,
+      },
+      {
+        name: "Junior Cycle",
+        price: 25.0,
+      },
+      {
+        name: "Adult/Casual",
+        price: 25.0,
+      },
+    ],
+  };
+
+  const [subjectInfo, setSubjectInfo] = useState([
+    {
+      subject: "Math",
+      level: [
+        {
+          name: "",
+          price: 20,
+        },
+        {
+          name: "",
+          price: 20,
+        },
+        {
+          name: "Adult/Casual",
+          price: 20,
+        },
+      ],
+    },
+  ]);
+
+  const [typeOpen, setTypeOpen] = useState(false);
+  const [typeValue, setTypeValue] = useState();
+  const types = [
+    { label: "In Person", value: "oneToOne" },
+    { label: "Online", value: "online" },
+    { label: "Both", value: "both" },
+  ];
+
+  const [qualificationOpen, setQualificaitonOpen] = useState(false);
+  const [qualificationValue, setQualificationValue] = useState();
+  const qualifications = [
+    { label: "Bachelor", value: "Bachelor" },
+    { label: "Master", value: "Master" },
+    { label: "PhD", value: "PhD" },
+  ];
+
+  const [detailsOpen, setDetailsOpen] = useState(false);
+  const [detailsValue, setDetailsValue] = useState();
+  const details = [
+    { label: "Student", value: "Student" },
+    { label: "Professional", value: "Professional" },
+  ];
+
+  const onQualificationOpen = () =>
+    useCallback(() => {
+      setDetailsOpen(false);
+    }, []);
+
+  const onDetailsOpen = () =>
+    useCallback(() => {
+      setQualificaitonOpen(false);
+    }, []);
+
   const dispatch = useDispatch();
+
+  //Navigation
+  const navigation = useNavigation();
+
+  const error = useSelector((state) => state.tutor.error);
+  const res = useSelector((state) => state.tutor.res);
+  const status = useSelector((state) => state.tutor.status);
+  const allSubject = useSelector((state) => state.tutor.subject);
+  const subjectObj = useSelector((state) => state.tutor.subjectObj);
 
   const handleOnchange = (text, input) => {
     setInputs((prevState) => ({ ...prevState, [input]: text }));
   };
 
-  const updateLevel = (index, newLevel) => {
-    setLevel((prevLevel) => {
-      const updatedLevel = [...prevLevel];
-      updatedLevel[index] = { ...updatedLevel[index], name: newLevel };
-      return updatedLevel;
-    });
+  const handleAddSubject = () => {
+    setSubjectInfo([...subjectInfo, defaultSubjectInfo]);
   };
 
-  const updatePrice = (index, newLevel) => {
-    setLevel((prevLevel) => {
-      const updatedLevel = [...prevLevel];
-      updatedLevel[index] = { ...updatedLevel[index], price: newLevel };
-      return updatedLevel;
-    });
+  const handleRemoveSubject = (index) => {
+    const updatedSubject = subjectInfo.filter((_, i) => i !== index);
+    setSubjectInfo(updatedSubject);
   };
 
-  const updateInputs = (keyPath, newValue) => {
-    setInputs((prevState) => {
-      const updatedState = { ...prevState };
-      updateValueRecursive(updatedState, keyPath, newValue);
-      return updatedState;
-    });
+  const updateSubject = (x, subject) => {
+    const updatedSubject = [...subjectInfo];
+    updatedSubject[x].subject = subject;
+    setSubjectInfo(updatedSubject);
   };
 
-  const updateValueRecursive = (obj, keyPath, newValue) => {
-    const keys = keyPath.split(".");
+  const updateLevel = (x, y, newName) => {
+    const updatedLevels = [...subjectInfo];
+    updatedLevels[x].level[y].name = newName;
+    setSubjectInfo(updatedLevels);
+  };
 
-    if (keys.length === 1) {
-      obj[keys[0]] = newValue;
-    } else {
-      const currentKey = keys[0];
-      if (!obj.hasOwnProperty(currentKey)) {
-        obj[currentKey] = {};
-      } else if (Array.isArray(obj[currentKey])) {
-        obj[currentKey] = [...obj[currentKey]];
-      }
-      updateValueRecursive(obj[currentKey], keys.slice(1).join("."), newValue);
-    }
+  const updatePrice = (x, y, newPrice) => {
+    const updatedPrice = [...subjectInfo];
+    updatedPrice[x].level[y].price = newPrice;
+    setSubjectInfo(updatedPrice);
   };
 
   const onNext = () => {
-    if (!inputs.details) {
-      setInputError("Description Code is required");
+    if (!detailsValue) {
+      setInputError("Who Are You is required");
     }
-    if (!inputs.qualification) {
-      setInputError("Qualification Code is required");
+    if (!qualificationValue) {
+      setInputError("Qualification is required");
     }
     if (!inputs.eirCode) {
       setInputError("EIR Code is required");
@@ -109,41 +182,56 @@ const TutorAddDetailsScreen = () => {
       setInputError("Address is required");
     }
 
-    if (
-      !!inputs.addressLine1 &&
-      !!inputs.telephone &&
-      !!inputs.qualification &&
-      !!inputs.eirCode &&
-      !!inputs.details
-    ) {
+    if (!!inputs.addressLine1 && !!inputs.telephone && !!inputs.eirCode) {
       setInputError("");
       setTab(2);
     }
   };
 
   const onDone = () => {
-    if (level.length == 0) {
-      setInputError("You must select a level");
-    }
-    if (!inputs.subjectInfo.subject) {
-      setInputError("You must select a subject");
-    }
+    let body = inputs;
+    body.subjectInfo = subjectInfo;
+    body.tuitionType = typeValue;
+    body.details = detailsValue;
+    body.qualification = qualificationValue;
+
+    const count = subjectInfo.reduce((acc, obj) => {
+      acc[obj.subject] = (acc[obj.subject] || 0) + 1;
+      return acc;
+    }, {});
+
+    const duplicates = Object.keys(count).filter(
+      (subject) => count[subject] > 1
+    );
+
     if (!inputs.tuitionType) {
       setInputError("You must select a tution type");
     }
 
-    if (
-      !!inputs.tuitionType &&
-      !!inputs.subjectInfo.subject &&
-      level.length != 0
-    ) {
+    if (duplicates.length > 0) {
+      setInputError(`You have selected ${duplicates} multiple times`);
+    }
+
+    if (!!inputs.tuitionType && duplicates.length == 0) {
       setInputError("");
-      let body = inputs;
-      body.subjectInfo.level = level;
       console.log(JSON.stringify(body));
       dispatch(addTutorDetails(body));
     }
   };
+
+  useEffect(() => {
+    if (res == "Tutor details added successfully") {
+      dispatch(clearError());
+      dispatch(clearRes());
+      navigation.navigate("Confirmation");
+    }
+  }, [res]);
+
+  useEffect(() => {
+    if (allSubject == null) {
+      dispatch(getSubject());
+    }
+  }, [allSubject]);
 
   return (
     <SafeAreaView style={{ backgroundColor: Color.background, flex: 1 }}>
@@ -166,27 +254,49 @@ const TutorAddDetailsScreen = () => {
               placeholder="Address Line"
               iconName={locationIcon}
               onChangeText={(text) => handleOnchange(text, "addressLine1")}
+              value={inputs.addressLine1}
             />
             <Input
               placeholder="Phone"
               iconName={callIcon}
               onChangeText={(text) => handleOnchange(text, "telephone")}
+              value={inputs.telephone}
             />
             <Input
               placeholder="EIR Code"
               iconName={eirIcon}
               onChangeText={(text) => handleOnchange(text, "eirCode")}
+              value={inputs.eirCode}
             />
-            <Input
-              placeholder="Highest Qualification"
-              iconName={teacherIcon}
-              onChangeText={(text) => handleOnchange(text, "qualification")}
-            />
-            <Input
-              placeholder="Who are you"
-              iconName={mq}
-              onChangeText={(text) => handleOnchange(text, "details")}
-            />
+            <View style={{ zIndex: 20 }}>
+              <DropDownPicker
+                open={qualificationOpen}
+                value={qualificationValue}
+                items={qualifications}
+                onOpen={onQualificationOpen}
+                setOpen={setQualificaitonOpen}
+                setValue={setQualificationValue}
+                dropDownContainerStyle={styles.dropdown}
+                style={styles.dropdownPicker}
+                placeholder="Highest Qualification"
+              />
+            </View>
+
+            <Space height={20} />
+
+            <View style={{ zIndex: 10 }}>
+              <DropDownPicker
+                open={detailsOpen}
+                value={detailsValue}
+                items={details}
+                onOpen={onDetailsOpen}
+                setOpen={setDetailsOpen}
+                setValue={setDetailsValue}
+                dropDownContainerStyle={styles.dropdown}
+                style={styles.dropdownPicker}
+                placeholder="Who are you"
+              />
+            </View>
 
             {!!inputError && <ErrorMessage message={inputError} />}
 
@@ -196,7 +306,16 @@ const TutorAddDetailsScreen = () => {
 
         {tab === 2 && (
           <>
-            <Text style={styles.subtitle}>2. Subject Information</Text>
+            <View style={[styles.flexRow, { justifyContent: "space-between" }]}>
+              <Text style={styles.subtitle}>2. Subject Information</Text>
+              <TouchableOpacity
+                onPress={() => setTab(1)}
+                style={styles.prevBtn}
+              >
+                <Text style={styles.prevText}>Previous</Text>
+              </TouchableOpacity>
+            </View>
+
             <Space height={10} />
             <View style={styles.progressBar}>
               <View style={styles.progressBar100}></View>
@@ -211,202 +330,66 @@ const TutorAddDetailsScreen = () => {
                 The first class will be free.
               </Text>
             </TouchableOpacity>
-            <Space height={30} />
+            <Space height={20} />
 
-            <View
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "space-between",
-              }}
-            >
-              <Text style={styles.label}>Select Tuton Type</Text>
+            <View style={{ zIndex: 10 }}>
+              <DropDownPicker
+                open={typeOpen}
+                value={typeValue}
+                items={types}
+                //onOpen={onTypeOpen}
+                setOpen={setTypeOpen}
+                setValue={setTypeValue}
+                dropDownContainerStyle={styles.dropdown}
+                style={styles.dropdownPicker}
+                placeholder="How you want to teach"
+              />
             </View>
+
             <Space height={10} />
 
-            <View style={styles.flexRow}>
-              <View style={styles.flexRow}>
-                <TouchableOpacity
-                  onPress={() =>
-                    handleOnchange(
-                      inputs?.tuitionType == "oneToOne" ? "" : "oneToOne",
-                      "tuitionType"
-                    )
-                  }
-                >
-                  <Icon
-                    icon={
-                      inputs?.tuitionType == "oneToOne"
-                        ? tickIconActive
-                        : tickIcon
-                    }
-                    l
+            {subjectObj != null && (
+              <KeyboardAvoidingView behavior="padding" enabled>
+                {subjectInfo.map((item, index) => (
+                  <AddSubject
+                    key={index}
+                    i={index}
+                    onRemove={handleRemoveSubject}
+                    data={item}
+                    updateLevel={updateLevel}
+                    updatePrice={updatePrice}
+                    updateSubject={updateSubject}
+                    subject={subjectObj}
                   />
-                </TouchableOpacity>
-                <Text style={styles.levelText}>In Person</Text>
-              </View>
-              <View style={[styles.flexRow, { marginLeft: 20 }]}>
-                <TouchableOpacity
-                  onPress={() =>
-                    handleOnchange(
-                      inputs?.tuitionType == "online" ? "" : "online",
-                      "tuitionType"
-                    )
-                  }
-                >
-                  <Icon
-                    icon={
-                      inputs?.tuitionType == "online"
-                        ? tickIconActive
-                        : tickIcon
-                    }
-                    l
-                  />
-                </TouchableOpacity>
-                <Text style={styles.levelText}>Online</Text>
-              </View>
-            </View>
-            <Space height={30} />
+                ))}
+              </KeyboardAvoidingView>
+            )}
 
-            <View
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "space-between",
-              }}
-            >
-              <Text style={styles.label}>Select Subject</Text>
-            </View>
-            <Space height={10} />
-
-            <View style={styles.flexRow}>
-              <View style={styles.flexRow}>
-                <TouchableOpacity
-                  onPress={() =>
-                    inputs.subjectInfo.subject == "Math"
-                      ? updateInputs("subjectInfo.subject", "")
-                      : updateInputs("subjectInfo.subject", "Math")
-                  }
-                >
-                  <Icon
-                    icon={
-                      inputs.subjectInfo.subject == "Math"
-                        ? tickIconActive
-                        : tickIcon
-                    }
-                    l
-                  />
-                </TouchableOpacity>
-                <Text style={styles.levelText}>Math</Text>
-              </View>
-              <View style={[styles.flexRow, { marginLeft: 20 }]}>
-                <TouchableOpacity
-                  onPress={() =>
-                    inputs.subjectInfo.subject == "Physics"
-                      ? updateInputs("subjectInfo.subject", "")
-                      : updateInputs("subjectInfo.subject", "Physics")
-                  }
-                >
-                  <Icon
-                    icon={
-                      inputs.subjectInfo.subject == "Physics"
-                        ? tickIconActive
-                        : tickIcon
-                    }
-                    l
-                  />
-                </TouchableOpacity>
-                <Text style={styles.levelText}>Physics</Text>
-              </View>
-            </View>
-
-            <Space height={30} />
-
-            <View>
-              <View
-                style={{
-                  flexDirection: "row",
-                  alignItems: "center",
-                }}
+            {subjectInfo.length <= 7 && (
+              <TouchableOpacity
+                style={[
+                  styles.prevBtn,
+                  {
+                    width: "30%",
+                    alignSelf: "center",
+                    marginTop: 20,
+                    height: 40,
+                    justifyContent: "center",
+                  },
+                ]}
+                onPress={handleAddSubject}
               >
-                <Text style={[styles.label, { marginRight: "50%" }]}>
-                  Level
+                <Text style={[styles.prevText, { textAlign: "center" }]}>
+                  + Add Subject
                 </Text>
-                <Text style={styles.label}>Price</Text>
-              </View>
-
-              <LevelPrice
-                title={"Primary School"}
-                onPress={() =>
-                  level[0]?.name == "Primary School"
-                    ? updateLevel(0, "")
-                    : updateLevel(0, "Primary School")
-                }
-                iconName={
-                  level[0]?.name == "Primary School" ? tickIconActive : tickIcon
-                }
-                setPrice={updatePrice}
-                index={0}
-              />
-              <LevelPrice
-                title={"Junior Cycle"}
-                onPress={() =>
-                  level[1]?.name == "Junior Cycle"
-                    ? updateLevel(1, "")
-                    : updateLevel(1, "Junior Cycle")
-                }
-                iconName={
-                  level[1]?.name == "Junior Cycle" ? tickIconActive : tickIcon
-                }
-                setPrice={updatePrice}
-                index={1}
-              />
-              <LevelPrice
-                title={"Senior Cycle"}
-                onPress={() =>
-                  level[2]?.name == "Senior Cycle"
-                    ? updateLevel(2, "")
-                    : updateLevel(2, "Senior Cycle")
-                }
-                iconName={
-                  level[2]?.name == "Senior Cycle" ? tickIconActive : tickIcon
-                }
-                setPrice={updatePrice}
-                index={2}
-              />
-              <LevelPrice
-                title={"University"}
-                onPress={() =>
-                  level[3]?.name == "University"
-                    ? updateLevel(3, "")
-                    : updateLevel(3, "University")
-                }
-                iconName={
-                  level[3]?.name == "University" ? tickIconActive : tickIcon
-                }
-                setPrice={updatePrice}
-                index={3}
-              />
-              <LevelPrice
-                title={"Adult/Casual"}
-                onPress={() =>
-                  level[4]?.name == "Adult/Casual"
-                    ? updateLevel(4, "")
-                    : updateLevel(4, "Adult/Casual")
-                }
-                iconName={
-                  level[4]?.name == "Adult/Casual" ? tickIconActive : tickIcon
-                }
-                setPrice={updatePrice}
-                index={4}
-              />
-            </View>
+              </TouchableOpacity>
+            )}
 
             <Space height={10} />
-
             {!!inputError && <ErrorMessage message={inputError} />}
+            {error?.message && <ErrorMessage message={error?.message} />}
 
-            <Button title="Done" onPress={() => onDone()} />
+            <Button title="Done" status={status} onPress={() => onDone()} />
           </>
         )}
       </ScrollView>
@@ -479,6 +462,18 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     flexWrap: "wrap",
+  },
+  prevBtn: {
+    backgroundColor: Color.primarylight,
+    paddingVertical: 3,
+    paddingHorizontal: 5,
+    borderRadius: 5,
+  },
+  prevText: {
+    fontSize: 12,
+    color: Color.dark1,
+    fontFamily: "sofia-light",
+    lineHeight: 16,
   },
 });
 

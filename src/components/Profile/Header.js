@@ -74,24 +74,46 @@ const Header = ({ tutorProfile, data }) => {
             <SubjectTag />
           </View>
           <Text style={styles.freeClass}>Enjoy your first class for free.</Text>
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-evenly",
-              borderTopWidth: 1,
-              borderBottomWidth: 1,
-              borderColor: "#E6E6E6",
-              padding: 10,
-            }}
-          >
-            <View>
-              <Text style={styles.priceText}>€15.00</Text>
-              <Text style={styles.priceDes}>Hourly Rate</Text>
+
+          <View>
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-evenly",
+                borderTopWidth: 1,
+                borderBottomWidth: 1,
+                borderColor: "#E6E6E6",
+                padding: 10,
+              }}
+            >
+              <View style={{ width: "25%" }}>
+                <Text style={styles.priceText}>Junior Cycle</Text>
+                {/* <Text style={styles.priceDes}>Hourly Rate</Text> */}
+              </View>
+              <View style={{ borderWidth: 1, borderColor: "#E6E6E6" }}></View>
+              <View>
+                <Text style={styles.priceText}>€ 25</Text>
+                {/* <Text style={styles.priceDes}>Response Time</Text> */}
+              </View>
             </View>
-            <View style={{ borderWidth: 1, borderColor: "#E6E6E6" }}></View>
-            <View>
-              <Text style={styles.priceText}>2h</Text>
-              <Text style={styles.priceDes}>Response Time</Text>
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-evenly",
+                borderBottomWidth: 1,
+                borderColor: "#E6E6E6",
+                padding: 10,
+              }}
+            >
+              <View style={{ width: "25%" }}>
+                <Text style={styles.priceText}>University</Text>
+                {/* <Text style={styles.priceDes}>Hourly Rate</Text> */}
+              </View>
+              <View style={{ borderWidth: 1, borderColor: "#E6E6E6" }}></View>
+              <View>
+                <Text style={styles.priceText}>€ 30</Text>
+                {/* <Text style={styles.priceDes}>Response Time</Text> */}
+              </View>
             </View>
           </View>
         </View>
@@ -163,11 +185,11 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   priceText: {
-    fontSize: 18,
+    fontSize: 16, //18
     fontFamily: "sofia-medium",
-    lineHeight: 26,
+    lineHeight: 20, //26
     color: Color.dark1,
-    textAlign: "center",
+    //textAlign: "center",
   },
   priceDes: {
     fontSize: 13,

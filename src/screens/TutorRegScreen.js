@@ -14,8 +14,6 @@ import Header from "../components/Auth/Header";
 import Button from "../components/common/Button";
 import ThirdPartyAuth from "../components/Auth/ThridPartyAuth";
 import { useEffect, useState } from "react";
-import Icon from "../components/common/Icon";
-import LevelPrice from "../components/Auth/LevelPrice";
 import ErrorMessage from "../components/common/ErrorMessage";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/native";

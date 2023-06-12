@@ -8,6 +8,7 @@ import {
   Image,
   Platform,
   TouchableOpacity,
+  TextInput,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
@@ -17,8 +18,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import Space from "../components/common/Space";
 import Button from "../components/common/Button";
 import { useDispatch, useSelector } from "react-redux";
-import { searchTutor } from "../api/tutor";
+import { getSubject, searchTutor } from "../api/tutor";
 import ErrorMessage from "../components/common/ErrorMessage";
+import { subjects } from "../store/tutorSlice";
 
 const pq = require("../../assets/images/document-text.png");
 
@@ -33,65 +35,48 @@ const SearchScreen = () => {
   const [subOpen, setSubOpen] = useState(false);
   const [levelOpen, setLevelOpen] = useState(false);
   const [typeOpen, setTypeOpen] = useState(false);
-  const [eirOpen, setEirOpen] = useState(false);
 
   const [subValue, setSubValue] = useState(null);
   const [levelValue, setLevelValue] = useState(null);
   const [typeValue, setTypeValue] = useState(null);
-  const [eirValue, setEirValue] = useState(null);
+  const [location, setLocation] = useState(null);
 
   const [invalid, setInvalid] = useState();
 
   //Navigation
   const navigation = useNavigation();
 
-  const status = useSelector((state) => state.tutor.state);
+  const status = useSelector((state) => state.tutor.status);
   const tutor = useSelector((state) => state.tutor.tutor);
+  const allSubject = useSelector((state) => state.tutor.subject);
+  const subjectObj = useSelector((state) => state.tutor.subjectObj);
 
   const dispatch = useDispatch();
 
-  const subjects = [
-    { label: "Math", value: "Math" },
-    { label: "Physics", value: "Physics" },
-  ];
-
   const levels = [
+    { label: "Junior Cycle", value: "Junior Cycle" },
     { label: "University", value: "University" },
     { label: "Adult/Casual", value: "Adult/Casual" },
   ];
 
   const types = [
-    { label: "One to one", value: "One to one" },
-    { label: "Online", value: "Online" },
-  ];
-
-  const eircodes = [
-    { label: "A65 F4E2", value: "A65 F4E2" },
-    { label: "A65 F4E4", value: "A65 F4E4" },
+    { label: "In Person", value: "oneToOne" },
+    { label: "Online", value: "online" },
   ];
 
   const onSubOpen = useCallback(() => {
-    setEirOpen(false);
     setLevelOpen(false);
     setTypeOpen(false);
   }, []);
 
   const onLevelOpen = useCallback(() => {
-    setEirOpen(false);
     setSubOpen(false);
     setTypeOpen(false);
   }, []);
 
   const onTypeOpen = useCallback(() => {
-    setEirOpen(false);
     setSubOpen(false);
     setLevelOpen(false);
-  }, []);
-
-  const onEirOpen = useCallback(() => {
-    setLevelOpen(false);
-    setSubOpen(false);
-    setTypeOpen(false);
   }, []);
 
   const onSearch = () => {
@@ -99,6 +84,7 @@ const SearchScreen = () => {
       subject: subValue,
       type: typeValue,
       level: levelValue,
+      location: location,
     };
 
     if (subValue) {
@@ -111,28 +97,38 @@ const SearchScreen = () => {
 
   useEffect(() => {
     if (tutor?.message === "Data getting successfully") {
-      navigation.navigate("Tutor");
+      navigation.navigate("Tutor", {
+        data: { screen: "search" },
+      });
     }
   }, [tutor]);
+
+  useEffect(() => {
+    if (allSubject == null) {
+      dispatch(getSubject());
+    }
+  }, [allSubject]);
 
   return (
     <SafeAreaView style={styles.contains}>
       <View style={{ paddingHorizontal: 20 }}>
         <Space height={20} />
 
-        <View style={{ zIndex: 4 }}>
-          <DropDownPicker
-            open={subOpen}
-            value={subValue}
-            items={subjects}
-            onOpen={onSubOpen}
-            setOpen={setSubOpen}
-            setValue={setSubValue}
-            dropDownContainerStyle={styles.dropdown}
-            style={styles.dropdownPicker}
-            placeholder="Choose a subject"
-          />
-        </View>
+        {subjectObj != null && (
+          <View style={{ zIndex: 4 }}>
+            <DropDownPicker
+              open={subOpen}
+              value={subValue}
+              items={subjectObj}
+              onOpen={onSubOpen}
+              setOpen={setSubOpen}
+              setValue={setSubValue}
+              dropDownContainerStyle={styles.dropdown}
+              style={styles.dropdownPicker}
+              placeholder="Choose a subject"
+            />
+          </View>
+        )}
         <Space height={15} />
 
         <View style={{ zIndex: 3 }}>
@@ -165,21 +161,15 @@ const SearchScreen = () => {
           />
         </View>
 
-        {typeValue === "One to one" && (
+        {typeValue === "oneToOne" && (
           <>
             <Space height={15} />
 
             <View style={{ zIndex: 1 }}>
-              <DropDownPicker
-                open={eirOpen}
-                value={eirValue}
-                items={eircodes}
-                onOpen={onEirOpen}
-                setOpen={setEirOpen}
-                setValue={setEirValue}
-                dropDownContainerStyle={styles.dropdown}
-                style={styles.dropdownPicker}
-                placeholder="Choose your EIRCODE"
+              <TextInput
+                placeholder="Enter Location"
+                onChangeText={(text) => setLocation(text)}
+                style={styles.location}
               />
             </View>
           </>
@@ -226,6 +216,16 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 12,
     backgroundColor: Color.background,
+  },
+  location: {
+    borderColor: Color.border,
+    borderWidth: 1,
+    borderRadius: 12,
+    padding: 15,
+    color: Color.dark1,
+    fontSize: 16,
+    fontFamily: "sofia-light",
+    lineHeight: 18,
   },
   postBtn: {
     borderWidth: 1,

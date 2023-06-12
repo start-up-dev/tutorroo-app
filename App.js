@@ -18,10 +18,6 @@ import {
   newMessageReceived,
 } from "./src/store/inboxSlice";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import TutorAddDetailsScreen from "./src/screens/TutorAddDetailsScreen";
-import BackBtn from "./src/components/Auth/BackBtn";
-import Header from "./src/components/common/Header";
-import TutorRegisterStack from "./src/navigation/TutorRegisterStack";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -106,12 +102,6 @@ const Main = () => {
   }
   return (
     <NavigationContainer onLayout={onLayoutRootView()}>
-      {/* {userInfo?.type == "tutor" && !userInfo?.subjectInfo ? (
-        <TutorRegisterStack />
-      ) : (
-        <MainStack />
-      )} */}
-
       <MainStack />
     </NavigationContainer>
   );

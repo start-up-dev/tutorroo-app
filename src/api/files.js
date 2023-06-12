@@ -39,6 +39,7 @@ export const uploadFileV2 = async (file) => {
 
     return data;
   } catch (err) {
+    console.log("Catch Upload File: " + err.response.data);
     throw err;
   }
 };

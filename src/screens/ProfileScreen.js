@@ -59,7 +59,7 @@ const ProfileScreen = () => {
         />
         {userInfo?.type == "tutor" && !userInfo?.subjectInfo ? (
           <IconButton
-            title={"Complete Profile"}
+            title={"Edit Tutor Profile"}
             icon={editProfile}
             navigate={"Tutor Add Details"}
           />

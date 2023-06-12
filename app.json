@@ -2,7 +2,7 @@
   "expo": {
     "name": "tutorroo-app",
     "slug": "tutorroo-app",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -11,9 +11,13 @@
       "resizeMode": "contain",
       "backgroundColor": "#FFF8F8"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
-      "associatedDomains": ["applinks:expo.dev"],
+      "associatedDomains": [
+        "applinks:expo.dev"
+      ],
       "supportsTablet": true,
       "bundleIdentifier": "com.makereal.tutorroo"
     },
@@ -28,7 +32,7 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "schema": "tutorroo",
+    "scheme": "tutorroo",
     "plugins": [
       "expo-apple-authentication",
       [
@@ -40,9 +44,8 @@
     ],
     "extra": {
       "eas": {
-        "projectId": "e9d041f3-d680-48c6-b4fa-0f41e2e4af0f"
+        "projectId": "31463c13-8ac7-4cce-a2a4-2c571cfa3eca"
       }
-    },
-    "owner": "coder.shanta"
+    }
   }
 }

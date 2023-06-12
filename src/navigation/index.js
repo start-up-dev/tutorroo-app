@@ -3,7 +3,6 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import TabNav from "./TabNav";
 import AuthStack from "./AuthStack";
 import TutorDetailScreen from "../screens/TutorDetailScreen";
-import MessageDetailScreen from "../screens/ChatScreen";
 import ChatScreen from "../screens/ChatScreen";
 import TutorScreen from "../screens/TutorScreen";
 import NotificationScreen from "../screens/NotificationScreen";
@@ -11,29 +10,18 @@ import Header from "../components/common/Header";
 import BackBtn from "../components/Auth/BackBtn";
 import EditProfileScreen from "../screens/EditProfileScreen";
 import PostQuestionScreen from "../screens/PostQuestionScreen";
-import { useSelector } from "react-redux";
 import TutorAddDetailsScreen from "../screens/TutorAddDetailsScreen";
 import ProfileScreen from "../screens/ProfileScreen";
 import ViewAllSubjectScreen from "../screens/ViewAllSubjectScreen";
 import ChangePassScreen from "../screens/ChangePassScreen";
 import ResetPassScreen from "../screens/ResetPassScreen";
+import ConfirmationScreen from "../screens/ConfirmationScreen";
 
 const Stack = createNativeStackNavigator();
 
 const MainStack = () => {
-  const [initialRoute, setInitialRoute] = useState();
-  const userInfo = useSelector((state) => state.auth.user);
-
-  const onInitialRoute = () => {
-    if (userInfo?.type == "tutor" && !userInfo?.subjectInfo) {
-      return "Tutor Add Details";
-    }
-  };
-
-  console.log(onInitialRoute());
-
   return (
-    <Stack.Navigator>
+    <Stack.Navigator initialRouteName="Tab Nav">
       <Stack.Screen
         name="Tab Nav"
         component={TabNav}
@@ -66,9 +54,9 @@ const MainStack = () => {
       <Stack.Screen
         name="Tutor"
         component={TutorScreen}
-        options={{
-          header: () => <Header title="Tutor" />,
-        }}
+        // options={{
+        //   headerShown: false,
+        // }}
       />
       <Stack.Screen
         name="Notification"
@@ -97,7 +85,6 @@ const MainStack = () => {
         component={TutorAddDetailsScreen}
         options={{
           header: () => <Header home loggedIn={true} />,
-          gestureEnabled: false,
         }}
       />
       <Stack.Screen
@@ -111,6 +98,11 @@ const MainStack = () => {
       <Stack.Screen
         name="Profile"
         component={ProfileScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Confirmation"
+        component={ConfirmationScreen}
         options={{ headerShown: false }}
       />
       <Stack.Screen

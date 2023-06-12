@@ -50,16 +50,9 @@ const EnterOTPScreen = ({ route }) => {
         email: data.email,
         password: data.password,
       };
-      navigation.navigate("Log In");
       dispatch(login(body));
     }
-
-    // if (res?.message === "Code matched, Now you can reset your password!") {
-    //   navigation.navigate("Reset Password");
-    // }
   }, [res]);
-
-  console.log(res);
 
   return (
     <SafeAreaView style={{ backgroundColor: Color.background, flex: 1 }}>
