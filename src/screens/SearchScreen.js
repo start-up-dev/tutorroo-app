@@ -20,7 +20,7 @@ import Button from "../components/common/Button";
 import { useDispatch, useSelector } from "react-redux";
 import { getSubject, searchTutor } from "../api/tutor";
 import ErrorMessage from "../components/common/ErrorMessage";
-import { subjects } from "../store/tutorSlice";
+import { selectSubject, subjects } from "../store/tutorSlice";
 
 const pq = require("../../assets/images/document-text.png");
 
@@ -50,6 +50,7 @@ const SearchScreen = () => {
   const tutor = useSelector((state) => state.tutor.tutor);
   const allSubject = useSelector((state) => state.tutor.subject);
   const subjectObj = useSelector((state) => state.tutor.subjectObj);
+  const selectedSubject = useSelector((state) => state.tutor.selectedSubject);
 
   const dispatch = useDispatch();
 
@@ -100,6 +101,8 @@ const SearchScreen = () => {
       navigation.navigate("Tutor", {
         data: { screen: "search" },
       });
+      dispatch(selectSubject(subValue ? subValue : selectedSubject));
+      setSubValue("");
     }
   }, [tutor]);
 
@@ -126,6 +129,7 @@ const SearchScreen = () => {
               dropDownContainerStyle={styles.dropdown}
               style={styles.dropdownPicker}
               placeholder="Choose a subject"
+              listMode="SCROLLVIEW"
             />
           </View>
         )}

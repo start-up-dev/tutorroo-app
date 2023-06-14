@@ -11,6 +11,7 @@ import { Color } from "../../const/color";
 import { useNavigation } from "@react-navigation/native";
 import { useDispatch } from "react-redux";
 import { searchTutor } from "../../api/tutor";
+import { selectSubject } from "../../store/tutorSlice";
 
 const image = require("../../../assets/physics.jpeg");
 
@@ -28,9 +29,9 @@ const Subject = ({ data }) => {
     };
 
     dispatch(searchTutor(body));
-
+    dispatch(selectSubject(data?.name));
     navigation.navigate("Tutor", {
-      data: { screen: "home", subject: data?.name },
+      data: { screen: "home" },
     });
   };
 

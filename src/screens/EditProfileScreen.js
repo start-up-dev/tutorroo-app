@@ -68,6 +68,7 @@ const EditProfileScreen = () => {
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       aspect: [1, 1],
       quality: 1,
+      allowsEditing: true,
     });
 
     if (!result.canceled) {
@@ -124,7 +125,13 @@ const EditProfileScreen = () => {
 
           <View style={[styles.profileImgView]}>
             <Image
-              source={profileImage ? { uri: profileImage } : profile}
+              source={
+                profileImage
+                  ? { uri: profileImage }
+                  : userInfo?.avatar
+                  ? { uri: userInfo?.avatar }
+                  : profile
+              }
               style={[styles.profileImg]}
             />
             <TouchableOpacity

@@ -19,6 +19,7 @@ const initialState = {
   user: null,
   error: null,
   status: "idle",
+  tutorMe: null,
 };
 
 export const authSlice = createSlice({
@@ -107,6 +108,7 @@ export const authSlice = createSlice({
       })
       .addCase(getMe.fulfilled, (state, action) => {
         state.status = "succeeded";
+        state.tutorMe = action.payload?.tutor;
         state.user = action.payload?.data;
       })
       .addCase(updateProfile.pending, (state, action) => {

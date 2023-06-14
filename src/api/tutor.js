@@ -13,6 +13,7 @@ export const searchTutor = createAsyncThunk(
           subject: body?.subject,
           level: body?.level,
           location: body?.location,
+          _id: body?.id,
         },
       });
       console.log("Try Search Tutor: " + JSON.stringify(res.data));
@@ -42,8 +43,8 @@ export const getSubject = createAsyncThunk("tutor/getSubject", async () => {
 export const getWishlist = createAsyncThunk("tutor/getWishlist", async () => {
   try {
     const { data } = await Axios.get(`/wishlist`);
-    console.log("Try Get Wishlist: " + JSON.stringify(data));
-    return data;
+    console.log("Try Get Wishlist: " + JSON.stringify(data?.data));
+    return data?.data;
   } catch (err) {
     console.log("Try Get Wishlist: " + JSON.stringify(err.response.data));
     return err.response.data;

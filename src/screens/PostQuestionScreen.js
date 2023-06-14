@@ -1,17 +1,31 @@
-import { SafeAreaView, ScrollView, Text, View, StyleSheet, TextInput, TouchableOpacity, Platform, ToastAndroid } from "react-native";
+import {
+  SafeAreaView,
+  ScrollView,
+  Text,
+  View,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+  Platform,
+  ToastAndroid,
+} from "react-native";
 import Space from "../components/common/Space";
 import { Color } from "../const/color";
 import DropDownPicker from "react-native-dropdown-picker";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Button from "../components/common/Button";
 import Icon from "../components/common/Icon";
 import * as DocumentPicker from "expo-document-picker";
 import * as ImagePicker from "expo-image-picker";
 import { uploadFile, uploadFileV2 } from "../api/files";
 import { sendMessageRequest } from "../api/inbox";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
-import { addInboxes, clearMessages, setSelectedRouteId } from "../store/inboxSlice";
+import {
+  addInboxes,
+  clearMessages,
+  setSelectedRouteId,
+} from "../store/inboxSlice";
 
 const attachIcon = require("../../assets/images/attach-circle-red.png");
 const closeIcon = require("../../assets/images/close-circle-red.png");
@@ -28,10 +42,8 @@ const PostQuestionScreen = () => {
   const [question, setQuestion] = useState("");
   const [docs, setDocs] = useState([]);
 
-  const subjects = [
-    { label: "Math", value: "Math" },
-    { label: "Physics", value: "Physics" },
-  ];
+  const allSubject = useSelector((state) => state.tutor.subject);
+  const subjectObj = useSelector((state) => state.tutor.subjectObj);
 
   const levels = [
     { label: "University", value: "University" },
@@ -98,10 +110,19 @@ const PostQuestionScreen = () => {
       setStatus(null);
 
       if ((Platform.OS = "android")) {
-        ToastAndroid.show(error?.response?.data?.issue?.message || "Something went wrong.", ToastAndroid.LONG);
+        ToastAndroid.show(
+          error?.response?.data?.issue?.message || "Something went wrong.",
+          ToastAndroid.LONG
+        );
       }
     }
   };
+
+  useEffect(() => {
+    if (allSubject == null) {
+      dispatch(getSubject());
+    }
+  }, [allSubject]);
 
   return (
     <SafeAreaView style={styles.contains}>
@@ -111,7 +132,7 @@ const PostQuestionScreen = () => {
           <DropDownPicker
             open={subOpen}
             value={subValue}
-            items={subjects}
+            items={subjectObj}
             onOpen={onSubOpen}
             setOpen={setSubOpen}
             setValue={setSubValue}
@@ -137,18 +158,35 @@ const PostQuestionScreen = () => {
         </View>
         <Space height={15} />
 
-        <TextInput value={question} onChangeText={setQuestion} placeholder="Write your question here" style={styles.textInput} multiline />
+        <TextInput
+          value={question}
+          onChangeText={setQuestion}
+          placeholder="Write your question here"
+          style={styles.textInput}
+          multiline
+        />
 
         <Space height={25} />
 
         {docs.map((doc, idx) => (
           <View
             key={idx}
-            style={{ display: "flex", marginBottom: 8, flexDirection: "row", borderColor: Color.border, borderWidth: 1, borderRadius: 12, backgroundColor: Color.background, padding: 8 }}
+            style={{
+              display: "flex",
+              marginBottom: 8,
+              flexDirection: "row",
+              borderColor: Color.border,
+              borderWidth: 1,
+              borderRadius: 12,
+              backgroundColor: Color.background,
+              padding: 8,
+            }}
           >
             <Text style={{ flex: 1 }}>{doc?.name}</Text>
 
-            <TouchableOpacity onPress={() => setDocs((prev) => prev.filter((d) => d != doc))}>
+            <TouchableOpacity
+              onPress={() => setDocs((prev) => prev.filter((d) => d != doc))}
+            >
               <Icon icon={closeIcon} l />
             </TouchableOpacity>
           </View>
@@ -162,7 +200,11 @@ const PostQuestionScreen = () => {
 
         <Space height={25} />
 
-        <Button title="Post A Question" status={status} onPress={handlePostAQuestion} />
+        <Button
+          title="Post A Question"
+          status={status}
+          onPress={handlePostAQuestion}
+        />
       </ScrollView>
     </SafeAreaView>
   );

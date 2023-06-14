@@ -14,9 +14,10 @@ import Loader from "../components/common/Loader";
 import { Color } from "../const/color";
 import { useState } from "react";
 import Icon from "../components/common/Icon";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
 import { Image } from "react-native";
+import { clearTutor } from "../store/tutorSlice";
 
 const dot = require("../../assets/images/dot.png");
 const sad = require("../../assets/images/emoji-sad.png");
@@ -27,15 +28,13 @@ const TutorScreen = ({ route }) => {
 
   //Navigation
   const navigation = useNavigation();
+  const dispatch = useDispatch();
 
   const { data } = route.params;
 
   const handleBackBtn = () => {
-    if (data.screen == "home") {
-      navigation.navigate("Search");
-    } else {
-      navigation.goBack();
-    }
+    dispatch(clearTutor());
+    navigation.navigate("Search");
   };
 
   console.log(".............." + data.screen);
@@ -95,8 +94,12 @@ const TutorScreen = ({ route }) => {
       <ScrollView style={{ paddingHorizontal: 16 }}>
         <Loader visible={status == "loading" ? true : false} />
         {tutor?.data?.length > 0
-          ? status !== "loading" &&
-            tutor.data.map((item, idx) => <TutorCard data={item} key={idx} />)
+          ? tab == 1
+            ? tutor.data.map((item, idx) => <TutorCard data={item} key={idx} />)
+            : tutor.data.map(
+                (item, idx) =>
+                  item.tutorsChoice && <TutorCard data={item} key={idx} />
+              )
           : status !== "loading" && (
               <View style={styles.notFound}>
                 <Icon icon={sad} xxl />
