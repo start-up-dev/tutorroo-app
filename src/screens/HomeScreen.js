@@ -1,18 +1,5 @@
 import React, { useEffect } from "react";
-import {
-  SafeAreaView,
-  View,
-  StyleSheet,
-  Text,
-  Platform,
-  Image,
-  Dimensions,
-  TouchableOpacity,
-  ScrollView,
-  FlatList,
-  Pressable,
-  StatusBar,
-} from "react-native";
+import { SafeAreaView, View, StyleSheet, Text, Platform, Image, Dimensions, TouchableOpacity, ScrollView, FlatList, Pressable, StatusBar } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
 import { Color } from "../const/color";
@@ -24,6 +11,7 @@ import { getSubject } from "../api/tutor";
 import * as Device from "expo-device";
 import * as Notifications from "expo-notifications";
 import { saveExpoPushToken } from "../api/notifications";
+import { getInboxes, getMessages } from "../api/inbox";
 
 const banner1 = require("../../assets/banner1.jpg");
 const banner2 = require("../../assets/banner2.png");
@@ -47,8 +35,7 @@ async function registerForPushNotificationsAsync() {
   }
 
   if (Device.isDevice) {
-    const { status: existingStatus } =
-      await Notifications.getPermissionsAsync();
+    const { status: existingStatus } = await Notifications.getPermissionsAsync();
     let finalStatus = existingStatus;
     if (existingStatus !== "granted") {
       const { status } = await Notifications.requestPermissionsAsync();
@@ -59,7 +46,6 @@ async function registerForPushNotificationsAsync() {
       return;
     }
     token = (await Notifications.getExpoPushTokenAsync()).data;
-    console.log(token);
   } else {
     // alert("Must use physical device for Push Notifications");
   }
@@ -78,9 +64,11 @@ const HomeScreen = () => {
   useEffect(() => {
     if (subject === null) {
       dispatch(getSubject());
+
+      dispatch(getInboxes());
     }
 
-    registerForPushNotificationsAsync().then(saveExpoPushToken);
+    registerForPushNotificationsAsync().then((token) => saveExpoPushToken(token));
   }, []);
 
   return (
@@ -98,13 +86,10 @@ const HomeScreen = () => {
             justifyContent: "space-evenly",
           }}
         >
-          {firstNine?.length > 0 &&
-            firstNine?.map((item) => <Subject key={item._id} data={item} />)}
+          {firstNine?.length > 0 && firstNine?.map((item) => <Subject key={item._id} data={item} />)}
         </View>
         <Space height={10} />
-        <TouchableOpacity
-          onPress={() => navigation.navigate("View All Subject")}
-        >
+        <TouchableOpacity onPress={() => navigation.navigate("View All Subject")}>
           <Text style={styles.viewAll}>View All</Text>
         </TouchableOpacity>
         <Space height={20} />

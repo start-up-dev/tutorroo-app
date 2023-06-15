@@ -10,8 +10,9 @@ import SearchScreen from "../screens/SearchScreen";
 import ProfileScreen from "../screens/ProfileScreen";
 import MessageScreen from "../screens/MessageScreen";
 import FavouriteScreen from "../screens/FavouriteScreen";
-import { Image } from "react-native";
+import { Image, Text } from "react-native";
 import { useSelector } from "react-redux";
+import { View } from "react-native";
 
 //icon
 
@@ -34,6 +35,8 @@ const Tab = createBottomTabNavigator();
 
 const TabNav = () => {
   const isLoggedIn = useSelector((state) => state.auth.loggedIn);
+  const hasUnseenMessage = useSelector((state) => state.inbox.inboxes.find((i) => i.numberOfUnSeenMessages != 0));
+
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -59,43 +62,36 @@ const TabNav = () => {
           }
 
           return (
-            <Image
-              source={iconName}
-              style={{ width: 24, height: 24, resizeMode: "contain" }}
-            />
+            <View>
+              {route.name == "Message" && hasUnseenMessage && (
+                <View
+                  style={{
+                    backgroundColor: "red",
+                    position: "absolute",
+                    top: -2,
+                    right: -2,
+                    width: 10,
+                    height: 10,
+                    borderRadius: 5,
+                  }}
+                />
+              )}
+
+              <Image source={iconName} style={{ width: 24, height: 24, resizeMode: "contain" }} />
+            </View>
           );
         },
         tabBarActiveTintColor: "tomato",
         tabBarInactiveTintColor: "gray",
       })}
     >
-      <Tab.Screen
-        name="Home"
-        component={HomeScreen}
-        options={{ header: () => <Header home loggedIn={isLoggedIn} /> }}
-      />
-      <Tab.Screen
-        name="Search"
-        component={SearchScreen}
-        options={{ header: () => <Header title="Find A Tutor" /> }}
-      />
+      <Tab.Screen name="Home" component={HomeScreen} options={{ header: () => <Header home loggedIn={isLoggedIn} /> }} />
+      <Tab.Screen name="Search" component={SearchScreen} options={{ header: () => <Header title="Find A Tutor" /> }} />
       {isLoggedIn && (
         <>
-          <Tab.Screen
-            name="Message"
-            component={MessageScreen}
-            options={{ header: () => <Header title="Messages" /> }}
-          />
-          <Tab.Screen
-            name="Favourite"
-            component={FavouriteScreen}
-            options={{ header: () => <Header title="Favourite" /> }}
-          />
-          <Tab.Screen
-            name="Profile"
-            component={ProfileScreen}
-            options={{ headerShown: false }}
-          />
+          <Tab.Screen name="Message" component={MessageScreen} options={{ header: () => <Header title="Messages" /> }} />
+          <Tab.Screen name="Favourite" component={FavouriteScreen} options={{ header: () => <Header title="Favourite" /> }} />
+          <Tab.Screen name="Profile" component={ProfileScreen} options={{ headerShown: false }} />
         </>
       )}
     </Tab.Navigator>

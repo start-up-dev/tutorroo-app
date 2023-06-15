@@ -44,8 +44,9 @@
     ],
     "extra": {
       "eas": {
-        "projectId": "31463c13-8ac7-4cce-a2a4-2c571cfa3eca"
+        "projectId": "e9d041f3-d680-48c6-b4fa-0f41e2e4af0f"
       }
-    }
+    },
+    "owner": "coder.shanta"
   }
 }
