@@ -13,7 +13,7 @@ export const inboxSlice = createSlice({
   initialState,
   reducers: {
     addInboxes: (state, action) => {
-      state.inboxes = action.payload;
+      state.inboxes = [...action.payload, ...state.inboxes];
     },
     markAsSeenAll: (state, action) => {
       state.inboxes.map((i) => {
