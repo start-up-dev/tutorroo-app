@@ -18,11 +18,12 @@ import Icon from "../components/common/Icon";
 import DropDownPicker from "react-native-dropdown-picker";
 import ErrorMessage from "../components/common/ErrorMessage";
 import { useDispatch, useSelector } from "react-redux";
-import { addTutorDetails, getSubject } from "../api/tutor";
+import { addTutorDetails, getSubject, searchTutor } from "../api/tutor";
 import { clearError, clearRes, subjects } from "../store/tutorSlice";
 import { useNavigation } from "@react-navigation/native";
 import LevelPrice from "../components/Profile/LevelPrice";
 import AddSubject from "../components/Profile/AddSubject";
+import { getMe } from "../api/auth";
 
 const locationIcon = require("../../assets/images/location.png");
 const callIcon = require("../../assets/images/call-calling.png");
@@ -48,8 +49,9 @@ const TutorAddDetailsScreen = () => {
     country: "Ireland",
     eirCode: "",
     qualification: "",
-    details: "",
+    description: "",
     tuitionType: "",
+    freeFirstClass: false,
   });
 
   const defaultSubjectInfo = {
@@ -108,7 +110,7 @@ const TutorAddDetailsScreen = () => {
 
   const [detailsOpen, setDetailsOpen] = useState(false);
   const [detailsValue, setDetailsValue] = useState();
-  const details = [
+  const whoAreYou = [
     { label: "Student", value: "Student" },
     { label: "Professional", value: "Professional" },
   ];
@@ -166,6 +168,9 @@ const TutorAddDetailsScreen = () => {
   };
 
   const onNext = () => {
+    if (!inputs.description) {
+      setInputError("Description is required");
+    }
     if (!detailsValue) {
       setInputError("Who Are You is required");
     }
@@ -182,7 +187,14 @@ const TutorAddDetailsScreen = () => {
       setInputError("Address is required");
     }
 
-    if (!!inputs.addressLine1 && !!inputs.telephone && !!inputs.eirCode) {
+    if (
+      !!inputs.addressLine1 &&
+      !!inputs.telephone &&
+      !!inputs.eirCode &&
+      !!detailsValue &&
+      !!qualificationValue &&
+      !!inputs.description
+    ) {
       setInputError("");
       setTab(2);
     }
@@ -192,7 +204,7 @@ const TutorAddDetailsScreen = () => {
     let body = inputs;
     body.subjectInfo = subjectInfo;
     body.tuitionType = typeValue;
-    body.details = detailsValue;
+    body.whoAreYou = detailsValue;
     body.qualification = qualificationValue;
 
     const count = subjectInfo.reduce((acc, obj) => {
@@ -235,6 +247,7 @@ const TutorAddDetailsScreen = () => {
 
   return (
     <SafeAreaView style={{ backgroundColor: Color.background, flex: 1 }}>
+      <StatusBar />
       <ScrollView style={{ paddingHorizontal: 20 }}>
         <Space height={20} />
         <Header
@@ -288,7 +301,7 @@ const TutorAddDetailsScreen = () => {
               <DropDownPicker
                 open={detailsOpen}
                 value={detailsValue}
-                items={details}
+                items={whoAreYou}
                 onOpen={onDetailsOpen}
                 setOpen={setDetailsOpen}
                 setValue={setDetailsValue}
@@ -297,6 +310,16 @@ const TutorAddDetailsScreen = () => {
                 placeholder="Who are you"
               />
             </View>
+
+            <Space height={20} />
+
+            <Input
+              placeholder="Description"
+              iconName={bookIcon}
+              onChangeText={(text) => handleOnchange(text, "description")}
+              value={inputs.description}
+              multiline
+            />
 
             {!!inputError && <ErrorMessage message={inputError} />}
 
@@ -323,9 +346,14 @@ const TutorAddDetailsScreen = () => {
             <Space height={30} />
             <TouchableOpacity
               style={{ flexDirection: "row", alignItems: "center" }}
-              onPress={() => handleOnchange(!inputs?.freeClass, "freeClass")}
+              onPress={() =>
+                handleOnchange(!inputs?.freeFirstClass, "freeFirstClass")
+              }
             >
-              <Icon icon={inputs?.freeClass ? tickIconActive : tickIcon} l />
+              <Icon
+                icon={inputs?.freeFirstClass ? tickIconActive : tickIcon}
+                l
+              />
               <Text style={styles.freeClass}>
                 The first class will be free.
               </Text>
@@ -337,7 +365,6 @@ const TutorAddDetailsScreen = () => {
                 open={typeOpen}
                 value={typeValue}
                 items={types}
-                //onOpen={onTypeOpen}
                 setOpen={setTypeOpen}
                 setValue={setTypeValue}
                 dropDownContainerStyle={styles.dropdown}

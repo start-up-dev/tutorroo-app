@@ -31,9 +31,10 @@ export const login = createAsyncThunk("auth/login", async (body) => {
   try {
     const res = await Axios.post(`/authenticate/login`, body);
     saveJwtToken(res.data.access_token);
+    console.log("Try Log In" + JSON.stringify(res.data));
     return res.data;
   } catch (err) {
-    console.log("Catch" + JSON.stringify(err.response.data));
+    console.log("Catch Log In" + JSON.stringify(err.response.data));
     return err.response.data;
   }
 });
@@ -111,9 +112,10 @@ export const loginWithApple = createAsyncThunk(
 export const getMe = createAsyncThunk("auth/getMe", async () => {
   try {
     const res = await Axios.get(`/authenticate/me`);
+    console.log("Try Get Me" + JSON.stringify(res.data));
     return res.data;
   } catch (err) {
-    console.log("Catch" + JSON.stringify(err.response.data));
+    console.log("Catch Get Me" + JSON.stringify(err.response.data));
     return err.response.data;
   }
 });

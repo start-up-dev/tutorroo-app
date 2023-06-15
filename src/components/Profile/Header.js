@@ -14,13 +14,15 @@ import { Color } from "../../const/color";
 import SubjectTag from "./SubjectTag";
 import Icon from "../common/Icon";
 import Space from "../common/Space";
+import { useSelector } from "react-redux";
 
 const cover = require("../../../assets/physics.jpeg");
 const profile = require("../../../assets/profile.jpeg");
 const left = require("../../../assets/images/arrow-left.png");
 
-const Header = ({ tutorProfile, data }) => {
+const Header = ({ tutorProfile, data, allData }) => {
   const navigation = useNavigation();
+  const subjects = allData?.subjectInfo?.map((item) => item.subject);
 
   return (
     <View style={{ backgroundColor: Color.background }}>
@@ -63,59 +65,23 @@ const Header = ({ tutorProfile, data }) => {
           />
           <Space height={20} />
           <Text style={styles.profileName}>
-            {data?.firstName ? data?.firstName : "Add Name"} {data?.lastName}
+            {data?.firstName ? data?.firstName : "Add Name"}{" "}
+            {!tutorProfile && data?.lastName}
           </Text>
         </View>
       </View>
       {tutorProfile && (
         <View>
           <View style={styles.tagView}>
-            <SubjectTag />
-            <SubjectTag />
+            {subjects?.map((item, idx) => (
+              <SubjectTag subject={item} key={idx} />
+            ))}
           </View>
-          <Text style={styles.freeClass}>Enjoy your first class for free.</Text>
-
-          <View>
-            <View
-              style={{
-                flexDirection: "row",
-                justifyContent: "space-evenly",
-                borderTopWidth: 1,
-                borderBottomWidth: 1,
-                borderColor: "#E6E6E6",
-                padding: 10,
-              }}
-            >
-              <View style={{ width: "25%" }}>
-                <Text style={styles.priceText}>Junior Cycle</Text>
-                {/* <Text style={styles.priceDes}>Hourly Rate</Text> */}
-              </View>
-              <View style={{ borderWidth: 1, borderColor: "#E6E6E6" }}></View>
-              <View>
-                <Text style={styles.priceText}>€ 25</Text>
-                {/* <Text style={styles.priceDes}>Response Time</Text> */}
-              </View>
-            </View>
-            <View
-              style={{
-                flexDirection: "row",
-                justifyContent: "space-evenly",
-                borderBottomWidth: 1,
-                borderColor: "#E6E6E6",
-                padding: 10,
-              }}
-            >
-              <View style={{ width: "25%" }}>
-                <Text style={styles.priceText}>University</Text>
-                {/* <Text style={styles.priceDes}>Hourly Rate</Text> */}
-              </View>
-              <View style={{ borderWidth: 1, borderColor: "#E6E6E6" }}></View>
-              <View>
-                <Text style={styles.priceText}>€ 30</Text>
-                {/* <Text style={styles.priceDes}>Response Time</Text> */}
-              </View>
-            </View>
-          </View>
+          {allData?.freeFirstClass && (
+            <Text style={styles.freeClass}>
+              Enjoy your first class for free.
+            </Text>
+          )}
         </View>
       )}
     </View>
@@ -163,7 +129,7 @@ const styles = StyleSheet.create({
 
   profileImgView: {
     alignItems: "center",
-    bottom: 90,
+    bottom: 100,
   },
   profileName: {
     fontSize: 18,

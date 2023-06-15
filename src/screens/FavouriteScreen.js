@@ -1,8 +1,15 @@
-import { SafeAreaView, ScrollView, Text, View } from "react-native";
+import {
+  RefreshControl,
+  SafeAreaView,
+  ScrollView,
+  Text,
+  View,
+  re,
+} from "react-native";
 import { Color } from "../const/color";
 import TutorCard from "../components/common/TutorCard";
 import Space from "../components/common/Space";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getWishlist } from "../api/tutor";
 import Loader from "../components/common/Loader";
@@ -16,17 +23,29 @@ const FavouriteScreen = () => {
   const wishlist = useSelector((state) => state.tutor.wishlist);
   const status = useSelector((state) => state.tutor.status);
 
+  const onRefresh = useCallback(() => {
+    dispatch(getWishlist());
+  }, []);
+
   useEffect(() => {
     if (wishlist === null) {
       dispatch(getWishlist());
     }
   }, [wishlist]);
 
-  console.log("WishList: " + wishlist);
   return (
     <SafeAreaView style={{ backgroundColor: Color.background, flex: 1 }}>
       <Loader visible={status === "loading" ? true : false} />
-      <ScrollView style={{ paddingHorizontal: 20 }}>
+      <ScrollView
+        style={{ paddingHorizontal: 20 }}
+        refreshControl={
+          <RefreshControl
+            refreshing={status == "loading"}
+            tintColor={Color.primaryDeep}
+            onRefresh={onRefresh}
+          />
+        }
+      >
         <Space height={10} />
 
         {wishlist?.length > 0 ? (

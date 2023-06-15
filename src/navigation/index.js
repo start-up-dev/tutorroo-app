@@ -21,7 +21,7 @@ const Stack = createNativeStackNavigator();
 
 const MainStack = () => {
   return (
-    <Stack.Navigator initialRouteName="Tab Nav">
+    <Stack.Navigator>
       <Stack.Screen
         name="Tab Nav"
         component={TabNav}
@@ -84,7 +84,8 @@ const MainStack = () => {
         name="Tutor Add Details"
         component={TutorAddDetailsScreen}
         options={{
-          header: () => <Header home loggedIn={true} />,
+          gestureEnabled: true,
+          headerShown: false,
         }}
       />
       <Stack.Screen

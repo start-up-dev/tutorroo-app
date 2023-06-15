@@ -1,7 +1,7 @@
 import { View, Text } from "react-native";
 import { Color } from "../../const/color";
 
-const SubjectTag = () => {
+const SubjectTag = ({ subject }) => {
   return (
     <View
       style={{
@@ -21,7 +21,7 @@ const SubjectTag = () => {
           fontFamily: "sofia-regular",
         }}
       >
-        Mathmatics
+        {subject}
       </Text>
     </View>
   );

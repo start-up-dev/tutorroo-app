@@ -9,7 +9,7 @@ import { Color } from "../const/color";
 import Button from "../components/common/Button";
 import ErrorMessage from "../components/common/ErrorMessage";
 import Header from "../components/Auth/Header";
-import { login, verifyAccount } from "../api/auth";
+import { getMe, login, verifyAccount } from "../api/auth";
 
 const EnterOTPScreen = ({ route }) => {
   const [otpInput, setOtpInput] = useState();
@@ -53,6 +53,17 @@ const EnterOTPScreen = ({ route }) => {
       dispatch(login(body));
     }
   }, [res]);
+
+  useEffect(() => {
+    if (res?.access_token || res?.token) {
+      navigation.navigate(
+        res?.type == "tutor" && !res?.eirCode ? "Tutor Add Details" : "Tab Nav"
+      );
+      dispatch(getMe());
+    }
+  }, [res]);
+
+  console.log("....." + JSON.stringify(res));
 
   return (
     <SafeAreaView style={{ backgroundColor: Color.background, flex: 1 }}>

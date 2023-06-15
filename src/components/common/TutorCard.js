@@ -26,6 +26,33 @@ const TutorCard = ({ data }) => {
   const dispatch = useDispatch();
 
   const userInfo = useSelector((state) => state.auth.user);
+  const selectedSubject = useSelector((state) => state.tutor.selectedSubject);
+
+  // Find the subject
+  const mathSubject = data?.subjectInfo?.find(
+    (item) => item.subject === selectedSubject
+  );
+
+  // Get a random subject
+  const randomSubject =
+    data?.subjectInfo[Math.floor(Math.random() * data?.subjectInfo?.length)];
+
+  // Get a random price value for the subject "Math"
+  let randomPrice = null;
+
+  if (mathSubject) {
+    const levels = mathSubject.level;
+    if (levels.length > 0) {
+      const randomIndex = Math.floor(Math.random() * levels.length);
+      randomPrice = levels[randomIndex]?.price;
+    }
+  } else {
+    const levels = randomSubject.level;
+    if (levels.length > 0) {
+      const randomIndex = Math.floor(Math.random() * levels.length);
+      randomPrice = levels[randomIndex]?.price;
+    }
+  }
 
   const onWishlist = (id) => {
     if (favourite) {
@@ -52,19 +79,29 @@ const TutorCard = ({ data }) => {
         borderRadius: 12,
       }}
     >
-      <TouchableOpacity onPress={() => navigation.navigate("Tutor Detail", { tutor: data?.tutor })}>
+      <TouchableOpacity
+        onPress={() => navigation.navigate("Tutor Detail", { data: data })}
+      >
         <View style={styles.container}>
           <View style={{ flexDirection: "row", alignItems: "center" }}>
             <Image source={profile} style={styles.profileImg} />
             <View>
               <View style={{ flexDirection: "row", alignItems: "center" }}>
-                <Text style={styles.nameText}>{data?.tutor.firstName ? data?.tutor.firstName : "Mahbub"}</Text>
-                <Icon icon={verified} />
+                <Text style={styles.nameText}>
+                  {data?.tutor.firstName ? data?.tutor.firstName : "Mahbub"}
+                </Text>
+                {data?.tutorsChoice && <Icon icon={verified} />}
               </View>
               <Space height={10} />
-              <SubjectTag />
+              <SubjectTag
+                subject={
+                  selectedSubject ? selectedSubject : randomSubject?.subject
+                }
+              />
               <Space height={10} />
-              <Text style={styles.qualificationText}>Phd in Mathmatics</Text>
+              <Text style={styles.qualificationText}>
+                {data?.qualification}
+              </Text>
             </View>
           </View>
           <View>
@@ -75,7 +112,11 @@ const TutorCard = ({ data }) => {
                 justifyContent: "space-evenly",
               }}
             >
-              <TouchableOpacity onPress={() => onWishlist(data?._id)}>
+              <TouchableOpacity
+                onPress={() =>
+                  userInfo ? onWishlist(data?._id) : navigation.navigate("Auth")
+                }
+              >
                 <Icon icon={favourite ? heartActive : heart} />
               </TouchableOpacity>
               <View
@@ -88,11 +129,11 @@ const TutorCard = ({ data }) => {
                 <Text style={styles.ratingText}>4/5</Text>
               </View>
             </View>
-            <Text style={styles.priceText}>€15.00/h</Text>
+            <Text style={styles.priceText}>€ {randomPrice}/h</Text>
             <Space height={30} />
           </View>
         </View>
-        <Text style={styles.description}>Lorem ipsum dolor sit amet consectetur. Pharetra viverra accumsan neque neque faucibus sed. Utpat condimentum </Text>
+        <Text style={styles.description}>{data?.description}</Text>
       </TouchableOpacity>
     </View>
   );
