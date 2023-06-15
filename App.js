@@ -13,15 +13,13 @@ import { logIn } from "./src/store/authSlice";
 import { getMe } from "./src/api/auth";
 import { getSubject } from "./src/api/tutor";
 import { socketBaseURL } from "./src/config/baseURL";
-import {
-  messageRequestStatusChanged,
-  newMessageReceived,
-} from "./src/store/inboxSlice";
+import { markAllAsSeenByRouteId, markMessageAsSeenByMessageId, messageRequestStatusChanged, newMessageReceived } from "./src/store/inboxSlice";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { LogBox } from "react-native";
 
 SplashScreen.preventAutoHideAsync();
 
-const Stack = createNativeStackNavigator();
+LogBox.ignoreAllLogs();
 
 AsyncStorage.getItem("TOKEN").then((token) => {
   if (token) {
@@ -36,8 +34,7 @@ AsyncStorage.getItem("TOKEN").then((token) => {
     socket.on("ON_MESSAGE_RECEIVED", (message) => {
       store.dispatch(newMessageReceived(message));
 
-      if (store.getState().inbox.selectedRouteId == message.routeId)
-        socket.emit("MESSAGE_SEEN", message.routeId);
+      if (store.getState().inbox.selectedRouteId == message.routeId) socket.emit("MESSAGE_SEEN", message.routeId, message._id);
     });
 
     socket.on("MESSAGE_REQUEST_STATUS_CHANGED", (routeId, status) => {
@@ -47,6 +44,14 @@ AsyncStorage.getItem("TOKEN").then((token) => {
           status,
         })
       );
+    });
+
+    socket.on("MARK_ALL_AS_SEEN", (routeId) => {
+      store.dispatch(markAllAsSeenByRouteId(routeId));
+    });
+
+    socket.on("MARK_MESSAGE_AS_SEEN", (msgId) => {
+      store.dispatch(markMessageAsSeenByMessageId(msgId));
     });
   }
 });

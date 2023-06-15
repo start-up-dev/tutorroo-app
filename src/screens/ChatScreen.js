@@ -5,17 +5,20 @@ import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { clearMessages, markAsSeenAll, messageRequestStatusChanged, setSelectedRouteId } from "../store/inboxSlice";
 import { changeMessageRequestStatus, getMessages, sendMessage } from "../api/inbox";
-import * as ImagePicker from "expo-image-picker";
 import attachmentsIcon from "../../assets/images/attach-circle.png";
 import sendIcon from "../../assets/images/send.png";
-import { uploadFile, uploadFileV2 } from "../api/files";
+import { uploadFileV2 } from "../api/files";
 import * as DocumentPicker from "expo-document-picker";
 
-const ChatScreen = ({ route }) => {
+const ChatScreen = ({
+  route: {
+    params: { inbox },
+  },
+}) => {
   const dispatch = useDispatch();
 
   const user = useSelector((state) => state.auth.user);
-  const inbox = useSelector((state) => state.inbox.inboxes).find((i) => i.routeId == route.params.inbox.routeId);
+
   const messages = useSelector((state) => state.inbox.messages.filter((msg) => msg.routeId == inbox.routeId));
 
   useEffect(() => {
@@ -98,9 +101,7 @@ const ChatScreen = ({ route }) => {
         ref={scrollView}
         onContentSizeChange={() => scrollView.current.scrollToEnd({ animated: true })}
       >
-        {messages.reverse().map((msg, idx) => (
-          <ChatText msg={msg} key={idx} />
-        ))}
+        <Messages routeId={inbox.routeId} />
 
         {inbox?.status == "pending" && inbox?.creator != user?._id && (
           <View style={{ flex: 1, flexDirection: "row", marginVertical: 8 }}>
@@ -182,6 +183,18 @@ const ChatScreen = ({ route }) => {
         </View>
       )}
     </SafeAreaView>
+  );
+};
+
+const Messages = ({ routeId }) => {
+  const messages = useSelector((state) => state.inbox.messages.filter((msg) => msg.routeId == routeId));
+
+  return (
+    <>
+      {messages.map((msg, idx) => (
+        <ChatText msg={msg} key={idx} />
+      ))}
+    </>
   );
 };
 

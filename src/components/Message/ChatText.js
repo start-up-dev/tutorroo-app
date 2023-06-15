@@ -8,7 +8,8 @@ import pdfImage from "../../../assets/images/pdf.png";
 import docsImage from "../../../assets/images/docs.png";
 import unknownFileImage from "../../../assets/images/unknown_file.png";
 
-const sentIcon = require("../../../assets/images/tick-square-active.png");
+const seenIcon = require("../../../assets/images/tick-square-active.png");
+const sentIcon = require("../../../assets/images/tick-square.png");
 
 const ChatText = ({ msg }) => {
   const user = useSelector((state) => state?.auth?.user);
@@ -65,7 +66,9 @@ const ChatText = ({ msg }) => {
         />
 
         <View style={styles.timeStampView}>
-          <Icon icon={sentIcon} />
+          <View style={{ marginRight: 5 }}>
+            <Icon icon={msg?.seen ? seenIcon : sentIcon} />
+          </View>
 
           <Text style={styles.timeStamp}>{moment(msg?.createdAt).format("lll")}</Text>
         </View>
@@ -75,7 +78,6 @@ const ChatText = ({ msg }) => {
     return (
       <View style={styles.container}>
         <View style={styles.timeStampView}>
-          <Icon icon={sentIcon} />
           <Text style={styles.timeStamp}>{moment(msg?.createdAt).format("lll")}</Text>
         </View>
 
@@ -138,7 +140,7 @@ const styles = StyleSheet.create({
     fontSize: 10,
     fontFamily: "sofia-medium",
     lineHeight: 20,
-    marginLeft: 5,
+    marginLeft: 0,
   },
   timeStampView: {
     flexDirection: "row",

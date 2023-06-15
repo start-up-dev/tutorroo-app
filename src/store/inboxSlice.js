@@ -27,7 +27,7 @@ export const inboxSlice = createSlice({
 
     newMessageReceived: (state, action) => {
       if (state.selectedRouteId == action.payload.routeId) {
-        state.messages = [action.payload, ...state.messages];
+        state.messages = [...state.messages, action.payload];
       } else {
         state.inboxes.map((i) => {
           if (i.routeId == action.payload.routeId) {
@@ -57,11 +57,31 @@ export const inboxSlice = createSlice({
     setSelectedRouteId: (state, action) => {
       state.selectedRouteId = action.payload;
     },
+
+    markAllAsSeenByRouteId: (state, action) => {
+      state.messages.map((m) => {
+        if (m.routeId == action.payload) {
+          m.seen = true;
+        }
+
+        return m;
+      });
+    },
+    markMessageAsSeenByMessageId: (state, action) => {
+      state.messages.map((m) => {
+        if (m._id == action.payload) {
+          m.seen = true;
+        }
+
+        return m;
+      });
+    },
   },
+
   extraReducers: (builder) => {
     builder
       .addCase(sendMessage.fulfilled, (state, action) => {
-        state.messages = [action.payload, ...state.messages];
+        state.messages = [...state.messages, action.payload];
 
         state.inboxes.map((i) => {
           if (i.routeId == action.payload.routeId) {
@@ -86,4 +106,5 @@ export const inboxSlice = createSlice({
   },
 });
 
-export const { markAsSeenAll, addInboxes, newMessageReceived, clearMessages, setSelectedRouteId, messageRequestStatusChanged } = inboxSlice.actions;
+export const { markAsSeenAll, addInboxes, newMessageReceived, clearMessages, setSelectedRouteId, messageRequestStatusChanged, markAllAsSeenByRouteId, markMessageAsSeenByMessageId } =
+  inboxSlice.actions;
