@@ -17,6 +17,8 @@ const ChatScreen = ({
 }) => {
   const dispatch = useDispatch();
 
+  const [status, setStatus] = useState(inbox?.status);
+
   const user = useSelector((state) => state.auth.user);
 
   const messages = useSelector((state) => state.inbox.messages.filter((msg) => msg.routeId == inbox.routeId));
@@ -85,6 +87,8 @@ const ChatScreen = ({
     );
 
     changeMessageRequestStatus(inbox.routeId, status);
+
+    setStatus(status);
   };
 
   return (
@@ -103,7 +107,7 @@ const ChatScreen = ({
       >
         <Messages routeId={inbox.routeId} />
 
-        {inbox?.status == "pending" && inbox?.creator != user?._id && (
+        {status == "pending" && inbox?.creator != user?._id && (
           <View style={{ flex: 1, flexDirection: "row", marginVertical: 8 }}>
             <TouchableOpacity
               onPress={() => handleChangeMessageRequestState("rejected")}
@@ -147,14 +151,14 @@ const ChatScreen = ({
           </View>
         )}
 
-        {inbox?.status == "pending" && inbox?.creator == user?._id && <Text style={styles.noticeText}>Your request has not been accepted yet. We will keep you informed about updates.</Text>}
+        {status == "pending" && inbox?.creator == user?._id && <Text style={styles.noticeText}>Your request has not been accepted yet. We will keep you informed about updates.</Text>}
 
-        {inbox?.status == "rejected" && <Text style={styles.noticeText}>Message request was rejected.</Text>}
+        {status == "rejected" && <Text style={styles.noticeText}>Message request was rejected.</Text>}
 
-        {inbox?.status == "answered" && <Text style={styles.successText}>This question is marked as completed.</Text>}
+        {status == "answered" && <Text style={styles.successText}>This question is marked as completed.</Text>}
       </ScrollView>
 
-      {inbox?.status == "approved" && (
+      {status == "approved" && (
         <View style={{ display: "flex", flexDirection: "row", paddingVertical: 8, paddingHorizontal: 12, justifyContent: "center", alignItems: "center" }}>
           <View style={{ borderWidth: 1, borderColor: "#DFDADA", borderRadius: 20, flex: 1, flexDirection: "row", padding: 4, justifyContent: "center", alignItems: "center" }}>
             <TextInput value={text} onChangeText={(v) => setText(v)} style={{ paddingVertical: 4, paddingHorizontal: 12, flex: 1 }} placeholder="Write message" />
